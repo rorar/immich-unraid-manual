@@ -37,6 +37,8 @@ Plus we use a custom network for better performance and security, avoiding an ov
 Also for the migration from Google Photos to Immich, we use Google Takeout to export our photos and videos, and then utilize a Firefox Docker container on Unraid to download the exported files directly to our Unraid server, avoiding the need to download them to a local machine first.
 We'll be using PhotoMigrator to automate the process of importing photos from our Google Takeout export into Immich. PhotoMigrator takes care of handling metadata and organizing the photos in the correct structure for Immich.
 
+---
+
 ## Intended Use
 **READ THROUGH BEFORE STARTING YOUR SETUP.**
 ### In Scope:
@@ -67,6 +69,8 @@ AGAIN: This guide is intended for users who want to run a *NEW instance of Immic
   -> 100GB for the compressed files, 100GB for the extracted files, 100GB for the final library after migration.
 
 
+---
+
 ### Installation and Configuration
 #### Pre-Work: Google Takeout Phase 1 - Request Exporting Your Photos from Google Photos
 Before you can get your photos into Immich, you need to get them out of Google Photos.
@@ -89,6 +93,8 @@ We're covering `tar` here because of its better compression and faster extractio
 9. Choose the file type: "tar"
 10. Choose the file size: "50GB" (Google will split the export into multiple files if your library exceeds this size.)
 11. Hit "Create export" and wait for the process to complete. You will receive an email with a download link once the export is ready.
+
+---
 
 #### Step 1: Create Shares `immich` and `immich-gen` for Immich on Unraid
 Open up your Unraid web interface and using the top navigation menu, navigate to the "Shares" tab.
@@ -130,6 +136,8 @@ Click on "Add Share" on the bottom left of your Share table and create the follo
 
 -> Hit "Add Share" to create the share.
 
+---
+
 #### Pre-Work: Google Takeout Phase 2 - Downloading and Extracting Your Photos from Google Takeout utilizing a Firefox Docker Container on Unraid
 Once you receive the email from Google Takeout with the download link, you can use a Firefox Docker container on Unraid to download the exported files directly to your Unraid server. 
 
@@ -160,6 +168,8 @@ Once you receive the email from Google Takeout with the download link, you can u
 - The download speed may vary based on your internet connection and the size of your export. Be patient, especially if you have a large library. Grab a coffee or two while you wait! :coffee:
 - Sometimes the download speed may be slower than expected as you may have caught an overloaded Google Server. If you notice that the download is very slow, you can try pausing/aborting and resuming the download in the Firefox web UI to potentially improve the speed.
 
+---
+
 #### Step 2: Create the `immich_internal` Docker Network
 All Immich containers need to communicate with each other by container name. We create a dedicated Docker network for this.
 
@@ -171,6 +181,8 @@ docker network create immich_internal
 3. When setting up each container below, select `immich_internal` as the network in the template settings.
 
 **Why a custom network?** Containers on the default `bridge` network communicate via host port mappings (NAT overhead). On a custom network, containers resolve each other by name directly — faster and more secure since database/cache ports don't need to be exposed to the host.
+
+---
 
 #### Step 3: Choose Your Platform
 Before downloading templates, determine which GPU acceleration you want to use. This affects which **server** template (for video transcoding) and which **machine learning** template (for face recognition and image search) you need.
@@ -201,6 +213,8 @@ graph TD
 | **Intel iGPU** (N100, UHD, Iris) | `immich-server-qsv-vaapi` | `immich-machine-learning-openvino` |
 | **AMD** (Polaris+) | `immich-server-qsv-vaapi` | `immich-machine-learning-rocm` |
 | **NVIDIA** (Pascal+) | `immich-server-nvenc` | `immich-machine-learning-cuda` |
+
+---
 
 #### Step 4: Download Templates
 Open the Unraid terminal (`>_` icon in the top right corner) and download the templates you need.
@@ -268,6 +282,8 @@ wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercon
 wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-machine-learning-rocm.xml
 ```
 
+---
+
 #### Step 5: PostgreSQL
 Choose between stability and latest features:
 
@@ -292,6 +308,8 @@ Choose between stability and latest features:
 
 If upgrading from VectorChord 0.4.3 to 1.0.0+: See [this comment](https://github.com/immich-app/immich/pull/23845#issuecomment-3566969928).
 
+---
+
 #### Step 6: Valkey
 Valkey is a Redis-compatible cache used by Immich as a message broker.
 
@@ -304,6 +322,8 @@ Valkey is a Redis-compatible cache used by Immich as a message broker.
 
 That's it — Valkey needs no special configuration for Immich.
 
+---
+
 #### Step 7: Machine Learning
 The ML service handles face recognition, CLIP-based image search, and OCR. Models are downloaded on first use and cached (several GB).
 
@@ -315,6 +335,8 @@ The ML service handles face recognition, CLIP-based image search, and OCR. Model
 4. Hit **Apply** to start the container.
 
 **NOTE:** The first startup will be slow as ML models are downloaded. This is normal.
+
+---
 
 #### Step 8: Immich Server
 The main application — web UI, API, and background workers.
@@ -331,6 +353,8 @@ The main application — web UI, API, and background workers.
 
 Access Immich at `http://<your-unraid-ip>:2283` and create your admin account.
 
+---
+
 #### Step 9: Container Start Order with FolderView3
 Immich containers must start in the correct order. If the server starts before the database is ready, it will fail.
 
@@ -346,6 +370,8 @@ To manage this on Unraid, install **FolderView3** from Community Applications:
 3. Create a new folder called `Immich`
 4. Drag all four Immich containers into this folder in the order listed above
 5. FolderView3 will start them in sequence when you start the folder
+
+---
 
 #### Pre-Work: Google Takeout Phase 2.5 - Extract tar Archives
 Once your Google Takeout downloads are complete (see [Phase 2](#pre-work-google-takeout-phase-2---downloading-and-extracting-your-photos-from-google-takeout-utilizing-a-firefox-docker-container-on-unraid)), you need to extract them.
@@ -368,6 +394,8 @@ This will extract each archive (e.g. `takeout-20260518T081014Z-3-001.tgz`, `take
 - Extraction can take a while for large libraries. Be patient.
 - After successful extraction and migration to Immich, you can delete the `.tgz` files to free up space.
 - Keep the extracted files until you've verified everything imported correctly into Immich.
+
+---
 
 ### Google Takeout Phase 3: PhotoMigrator
 PhotoMigrator is a tool to help with the migration of photos from Google Takeout and other services to Immich. It automates importing photos including metadata handling and organizing files in the correct structure for Immich.
@@ -400,14 +428,20 @@ PhotoMigrator is a tool to help with the migration of photos from Google Takeout
 
 For detailed instructions on all features and migration options, see the [PhotoMigrator documentation](https://github.com/jaimetur/PhotoMigrator).
 
+---
+
 ## Cleanup
 ### Files
 After you have successfully downloaded and extracted your photos from Google Takeout, you can clean up the Firefox container by deleting it and any temporary files in `/mnt/user/immich/Takeout/` that were created during the download process.
 ### API Keys
 Remove your Immich API Key in your Account Settings-->API_KEY Keys that you created for the PhotoMigrator in the Immich web UI to ensure that there are no security risks from having an unused API key lying around.
 
+---
+
 ## TODO
 - [ ] Create script that guides users through the installation
+
+---
 
 ## Kudos and Credits
 ### This a polished guide from Starbuckstech @starbuck93
