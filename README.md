@@ -131,7 +131,9 @@ Click on "Add Share" on the bottom left of your Share table and create the follo
 -> Hit "Add Share" to create the share.
 
 #### Pre-Work: Google Takeout Phase 2 - Downloading and Extracting Your Photos from Google Takeout utilizing a Firefox Docker Container on Unraid
-Once you receive the email from Google Takeout with the download link, you can use a Firefox Docker container on Unraid to download the exported files directly to your Unraid server. This method is especially useful if you have a large library, slower download speed and to avoid downloading the files to your local machine first and moving it to Unraid.
+Once you receive the email from Google Takeout with the download link, you can use a Firefox Docker container on Unraid to download the exported files directly to your Unraid server. 
+
+**Purpose:** This method is especially useful if you have a large library, slower download speed and to avoid downloading the files to your local machine first and moving it to Unraid.
 
 1. Go to the "Apps" tab in your Unraid web interface
 2. Search for "Firefox" in the Community Applications.
