@@ -402,6 +402,9 @@ After you have successfully downloaded and extracted your photos from Google Tak
 ### API Keys
 Remove your Immich API Key in your Account Settings-->API_KEY Keys that you created for the PhotoMigrator in the Immich web UI to ensure that there are no security risks from having an unused API key lying around.
 
+## TODO
+- [ ] Create script that guides users through the installation
+
 ## Kudos and Credits
 ### This a polished guide from Starbuckstech @starbuck93
 Many thanks for sharing your knowledge and experience with the community! :slightly_smiling_face:
