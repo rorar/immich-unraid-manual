@@ -1,3 +1,10 @@
+[![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
+[![Immich](https://img.shields.io/badge/Immich-v2.7.5-4250e4)](https://immich.app)
+[![Unraid](https://img.shields.io/badge/Unraid-6.12+-e22d2d)](https://unraid.net)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18-336791)](https://www.postgresql.org)
+[![VectorChord](https://img.shields.io/badge/VectorChord-0.5.3%20%7C%201.1.1-E6DB3D)](https://github.com/tensorchord/VectorChord)
+[![Valkey](https://img.shields.io/badge/Valkey-9.1-d63f84)](https://valkey.io)
+
 # Table of Contents
 - [Unraid Immich Performance Setup](#unraid-immich-performance-setup)
 
