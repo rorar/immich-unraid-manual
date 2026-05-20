@@ -205,51 +205,62 @@ Open the Unraid terminal (`>_` icon in the top right corner) and download the te
 
 ##### Required templates (everyone needs these):
 
-PostgreSQL database — choose **one** (stable recommended):
+**PostgreSQL database** — RECOMMENDED (stable, tested by Immich team):
 ```bash
-# RECOMMENDED: Official Immich PostgreSQL (stable, tested)
 wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-postgres-official.xml
+```
 
-# OPTIONAL/EXPERIMENTAL: TensorChord VectorChord (latest VectorChord 1.1.1, less tested with Immich)
+**PostgreSQL database** — OPTIONAL/EXPERIMENTAL (latest VectorChord 1.1.1, less tested with Immich):
+```bash
 wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-vectorchord-db.xml
 ```
 
-Valkey (cache/message broker):
+**Valkey** (cache/message broker):
 ```bash
 wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-valkey.xml
 ```
 
-PhotoMigrator (for Google Takeout migration):
+**PhotoMigrator** (for Google Takeout migration):
 ```bash
 wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/photomigrator.xml
 ```
 
 ##### Server template (choose one based on your GPU):
 
+**CPU only** — no GPU transcoding:
 ```bash
-# CPU only (no GPU transcoding)
 wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-server.xml
+```
 
-# Intel QSV / AMD VAAPI (uses /dev/dri)
+**Intel QSV / AMD VAAPI** — uses `/dev/dri`:
+```bash
 wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-server-qsv-vaapi.xml
+```
 
-# NVIDIA NVENC (uses --runtime=nvidia)
+**NVIDIA NVENC** — uses `--runtime=nvidia`:
+```bash
 wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-server-nvenc.xml
 ```
 
 ##### Machine Learning template (choose one based on your GPU):
 
+**CPU only** — no GPU acceleration:
 ```bash
-# CPU only
 wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-machine-learning.xml
+```
 
-# NVIDIA CUDA
+**NVIDIA CUDA:**
+```bash
 wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-machine-learning-cuda.xml
+```
 
-# Intel OpenVINO
+**Intel OpenVINO:**
+```bash
 wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-machine-learning-openvino.xml
+```
 
-# AMD ROCm
+**AMD ROCm:**
+```bash
 wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-machine-learning-rocm.xml
 ```
 
