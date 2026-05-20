@@ -6,7 +6,25 @@
 [![Valkey](https://img.shields.io/badge/Valkey-9.1-d63f84)](https://valkey.io)
 
 # Table of Contents
-- [Unraid Immich Performance Setup](#unraid-immich-performance-setup)
+- [Unraid Immich Performance Setup + Google Takeout Guide](#unraid-immich-performance-setup--google-takeout-guide)
+  - [Intended Use](#intended-use)
+  - [Pre-requisites](#pre-requisites)
+  - [Installation and Configuration](#installation-and-configuration)
+    - [Pre-Work: Google Takeout Phase 1 - Request Export](#pre-work-google-takeout-phase-1---request-exporting-your-photos-from-google-photos)
+    - [Step 1: Create Shares](#step-1-create-shares-immich-and-immich-gen-for-immich-on-unraid)
+    - [Pre-Work: Google Takeout Phase 2 - Download via Firefox](#pre-work-google-takeout-phase-2---downloading-and-extracting-your-photos-from-google-takeout-utilizing-a-firefox-docker-container-on-unraid)
+    - [Step 2: Create Docker Network](#step-2-create-the-immich_internal-docker-network)
+    - [Step 3: Choose Your Platform](#step-3-choose-your-platform)
+    - [Step 4: Download Templates](#step-4-download-templates)
+    - [Step 5: PostgreSQL Setup](#step-5-postgresql)
+    - [Step 6: Valkey Setup](#step-6-valkey)
+    - [Step 7: Machine Learning Setup](#step-7-machine-learning)
+    - [Step 8: Immich Server Setup](#step-8-immich-server)
+    - [Step 9: Container Start Order with FolderView3](#step-9-container-start-order-with-folderview3)
+    - [Pre-Work: Google Takeout Phase 2.5 - Extract Archives](#pre-work-google-takeout-phase-25---extract-tar-archives)
+    - [Google Takeout Phase 3: PhotoMigrator](#google-takeout-phase-3-photomigrator)
+  - [Cleanup](#cleanup)
+  - [Kudos and Credits](#kudos-and-credits)
 
 
 ## Unraid Immich Performance Setup + Google Takeout Guide
@@ -19,7 +37,7 @@ Plus we use a custom network for better performance and security, avoiding an ov
 Also for the migration from Google Photos to Immich, we use Google Takeout to export our photos and videos, and then utilize a Firefox Docker container on Unraid to download the exported files directly to our Unraid server, avoiding the need to download them to a local machine first.
 We'll be using PhotoMigrator to automate the process of importing photos from our Google Takeout export into Immich. PhotoMigrator takes care of handling metadata and organizing the photos in the correct structure for Immich.
 
-## Intdended Use
+## Intended Use
 **READ THROUGH BEFORE STARTING YOUR SETUP.**
 ### In Scope:
 This guide is intended for NEW setups of Immich on Unraid.
@@ -57,7 +75,7 @@ If you have a large library, the Google Takeout exporting process can take a whi
 **Purpose:** You can use Google Takeout to export your photos and videos from Google Photos including metadata.
 For exporting from Google Takeout, you can choose between a `zip` and `tar`  file that you can extract and then using tools to upload to Immich.
 
-We're covering `tar` here because of it's better compression and faster extraction times, especially for large libraries.
+We're covering `tar` here because of its better compression and faster extraction times, especially for large libraries.
 
 1. Go to [Google Takeout](https://takeout.google.com/)
 2. Sign in to your Google account
@@ -78,7 +96,7 @@ Here, we will create two shares: one for the main media library and another for 
 Click on "Add Share" on the bottom left of your Share table and create the following shares:
 
 ##### `immich` Share
-**Data storage: **Array (HDD)
+**Data storage:** Array (HDD)
 **Purpose:** This share will be used to store your photo and video library, as well as backups and uploads. It will be the main storage location for your media files.
 
 **Share name:** immich
@@ -118,7 +136,7 @@ Once you receive the email from Google Takeout with the download link, you can u
 3. Choose a Firefox container by LinuxServer.io and click "Install".
 4. If you already have a Firefox container setup, choose to name the new container something like "firefox-takeout-export" to differentiate it from any other Firefox containers you may have.
 5. During the installation process, scroll down and click on `Add another Path, Port, Variable, Label or Device`
-6. To map the Download Path to the `immich` share, set the "Config Type" to "Path" (It's automtically pre-set)
+6. To map the Download Path to the `immich` share, set the "Config Type" to "Path" (It's automatically pre-set)
    1. Name: takeout-export
    2. Container Path: /config/Downloads
    3. Host Path: /mnt/user/immich/Takeout
@@ -136,109 +154,207 @@ Once you receive the email from Google Takeout with the download link, you can u
 
 **NOTES:**
 - The download speed may vary based on your internet connection and the size of your export. Be patient, especially if you have a large library. Grab a coffee or two while you wait! :coffee:
-- Sometimes the download speed may be slower than expected as you may catched an overloaded Google Server. If you notice that the download is very slow, you can try pausing/aborting and resuming the download in the Firefox web UI to potentially improve the speed.
+- Sometimes the download speed may be slower than expected as you may have caught an overloaded Google Server. If you notice that the download is very slow, you can try pausing/aborting and resuming the download in the Firefox web UI to potentially improve the speed.
 
-#### Step 2: Setting up Immich and it's dependencies with the optimal configuration for Unraid
-Meanwhile while your export is downloading, you can set up Immich on your machine.
-Instead of docker-compose, we'll be working with the Community Applications/Unraid Template method for installing Immich on Unraid.
-But instead of using the default configuration, we'll be making some adjustments to optimize it for Unraid and our specific share setup.
+#### Step 2: Create the `immich_internal` Docker Network
+All Immich containers need to communicate with each other by container name. We create a dedicated Docker network for this.
 
-We need four Services/Docker Templates
-1. **PostgreSQL** database (which is a dependency for Immich), we'll use the one from SpaceInvaderOne's Repository in the CA.
-2. **Valkey** (a redis fork) which is also a dependency for Immich, but you can use any redis container from the CA.
-3. **The Immich application itself**, we'll use a "Custom" template based on @imagegenius docker-immich to set up your Immich container.
-4. **PhotoMigrator** (a tool to help with the migration of photos from Google Takeout and other services to Immich), we'll use a "Custom" template based on @jaimetur https://github.com/jaimetur/PhotoMigrator docker image to set up the PhotoMigrator container.
-
-##### Downloading Custom Templates
-Before we can set up the Immich and PhotoMigrator containers, we need to download the custom templates for them. These templates are not available (yet) in the Community Applications, so we will be using "Custom" templates based on existing Docker images to set up these containers.
-
-Let's grab the template using the terminal.
-To open up the web-terminal for your Unraid server, click on the "Terminal" icon `>_` in the top right corner of your Unraid web interface.
-Then, run the following command to download the Immich template to your Unraid server:
-
+1. Open the Unraid terminal (click `>_` in the top right corner)
+2. Run:
 ```bash
-wget -P /boot/config/plugins/dockerMan/templates-user/ https://github.com/rorar/unraid-templates/raw/refs/heads/main/templates/immich-performance.xml
+docker network create immich_internal
+```
+3. When setting up each container below, select `immich_internal` as the network in the template settings.
+
+**Why a custom network?** Containers on the default `bridge` network communicate via host port mappings (NAT overhead). On a custom network, containers resolve each other by name directly — faster and more secure since database/cache ports don't need to be exposed to the host.
+
+#### Step 3: Choose Your Platform
+Before downloading templates, determine which GPU acceleration you want to use. This affects which **server** template (for video transcoding) and which **machine learning** template (for face recognition and image search) you need.
+
+```mermaid
+graph TD
+    A[What GPU do you have?] --> B{NVIDIA?}
+    A --> C{Intel iGPU?}
+    A --> D{AMD?}
+    A --> E{No GPU / CPU only}
+
+    B --> B1[Server: immich-server-nvenc]
+    B --> B2[ML: immich-machine-learning-cuda]
+
+    C --> C1[Server: immich-server-qsv-vaapi]
+    C --> C2[ML: immich-machine-learning-openvino]
+
+    D --> D1[Server: immich-server-qsv-vaapi]
+    D --> D2[ML: immich-machine-learning-rocm]
+
+    E --> E1[Server: immich-server]
+    E --> E2[ML: immich-machine-learning]
 ```
 
-Then run the following command to download the PhotoMigrator template to your Unraid server:
+| GPU | Server Template (Transcoding) | ML Template (Inference) |
+|-----|-------------------------------|------------------------|
+| **None / CPU only** | `immich-server` | `immich-machine-learning` |
+| **Intel iGPU** (N100, UHD, Iris) | `immich-server-qsv-vaapi` | `immich-machine-learning-openvino` |
+| **AMD** (Polaris+) | `immich-server-qsv-vaapi` | `immich-machine-learning-rocm` |
+| **NVIDIA** (Pascal+) | `immich-server-nvenc` | `immich-machine-learning-cuda` |
 
+#### Step 4: Download Templates
+Open the Unraid terminal (`>_` icon in the top right corner) and download the templates you need.
+
+**NOTE:** `wget` downloads files from the web. The `-P` flag sets the download directory. Templates are saved to Unraid's Docker Manager template directory.
+
+##### Required templates (everyone needs these):
+
+PostgreSQL database — choose **one** (stable recommended):
 ```bash
-wget -P /boot/config/plugins/dockerMan/templates-user/ https://github.com/rorar/unraid-templates/raw/refs/heads/main/templates/photomigrator.xml
+# RECOMMENDED: Official Immich PostgreSQL (stable, tested)
+wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-postgres-official.xml
+
+# OPTIONAL/EXPERIMENTAL: TensorChord VectorChord (latest VectorChord 1.1.1, less tested with Immich)
+wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-vectorchord-db.xml
 ```
 
-**OPTIONAL/EXPERIMENTAL (see NOTE in PostgreSQL section below):** Then run the following command to download the PostgreSQL template to your Unraid server:
-
+Valkey (cache/message broker):
 ```bash
-wget -P /boot/config/plugins/dockerMan/templates-user/ https://github.com/rorar/unraid-templates/raw/refs/heads/main/templates/immich-vectorchord-db.xml
+wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-valkey.xml
 ```
 
+PhotoMigrator (for Google Takeout migration):
+```bash
+wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/photomigrator.xml
+```
 
-**NOTE:**
-wget is a command-line utility for downloading files from the web. The `-P` flag specifies the directory where the downloaded file should be saved. In this case, we're saving the `immich-performance.xml`, `photomigrator.xml` and optional `immich-vectorchord-db.xml` template files to the `templates-user` directory of the Docker Manager plugin on Unraid.
+##### Server template (choose one based on your GPU):
 
+```bash
+# CPU only (no GPU transcoding)
+wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-server.xml
 
-##### PostgreSQL Templates
-Choose between stability and latest features (choose one of the two options below based on your preference):
-1. Stable and tested with Immich: `ghcr.io/immich-app/postgres:18-vectorchord0.5.3-pgvector0.8.1`
-2. OPTIONAL: Latest version with potential new features but less tested with Immich: `tensorchord/vchord-postgres:pg18-v1.1.1` (This image has VectorChord 1.1.1 and pgvector 0.8.2 included)
+# Intel QSV / AMD VAAPI (uses /dev/dri)
+wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-server-qsv-vaapi.xml
 
-**NOTE:**
-You COULD use a newer PostgreSQL image with VectorCord 1.0.0 (See GitHub Issue [#23845](https://github.com/immich-app/immich/pull/23845) or even VectorChord 1.1.1 (See [this GitHub Comment](https://github.com/immich-app/immich/discussions/23830#discussioncomment-15956803)).
-But the 0.5.3 version is more stable and has been tested more extensively with Immich, while the 1.0.0+ version is newer and may have some compatibility issues or bugs that haven't been fully resolved yet.
-If you really want to use the latest version of VectorChord PostgreSQL, you can try it out using the custom template we downloaded earlier and see if it works well with your setup.
+# NVIDIA NVENC (uses --runtime=nvidia)
+wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-server-nvenc.xml
+```
 
-###### Official/Stable Immich PostgreSQL Template
-The PostgreSQL template is available in the Community Applications BUT it is outdated, so you can simply
-1. Go to the "Apps" tab in your Unraid web interface
-2. Search for "PostgreSQL_Immich"
-3. Click on "Install"
-4. Change the settings/update the outdated entries to
-   1. **Repository:** ghcr.io/immich-app/postgres:18-vectorchord0.5.3-pgvector0.8.1
-   2. **POSTGRES_PASSWORD:** <PASSWORD_THAT_MATCHES_THE_IMMICH_DB_PASSWORD_VARIABLE>
-   (Set a strong password for your PostgreSQL database. This is important for security, as it will protect your database from unauthorized access. Generate a secure one in the Unraid terminal: `openssl rand -base64 32 | tr -dc A-Za-z0-9 | head -c 32`)
-   3. **POSTGRES_USER:** immichpguser
-   4. **POSTGRES_DB:** immich
-   5. **Database Storage Path (Appdata):** /mnt/user/appdata/PostgreSQL_Immich
-   6. **PostgreSQL access port:** 5433
-   (Change the access port to any port that is not already in use on your Unraid server. This is important to avoid port conflicts with other services running on your server.)
-   7. Hit "Apply" to install the PostgreSQL container.
+##### Machine Learning template (choose one based on your GPU):
 
-###### OPTIONAL/EXPERIMENTAL: VectorChord PostgreSQL Template
-If you want to use the latest version of VectorChord, you can try it out using the custom template we downloaded earlier.
-Once you have the template downloaded, you can
-1. go to the "Docker" tab in your Unraid web interface,
-2. click on "Add Container",
-3. and then select the "immich-vectorchord-db" template
-from the dropdown list of available templates to set up your immich-vectorchord-db container.
+```bash
+# CPU only
+wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-machine-learning.xml
 
-4. Change the settings/update the outdated entries to
-   1. **POSTGRES_PASSWORD:** <PASSWORD_THAT_MATCHES_THE_IMMICH_DB_PASSWORD_VARIABLE>
-   (Set a strong password for your PostgreSQL database. This is important for security, as it will protect your database from unauthorized access. Generate a secure one in the Unraid terminal: `openssl rand -base64 32 | tr -dc A-Za-z0-9 | head -c 32`)
-   2. **POSTGRES_USER:** immichpguser
-   3. **POSTGRES_DB:** immich
-   4. **Database Storage Path (Appdata):** /mnt/user/appdata/PostgreSQL_Immich
-   5. **PostgreSQL access port:** 5433
-   (Change the access port to any port that is not already in use on your Unraid server. This is important to avoid port conflicts with other services running on your server.)
-   6. Hit "Apply" to install the PostgreSQL container.
+# NVIDIA CUDA
+wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-machine-learning-cuda.xml
 
+# Intel OpenVINO
+wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-machine-learning-openvino.xml
+
+# AMD ROCm
+wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-machine-learning-rocm.xml
+```
+
+#### Step 5: PostgreSQL
+Choose between stability and latest features:
+
+| Option | Image | VectorChord | pgvector | Status |
+|--------|-------|-------------|----------|--------|
+| **Stable** | `ghcr.io/immich-app/postgres:18-vectorchord0.5.3-pgvector0.8.1` | 0.5.3 | 0.8.1 | Tested by Immich team |
+| Experimental | `tensorchord/vchord-postgres:pg18-v1.1.1` | 1.1.1 | 0.8.2 | Latest, less tested |
+
+**NOTE:** You COULD use VectorChord 1.0.0+ (See [#23845](https://github.com/immich-app/immich/pull/23845)) or 1.1.1 (See [this discussion](https://github.com/immich-app/immich/discussions/23830#discussioncomment-15956803)). The 0.5.3 version is more stable and tested extensively with Immich. If you want to try the latest, use the experimental template.
+
+##### Setup (both options):
+1. Go to the **Docker** tab → **Add Container**
+2. Select the template you downloaded (`immich-postgres-official` or `immich-vectorchord-db`)
+3. Configure:
+   - **POSTGRES_PASSWORD:** Set a strong password! Generate one in the terminal: `openssl rand -base64 32 | tr -dc A-Za-z0-9 | head -c 32`
+   - **POSTGRES_USER:** `postgres`
+   - **POSTGRES_DB:** `immich`
+   - **Network:** `immich_internal`
+4. Hit **Apply** to start the container.
+
+**IMPORTANT:** Remember your `POSTGRES_PASSWORD` — you'll need the exact same value in the Immich server configuration.
+
+If upgrading from VectorChord 0.4.3 to 1.0.0+: See [this comment](https://github.com/immich-app/immich/pull/23845#issuecomment-3566969928).
+
+#### Step 6: Valkey
+Valkey is a Redis-compatible cache used by Immich as a message broker.
+
+1. Go to the **Docker** tab → **Add Container**
+2. Select the `immich-valkey` template
+3. Configure:
+   - **Network:** `immich_internal`
+   - All other defaults are fine
+4. Hit **Apply** to start the container.
+
+That's it — Valkey needs no special configuration for Immich.
+
+#### Step 7: Machine Learning
+The ML service handles face recognition, CLIP-based image search, and OCR. Models are downloaded on first use and cached (several GB).
+
+1. Go to the **Docker** tab → **Add Container**
+2. Select the ML template matching your GPU (see [Step 3](#step-3-choose-your-platform))
+3. Configure:
+   - **Network:** `immich_internal`
+   - **Path: Model Cache:** `/mnt/user/appdata/immich/model-cache/` (default is fine)
+4. Hit **Apply** to start the container.
+
+**NOTE:** The first startup will be slow as ML models are downloaded. This is normal.
+
+#### Step 8: Immich Server
+The main application — web UI, API, and background workers.
+
+1. Go to the **Docker** tab → **Add Container**
+2. Select the server template matching your GPU (see [Step 3](#step-3-choose-your-platform))
+3. Configure:
+   - **Network:** `immich_internal`
+   - **DB_HOSTNAME:** `immich-vectorchord-db` (must match the database container name)
+   - **DB_PASSWORD:** The exact same password you set in [Step 5](#step-5-postgresql)
+   - **REDIS_HOSTNAME:** `immich-valkey` (must match the Valkey container name)
+   - All HDD/SSD storage paths should already point to the correct shares (`/mnt/user/immich/` and `/mnt/user/immich-gen/`)
+4. Hit **Apply** to start the container.
+
+Access Immich at `http://<your-unraid-ip>:2283` and create your admin account.
+
+#### Step 9: Container Start Order with FolderView3
+Immich containers must start in the correct order. If the server starts before the database is ready, it will fail.
+
+**Correct start order:**
+1. `immich-vectorchord-db` (PostgreSQL)
+2. `immich-valkey` (Valkey)
+3. `immich-machine-learning` (ML)
+4. `immich-server` (Server — depends on all above)
+
+To manage this on Unraid, install **FolderView3** from Community Applications:
+1. Go to **Apps** → search for **FolderView3** → Install
+2. Go to the **Docker** tab
+3. Create a new folder called `Immich`
+4. Drag all four Immich containers into this folder in the order listed above
+5. FolderView3 will start them in sequence when you start the folder
+
+#### Pre-Work: Google Takeout Phase 2.5 - Extract tar Archives
+Once your Google Takeout downloads are complete (see [Phase 2](#pre-work-google-takeout-phase-2---downloading-and-extracting-your-photos-from-google-takeout-utilizing-a-firefox-docker-container-on-unraid)), you need to extract them.
+
+Open the Unraid terminal and run the following to extract all `.tgz` archives into the Takeout folder:
+
+```bash
+cd /mnt/user/immich/Takeout
+for f in takeout-*.tgz; do
+  echo "Extracting $f ..."
+  tar -xzf "$f" -C /mnt/user/immich/Takeout
+  echo "Done: $f"
+done
+echo "All archives extracted."
+```
+
+This will extract each archive (e.g. `takeout-20260518T081014Z-3-001.tgz`, `takeout-20260518T081014Z-3-002.tgz`, etc.) sequentially into `/mnt/user/immich/Takeout`.
 
 **NOTES:**
-- If you really want to upgrade: See hints upgrading VectorChord version from 0.4.3 to 1.0.0 and above in [this comment](https://github.com/immich-app/immich/pull/23845#issuecomment-3566969928)
+- Extraction can take a while for large libraries. Be patient.
+- After successful extraction and migration to Immich, you can delete the `.tgz` files to free up space.
+- Keep the extracted files until you've verified everything imported correctly into Immich.
 
-
-##### Immich Template
-###### Download Immich Template
-The custom template isn't in the Community Applications (yet), so we use a "Custom" template based on @imagegenius docker-immich to set up your Immich container.
-
-Once you have the template downloaded, you can
-- go to the "Docker" tab in your Unraid web interface,
-- click on "Add Container",
-- and then select the "immich-performance" template
-from the dropdown list of available templates to set up your Immich container.
-
-###### Change settings for machine-learning
-
-### Google Takout Phase 3: PhotoMigrator
+### Google Takeout Phase 3: PhotoMigrator
 PhotoMigrator is a tool to help with the migration of photos from Google Takeout and other services to Immich. It can be used to automate the process of importing photos from your Google Takeout export into Immich, including handling metadata and organizing the photos in the correct structure for Immich.
 
 Run through the setup process and start the container. Then, you can access the PhotoMigrator web UI to configure PhotoMigrator. The [PhotoMigrator documentation](http://192.168.178.24:6078/docs/view/help) provides detailed instructions on how to use the tool to migrate your photos from Google Takeout or any other supported photo service to Immich.
@@ -258,7 +374,7 @@ Run through the setup process and start the container. Then, you can access the 
 ### Files
 After you have successfully downloaded and extracted your photos from Google Takeout, you can clean up the Firefox container by deleting it and any temporary files in `/mnt/user/immich/Takeout/` that were created during the download process.
 ### API Keys
-Revove your Immich API Key iin your Account Settings-->API_KEY Keys that you created for the PhotoMigrator in the Immich web UI to ensure that there are no security risks from having an unused API key lying around.
+Remove your Immich API Key in your Account Settings-->API_KEY Keys that you created for the PhotoMigrator in the Immich web UI to ensure that there are no security risks from having an unused API key lying around.
 
 ## Kudos and Credits
 ### This a polished guide from Starbuckstech @starbuck93
