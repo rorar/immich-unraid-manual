@@ -355,20 +355,35 @@ This will extract each archive (e.g. `takeout-20260518T081014Z-3-001.tgz`, `take
 - Keep the extracted files until you've verified everything imported correctly into Immich.
 
 ### Google Takeout Phase 3: PhotoMigrator
-PhotoMigrator is a tool to help with the migration of photos from Google Takeout and other services to Immich. It can be used to automate the process of importing photos from your Google Takeout export into Immich, including handling metadata and organizing the photos in the correct structure for Immich.
+PhotoMigrator is a tool to help with the migration of photos from Google Takeout and other services to Immich. It automates importing photos including metadata handling and organizing files in the correct structure for Immich.
 
-Run through the setup process and start the container. Then, you can access the PhotoMigrator web UI to configure PhotoMigrator. The [PhotoMigrator documentation](http://192.168.178.24:6078/docs/view/help) provides detailed instructions on how to use the tool to migrate your photos from Google Takeout or any other supported photo service to Immich.
+##### PhotoMigrator Setup
+1. Go to the **Docker** tab → **Add Container**
+2. Select the `photomigrator` template
+3. Configure the volume mappings:
 
-#### Quick Start Guide for PhotoMigrator: Import Google Takeout Photos to Immich
-1. Open the PhotoMigrator web UI
-2. Login with Default account - User:admin / Password: admin123
-3. Configuration Panel > Feature Config > Immich Photos
-4. Fill out
-   1. IMMICH_URL
-   Change this IP by the IP that contains the Immich server or by your valid Immich URL
-   2. IMMICH_API_KEY_ADMIN
-   Your ADMIN_API_KEY for Immich Photos (Your can create can API_KEY in your Account Settings-->API_KEY Keys. Grant ALL Access.
-5.
+| Container Path | Host Path | Purpose |
+|----------------|-----------|---------|
+| `/app/config` | `/mnt/user/appdata/photomigrator/config` | Config files (Config.ini, docker.conf) |
+| `/app/data` | `/mnt/user/appdata/photomigrator/data` | Working directory for import/export |
+| `/app/volumes` | **`/mnt/user/immich/Takeout`** | Your extracted Google Takeout files |
+
+4. Set **Network** to `immich_internal` (so PhotoMigrator can reach Immich by container name)
+5. Hit **Apply** to start the container.
+6. Access the PhotoMigrator web UI at `http://<your-unraid-ip>:6078`
+
+**NOTE:** The `/app/volumes` → `/mnt/user/immich/Takeout` mapping is key — this is how PhotoMigrator accesses your extracted Takeout files. Inside the container, your photos will be at `/app/volumes/Takeout/Google Photos/`.
+
+##### Quick Start Guide: Import Google Takeout Photos to Immich
+1. Open the PhotoMigrator web UI at `http://<your-unraid-ip>:6078`
+2. Login with default credentials — User: `admin` / Password: `admin123`
+3. Go to **Configuration Panel** → **Feature Config** → **Immich Photos**
+4. Fill out:
+   - **IMMICH_URL:** `http://immich-server:2283` (uses container name since both are on `immich_internal`)
+   - **IMMICH_API_KEY_ADMIN:** Create an API key in Immich first: Account Icon → Account Settings → API Keys → New API Key → Grant ALL access → Copy the key
+5. <!-- TODO: Complete migration steps -->
+
+For detailed instructions on all features and migration options, see the [PhotoMigrator documentation](https://github.com/jaimetur/PhotoMigrator).
 
 ## Cleanup
 ### Files
