@@ -25,7 +25,7 @@
   - [Step 2: Create the `immich_internal` Docker Network](#step-2-create-the-immich_internal-docker-network)
   - [Step 3: Choose Your Platform](#step-3-choose-your-platform)
   - [Step 4: Download Templates](#step-4-download-templates)
-        - [Required templates (everyone needs these):](#required-templates-everyone-needs-these)
+    - [Required templates (everyone needs these):](#required-templates-everyone-needs-these)
       - [PostgreSQL](#postgresql)
       - [Server template (choose one based on your GPU):](#server-template-choose-one-based-on-your-gpu)
       - [Machine Learning template (choose one based on your GPU):](#machine-learning-template-choose-one-based-on-your-gpu)
@@ -245,7 +245,7 @@ Open the Unraid terminal (`>_` icon in the top right corner) and download the te
 
 **NOTE:** `wget` downloads files from the web. The `-P` flag sets the download directory. Templates are saved to Unraid's Docker Manager template directory.
 
-##### Required templates (everyone needs these):
+### Required templates (everyone needs these):
 
 #### PostgreSQL
 **PostgreSQL database by Immich** — RECOMMENDED (stable, tested by Immich team):
@@ -373,7 +373,7 @@ The main application — web UI, API, and background workers.
 2. Select the `immich-server` template matching your GPU (see [Step 3](#step-3-choose-your-platform))
 3. Configure:
    - **Network:** `immich_internal`
-   - **DB_HOSTNAME:** `immich-vectorchord-db` (must match the database container name)
+   - **DB_HOSTNAME:** `immich-postgres-official` or `immich-vectorchord-db` (depending on your database choice | must match the database container name)
    - **DB_PASSWORD:** The exact same password you set in [Step 5](#step-5-postgresql)
    - **REDIS_HOSTNAME:** `immich-valkey` (must match the Valkey container name)
    - All HDD/SSD storage paths should already point to the correct shares (`/mnt/user/immich/` and `/mnt/user/immich-gen/`)
