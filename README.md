@@ -57,13 +57,14 @@
 We use a share living on the Cache (SSD/NVMe) for `encoded-video`, `profile` and `thumbs` - and a HDD share living on the Array for `backups`, `library` and `upload`. This setup allows us to leverage the speed of the Cache for frequently accessed data while utilizing the Array for long-term storage of original media files.
 Plus we use a custom network for better performance and security, avoiding an overhead of the default `bridge` network.
 
-##### Google Takeout Guide
+#### Google Takeout Guide
 Also for the migration from Google Photos to Immich, we use Google Takeout to export our photos and videos, and then utilize a Firefox Docker container on Unraid to download the exported files directly to our Unraid server, avoiding the need to download them to a local machine first.
 We'll be using PhotoMigrator to automate the process of importing photos from our Google Takeout export into Immich. PhotoMigrator takes care of handling metadata and organizing the photos in the correct structure for Immich.
 
 ## Note
-If you're unsure about using Immich, you can try it out on https://pixelunion.eu (non-sponsered) 
-Just a friendly recommendation to test Immich without setting it up yourself first. You can create a free account with 16GB inlcuded storage and upload a few photos to see how the interface works and if it meets your needs before going through the setup process on Unraid.
+If you're unsure about using Immich, you can try it out on [PixelUnion](https://pixelunion.eu) (non-sponsored).
+
+Just a friendly recommendation to test Immich without setting it up yourself first. You can create a free account with 16GB included storage and upload a few photos to see how the interface works and if it meets your needs before going through the setup process on Unraid.
 
 ---
 
