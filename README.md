@@ -427,10 +427,10 @@ To manage this on Unraid, install **FolderView3** from Community Applications:
 **Google Takeout Migration (if you don't want to migrate you're done here):**
 *You'll need this step for [Quick Start Guide: Import Google Takeout Photos to Immich](#quick-start-guide-import-google-takeout-photos-to-immich) in the PhotoMigrator section.*
 
-6. Once verified, create an API key for the admin user in Immich: 
+7. Once verified, create an API key for the admin user in Immich: 
   `Account Icon (Top right)  → Account Settings → API Keys → New API Key → Grant ALL access by "Select All" + "Create" → Copy the API-key.`
   You'll need the API key for PhotoMigrator to import your Google Takeout photos.
-7. You can now move on to the next step of your Google Photos library using PhotoMigrator (see next section).
+8. You can now move on to the next step of your Google Photos library using PhotoMigrator (see next section).
 
 **HINT:** Delete your API-Key after the migration process to ensure that there are no security risks from having an unused API key lying around. (see [Cleanup](#cleanup) section)
 
