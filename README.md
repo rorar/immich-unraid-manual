@@ -98,9 +98,11 @@ Depending on:
 ... choose between `zip` and `tar` for your export.
 
 **The convenient choice: `zip` (recommended)**
+
 `zip` has a larger file size but is supported by PhotoMigrator out of the box, *taking care of the extraction process*. See chapter [Google Takeout Phase 3: PhotoMigrator](#google-takeout-phase-3-photomigrator) for more details.
 
 **The smaller and faster choice: `tar`**
+
 But if you have a large library and/or slower internet speed, I would recommend choosing `tar` for better compression and faster extraction times. You can easily extract `tar` files on Unraid using the terminal or a Docker container. We got that step covered in chapter [Pre-Work: Google Takeout Phase 2.5 - Extract tar Archives](#pre-work-google-takeout-phase-25---extract-tar-archives).
 
 1. Go to [Google Takeout](https://takeout.google.com/)
