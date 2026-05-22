@@ -165,6 +165,12 @@
     - [Files](#files-2)
     - [API Keys](#api-keys-2)
     - [Google Photos](#google-photos-2)
+  - [FAQ](#faq)
+    - [Q: Why not use the imagegenius docker image?](#q-why-not-use-the-imagegenius-docker-image)
+    - [Q: Can I use this guide to upgrade an existing Immich setup on Unraid?](#q-can-i-use-this-guide-to-upgrade-an-existing-immich-setup-on-unraid)
+    - [Q: What if I have a different GPU or want to use a different transcoding method?](#q-what-if-i-have-a-different-gpu-or-want-to-use-a-different-transcoding-method)
+    - [Q: Can I use Docker Compose instead of individual containers?](#q-can-i-use-docker-compose-instead-of-individual-containers)
+    - [Q: Do I need to use the custom Docker network `immich_internal`?](#q-do-i-need-to-use-the-custom-docker-network-immich_internal)
   - [TODO](#todo-2)
   - [Kudos and Credits](#kudos-and-credits-2)
     - [This a polished guide from Starbuckstech @starbuck93](#this-a-polished-guide-from-starbuckstech-starbuck93-2)
@@ -732,6 +738,12 @@ Open the Unraid terminal and run the following to extract all `.tgz` archives in
     - [Files](#files-2)
     - [API Keys](#api-keys-2)
     - [Google Photos](#google-photos-2)
+  - [FAQ](#faq)
+    - [Q: Why not use the imagegenius docker image?](#q-why-not-use-the-imagegenius-docker-image)
+    - [Q: Can I use this guide to upgrade an existing Immich setup on Unraid?](#q-can-i-use-this-guide-to-upgrade-an-existing-immich-setup-on-unraid)
+    - [Q: What if I have a different GPU or want to use a different transcoding method?](#q-what-if-i-have-a-different-gpu-or-want-to-use-a-different-transcoding-method)
+    - [Q: Can I use Docker Compose instead of individual containers?](#q-can-i-use-docker-compose-instead-of-individual-containers)
+    - [Q: Do I need to use the custom Docker network `immich_internal`?](#q-do-i-need-to-use-the-custom-docker-network-immich_internal)
   - [TODO](#todo-2)
   - [Kudos and Credits](#kudos-and-credits-2)
     - [This a polished guide from Starbuckstech @starbuck93](#this-a-polished-guide-from-starbuckstech-starbuck93-2)
@@ -1429,6 +1441,12 @@ PhotoMigrator is a tool to help with the migration of photos from Google Takeout
     - [Files](#files-2)
     - [API Keys](#api-keys-2)
     - [Google Photos](#google-photos-2)
+  - [FAQ](#faq)
+    - [Q: Why not use the imagegenius docker image?](#q-why-not-use-the-imagegenius-docker-image)
+    - [Q: Can I use this guide to upgrade an existing Immich setup on Unraid?](#q-can-i-use-this-guide-to-upgrade-an-existing-immich-setup-on-unraid)
+    - [Q: What if I have a different GPU or want to use a different transcoding method?](#q-what-if-i-have-a-different-gpu-or-want-to-use-a-different-transcoding-method)
+    - [Q: Can I use Docker Compose instead of individual containers?](#q-can-i-use-docker-compose-instead-of-individual-containers)
+    - [Q: Do I need to use the custom Docker network `immich_internal`?](#q-do-i-need-to-use-the-custom-docker-network-immich_internal)
   - [TODO](#todo-2)
   - [Kudos and Credits](#kudos-and-credits-2)
     - [This a polished guide from Starbuckstech @starbuck93](#this-a-polished-guide-from-starbuckstech-starbuck93-2)
@@ -1928,6 +1946,19 @@ Remove your Immich API Key in your Account Settings-->API_KEY Keys that you crea
 If you have verified that all your photos have been successfully migrated to Immich and you no longer need your Google Photos library, you can choose to delete your Google Photos library to free up space and ensure that you are no longer relying on Google Photos for your photo storage. 
 
 *Make sure to double-check that everything is working correctly in Immich and that you have backups of your photos before deleting your Google Photos library.*
+
+## FAQ
+### Q: Why not use the imagegenius docker image?
+**A:** The [imagegenius docker image](https://hub.docker.com/r/imagegenius/immich) is a pre-built container that includes Immich and its dependencies. For example machine learning for AMD GPUs aren't supported in the imagegenius image. Using the approach covered in this guide, you'll also get updates faster using official Immich docker images. 
+Also: This guide provides a more tailored approach to setting up Immich on Unraid.
+### Q: Can I use this guide to upgrade an existing Immich setup on Unraid?
+**A:** This guide is intended for new setups of Immich on Unraid. Upgrading an existing setup requires significant changes and data migration. If you have an existing Immich setup, I recommend backing up your data, setting up a new instance of Immich following this guide, and then migrating your data from the old instance to the new one. Consult the Immich documentation and community for best practices on how to do this migration to ensure that you don't lose any data in the process.
+### Q: What if I have a different GPU or want to use a different transcoding method?
+**A:** The templates provided in this guide cover the most common GPU options (NVIDIA NVENC, Intel QSV, AMD VAAPI) as well as a CPU-only option. If you have a different GPU or want to use a different transcoding method, you can still use the CPU-only template for the server, but keep in mind that transcoding performance will be slower. Alternatively, you can try modifying one of the existing templates to work with your specific GPU or transcoding method, but this may require advanced knowledge of Docker and the specific requirements of your GPU.
+### Q: Can I use Docker Compose instead of individual containers?
+**A:** While Docker Compose is a popular tool for managing multi-container applications, it is not natively supported in Unraid's Docker management system. This guide is designed to work with Unraid's native Docker management for better integration and ease of use. However, if you prefer using Docker Compose, you can set it up manually by creating a `docker-compose.yml` file (for example using @starbuck93 [Gist](https://gist.github.com/starbuck93/5ce522b007f67267869afbf13d071f40)) with the appropriate configuration for the Immich stack and running it in a terminal/using the Docker Compose Plugin on Unraid. Just keep in mind that this approach may require more manual management and troubleshooting compared to using Unraid's native Docker management.
+### Q: Do I need to use the custom Docker network `immich_internal`?
+**A:** It is best practice to use a custom Docker network for Immich to allow containers to communicate with each other by name and to avoid the overhead of the default `bridge` network. However, if you have a specific reason for not using a custom network, you can configure the containers to use the `bridge` network and set up host port mappings for communication. Just keep in mind that this may lead to slightly reduced performance and requires exposing database/cache ports to the host, which can be a security risk.
 
 ---
 
