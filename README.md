@@ -418,10 +418,17 @@ To manage this on Unraid, install **FolderView3** from Community Applications:
 5. Check the logs of each container if you encounter any issues to troubleshoot.
 6. **Verify GPU acceleration for Machine Learning (if applicable):**
    If you chose a GPU-accelerated ML template (CUDA, OpenVINO, or ROCm), verify that the GPU is being used:
-   - Upload a photo and wait for face detection / smart search to process
-   - Check the `immich-machine-learning` container logs in the Unraid Docker tab (click on the container icon → **Log**)
-   - Look for: `Setting execution providers to ['CUDAExecutionProvider', 'CPUExecutionProvider']` (NVIDIA), `['OpenVINOExecutionProvider', ...]` (Intel), or `['MIGraphXExecutionProvider', ...]` (AMD)
-   - If you only see `Setting execution providers to ['CPUExecutionProvider']`, the GPU is not being used - check your device mappings and driver setup
+   - Upload a photo and wait for face detection / smart search to process (the provider log appears on first model load, not on container startup)
+   - Then run this command in the Unraid terminal:
+   ```bash
+   docker logs immich-machine-learning 2>&1 | grep -i "execution providers" | tail -1 | grep -qv "'CPUExecutionProvider'" && echo "GPU acceleration: ACTIVE" || echo "GPU acceleration: NOT ACTIVE (CPU only)"
+   ```
+   - If it says **NOT ACTIVE**, check your device mappings and driver setup
+   - For details, check the full log: `docker logs immich-machine-learning 2>&1 | grep -i "execution providers"`
+     - NVIDIA: `['CUDAExecutionProvider', 'CPUExecutionProvider']`
+     - Intel: `['OpenVINOExecutionProvider', 'CPUExecutionProvider']`
+     - AMD: `['MIGraphXExecutionProvider', 'CPUExecutionProvider']`
+     - CPU only: `['CPUExecutionProvider']`
 
 **Google Takeout Migration (if you don't want to migrate you're done here):**
 *You'll need this step for [Quick Start Guide: Import Google Takeout Photos to Immich](#quick-start-guide-import-google-takeout-photos-to-immich) in the PhotoMigrator section.*
