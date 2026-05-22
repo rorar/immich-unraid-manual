@@ -420,7 +420,7 @@ To manage this on Unraid, install **FolderView3** from Community Applications:
    If you chose a GPU-accelerated ML template (CUDA, OpenVINO, or ROCm), verify that the GPU is being used:
    - Upload a photo and wait for face detection / smart search to process
    - Check the `immich-machine-learning` container logs in the Unraid Docker tab (click on the container icon → **Log**)
-   - Look for: `Setting execution providers to ['CUDAExecutionProvider', 'CPUExecutionProvider']` (NVIDIA) or `['OpenVINOExecutionProvider', ...]` (Intel)
+   - Look for: `Setting execution providers to ['CUDAExecutionProvider', 'CPUExecutionProvider']` (NVIDIA), `['OpenVINOExecutionProvider', ...]` (Intel), or `['MIGraphXExecutionProvider', ...]` (AMD)
    - If you only see `Setting execution providers to ['CPUExecutionProvider']`, the GPU is not being used - check your device mappings and driver setup
 
 **Google Takeout Migration (if you don't want to migrate you're done here):**
