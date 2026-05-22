@@ -73,6 +73,7 @@ This repository contains a step-by-step guide for an optimal setup of Unraid for
 - Knowledge how to add a Docker Container to a (custom) docker network
 - Unraid Community Applications plugin installed
 - A SSD/NVMe drive for Cache (can be your Unraid Cache drive)
+  - 7-10GB for the Immich machine learning container to store ML models and cache
 - Very basic Terminal/Command Line knowledge for Unraid
 - If you want to migrate from Google Photos to Immich: Google Account with photos stored in Google Photos
 - Triple the space of your Google Photos library available on your Unraid server for the migration process.
@@ -378,7 +379,7 @@ The main application — web UI, API, and background workers.
 2. Select the `immich-server` template matching your GPU (see [Step 3](#step-3-choose-your-platform))
 3. Configure:
    - **Network:** `immich_internal`
-   - **DB_HOSTNAME:** `immich-postgres-official` or `immich-vectorchord-db` (depending on your database choice | must match the database container name)
+   - **DB_HOSTNAME:** `immich-vectorchord-db` (depending on your database choice | must match the database container name)
    - **DB_PASSWORD:** The exact same password you set in [Step 5](#step-5-postgresql)
    - **REDIS_HOSTNAME:** `immich-valkey` (must match the Valkey container name)
    - All HDD/SSD storage paths should already point to the correct shares (`/mnt/user/immich/` and `/mnt/user/immich-gen/`)
@@ -393,7 +394,7 @@ Immich containers must start in the correct order. If the server starts before t
 
 **Correct start order:**
 1. depending on your database choice: 
-   `immich-postgres-official` or `immich-vectorchord-db` (PostgreSQL)
+   `immich-vectorchord-db` (PostgreSQL)
 2. `immich-valkey` (Valkey)
 3. `immich-machine-learning` (ML)
 4. `immich-server` (Server — depends on all above)
@@ -528,8 +529,8 @@ The `immich` share on the array is used for storing the downloaded Google Takeou
 **A:** It is best practice to use a custom Docker network for Immich to allow containers to communicate with each other by name and to avoid the overhead of the default `bridge` network. However, if you have a specific reason for not using a custom network, you can configure the containers to use the `bridge` network and set up host port mappings for communication. Just keep in mind that this may lead to slightly reduced performance and requires exposing database/cache ports to the host, which can be a security risk.
 
 ### Q: Do I need to set ports while using `immich_internal`?
-**A:** No. On a custom Docker network, containers communicate directly by container name and internal port. Only the Immich server needs a port mapping (2283) so you can access the web UI from your browser. The database (5432), Valkey (6379), and machine learning (3003) containers do not need exposed ports - they are only accessed by the Immich server internally. Not exposing these ports is actually more secure since it prevents external access to your database and cache.
-
+**A:** No. On a custom Docker network, containers communicate directly by container name and internal port. The database (5432), Valkey (6379), and machine learning (3003) containers do not need exposed ports - they are only accessed by the Immich server internally. Not exposing these ports is actually more secure since it prevents external access to your database and cache.
+Only the Immich server needs a port mapping (2283) so you can access the web UI from your browser. 
 ---
 
 ## TODO
