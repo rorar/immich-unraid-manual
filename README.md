@@ -126,42 +126,42 @@ Here, we will create two shares: one for the main media library and another for 
 Click on "Add Share" on the bottom left of your Share table and create the following shares:
 
 ### `immich` Share
-**Data storage:** Array (HDD)
+**Data storage:** *Array (HDD)*
 
-**Purpose:** This share will be used to store your photo and video library, as well as backups and uploads. It will be the main storage location for your media files.
+**Purpose:** *This share will be used to store your photo and video library, as well as backups and uploads. It will be the main storage location for your media files.*
 
-- **Share name:** immich
-- **Comments:** Immich photo and video library, as well as backups and uploads.
-- **Minimum free space:** 10GB 
+- **Share name:** `immich`
+- **Comments:** `Immich photo and video library, as well as backups and uploads.`
+- **Minimum free space:** `10GB` 
   (you can adjust this based on your needs - Setting too low may lead to issues with uploads and backups if the share runs out of space)
-- **Primary storage (for new files and folders):** Array
-- **Allocation method:** High-Water
-- **Split level:** Automatically split any directory as required
-- **Included disk(s):** All 
+- **Primary storage (for new files and folders):** `Array`
+- **Allocation method:** `High-Water`
+- **Split level:** `Automatically split any directory as required`
+- **Included disk(s):** `All` 
   (BUT you can exclude disks if you want to dedicate specific disks for other purposes or if you have a mix of HDDs and SSDs in your array and want to keep the immich share on the HDDs. Also usable if you've got untrusted disks in your array that you don't want to use for immich storage.)
-- **Excluded disk(s):** None
+- **Excluded disk(s):** `None`
 
 -> Hit "Add Share" to create the share.
 
 
 ### `immich-gen` Share
-**Data storage:** Cache (SSD/NVMe)
+**Data storage:** *Cache (SSD/NVMe)*
 
-**Purpose:** This share will be used to store **gen**erated files like thumbnails and encoded videos. Also your profile lives here.
+**Purpose:** *This share will be used to store **gen**erated files like thumbnails and encoded videos. Also your profile lives here.*
 
-- **Share name:** immich-gen
-- **Comments:** Immich generated files (thumbnails, encoded videos) and profile.
-- **Minimum free space:** 10GB 
+- **Share name:** `immich-gen`
+- **Comments:** `Immich generated files (thumbnails, encoded videos) and profile.`
+- **Minimum free space:** `10GB` 
   (you can adjust this based on your needs - Setting too low may lead to issues with thumbnail generation and video encoding if the share runs out of space)
-- **Primary storage (for new files and folders):** Cache
-- **Secondary storage:** Array 
+- **Primary storage (for new files and folders):** `Cache`
+- **Secondary storage:** `Array` 
   (HDD - this is a fallback in case the cache runs out of space, but ideally, you want to keep the immich-gen share on the cache for optimal performance)
-- **Allocation method:** High-Water
-- **Split level:** Automatically split any directory as required
-- **Included disk(s):** All 
+- **Allocation method:** `High-Water`
+- **Split level:** `Automatically split any directory as required`
+- **Included disk(s):** `All` 
   (BUT you can exclude disks if you want to dedicate specific disks for other purposes or if you have a mix of HDDs and SSDs in your array and want to keep the immich share on the HDDs. Also usable if you've got untrusted disks in your array that you don't want to use for immich storage.)
-- **Excluded disk(s):** None
-- **Mover actions:** Cache -> Array
+- **Excluded disk(s):** `None`
+- **Mover actions:** `Cache -> Array`
 
 -> Hit "Add Share" to create the share.
 
@@ -254,12 +254,21 @@ Open the Unraid web interface and open the terminal (click the `>_` icon in the 
 **NOTE:** `wget` downloads files from the web. The `-P` flag sets the download directory. Templates are saved to Unraid's Docker Manager template directory.
 
 ### PostgreSQL
+Choose between stability and latest features:
+
+| Option | Image | VectorChord | pgvector | Status |
+|--------|-------|-------------|----------|--------|
+| **Stable** | `ghcr.io/immich-app/postgres:18-vectorchord0.5.3-pgvector0.8.1` | 0.5.3 | 0.8.1 | Tested by Immich team |
+| Experimental | `tensorchord/vchord-postgres:pg18-v1.1.1` | 1.1.1 | 0.8.2 | Latest, less tested |
+
+**NOTE:** You COULD use VectorChord 1.0.0+ (See [#23845](https://github.com/immich-app/immich/pull/23845)) or 1.1.1 (See [this discussion](https://github.com/immich-app/immich/discussions/23830#discussioncomment-15956803)). The 0.5.3 version is more stable and tested extensively with Immich. If you want to try the latest, use the experimental template.
+
 #### **PostgreSQL database by Immich** — RECOMMENDED (stable, tested by Immich team):
 ```bash
 wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-postgres-official.xml
 ```
 
-#### **PostgreSQL database by VectorChord** — OPTIONAL/EXPERIMENTAL (latest VectorChord 1.1.1, less tested with Immich):
+#### **PostgreSQL database by VectorChord** — EXPERIMENTAL (latest VectorChord 1.1.1, less tested with Immich):
 ```bash
 wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-vectorchord-db.xml
 ```
@@ -318,17 +327,7 @@ wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercon
 
 ---
 
-## Step 5: PostgreSQL
-Choose between stability and latest features:
-
-| Option | Image | VectorChord | pgvector | Status |
-|--------|-------|-------------|----------|--------|
-| **Stable** | `ghcr.io/immich-app/postgres:18-vectorchord0.5.3-pgvector0.8.1` | 0.5.3 | 0.8.1 | Tested by Immich team |
-| Experimental | `tensorchord/vchord-postgres:pg18-v1.1.1` | 1.1.1 | 0.8.2 | Latest, less tested |
-
-**NOTE:** You COULD use VectorChord 1.0.0+ (See [#23845](https://github.com/immich-app/immich/pull/23845)) or 1.1.1 (See [this discussion](https://github.com/immich-app/immich/discussions/23830#discussioncomment-15956803)). The 0.5.3 version is more stable and tested extensively with Immich. If you want to try the latest, use the experimental template.
-
-### PostgreSQL Setup (both options):
+## PostgreSQL Setup (both options):
 1. Go to the **Docker** tab → **Add Container**
 2. Select the template you downloaded (`immich-postgres-official` or `immich-vectorchord-db`)
 3. Configure:
