@@ -418,11 +418,10 @@ To manage this on Unraid, install **FolderView3** from Community Applications:
 5. Check the logs of each container if you encounter any issues to troubleshoot.
 6. **Verify GPU acceleration for Machine Learning (if applicable):**
    If you chose a GPU-accelerated ML template (CUDA, OpenVINO, or ROCm), verify that the GPU is being used:
-   - Go to **Administration** → **System Settings** → **Machine Learning**
    - Upload a photo and wait for face detection / smart search to process
    - Check the `immich-machine-learning` container logs in the Unraid Docker tab (click on the container icon → **Log**)
-   - Look for lines indicating GPU usage, e.g. `CUDA`, `OpenVINO`, or `ROCm` provider loaded
-   - If you only see `CPUExecutionProvider`, the GPU is not being used - check your device mappings and driver setup
+   - Look for: `Setting execution providers to ['CUDAExecutionProvider', 'CPUExecutionProvider']` (NVIDIA) or `['OpenVINOExecutionProvider', ...]` (Intel)
+   - If you only see `Setting execution providers to ['CPUExecutionProvider']`, the GPU is not being used - check your device mappings and driver setup
 
 **Google Takeout Migration (if you don't want to migrate you're done here):**
 *You'll need this step for [Quick Start Guide: Import Google Takeout Photos to Immich](#quick-start-guide-import-google-takeout-photos-to-immich) in the PhotoMigrator section.*
