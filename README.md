@@ -580,10 +580,10 @@ Once your Google Takeout downloads are complete (see [Phase 2](#pre-work-google-
 Open the Unraid terminal and run the following command. It starts a `tmux` session so the extraction continues even if you close the web terminal.
 
 ```bash
-tmux new-session -s takeout 'cd /mnt/user/immich/Takeout && for f in takeout-*.tgz; do echo "Extracting $f ..."; tar -xzf "$f" -C /mnt/user/immich/Takeout; echo "Done: $f"; done; echo "All archives extracted. Press Enter to close."; read'
+tmux new-session -s takeout 'cd /mnt/user/immich/Takeout && FAIL=0 && for f in takeout-*.tgz; do echo "Extracting $f ..."; EXPECTED=$(tar -tzf "$f" 2>/dev/null | wc -l); tar -xzf "$f" -C /mnt/user/immich/Takeout; ACTUAL=$(tar -tzf "$f" 2>/dev/null | while read p; do [ -e "/mnt/user/immich/Takeout/$p" ] && echo ok; done | wc -l); if [ "$EXPECTED" != "$ACTUAL" ]; then echo "WARNING: $f - expected $EXPECTED files, found $ACTUAL on disk!"; FAIL=1; else echo "OK: $f - all $EXPECTED files verified."; fi; done; if [ "$FAIL" = "0" ]; then echo "All archives extracted and verified successfully."; else echo "WARNING: Some archives had mismatches. Check the output above."; fi; echo "Press Enter to close."; read'
 ```
 
-This will extract each archive (e.g. `takeout-20260518T081014Z-3-001.tgz`, `takeout-20260518T081014Z-3-002.tgz`, etc.) sequentially into `/mnt/user/immich/Takeout`.
+This will extract each archive (e.g. `takeout-20260518T081014Z-3-001.tgz`, `takeout-20260518T081014Z-3-002.tgz`, etc.) sequentially into `/mnt/user/immich/Takeout` and verify that the number of extracted files matches the archive contents. You will see either `OK` or `WARNING` per archive.
 
 **tmux tips:**
 - If you close the terminal, the extraction keeps running in the background
