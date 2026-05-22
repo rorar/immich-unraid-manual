@@ -527,6 +527,9 @@ The `immich` share on the array is used for storing the downloaded Google Takeou
 ### Q: Do I need to use the custom Docker network `immich_internal`?
 **A:** It is best practice to use a custom Docker network for Immich to allow containers to communicate with each other by name and to avoid the overhead of the default `bridge` network. However, if you have a specific reason for not using a custom network, you can configure the containers to use the `bridge` network and set up host port mappings for communication. Just keep in mind that this may lead to slightly reduced performance and requires exposing database/cache ports to the host, which can be a security risk.
 
+### Q: Do I need to set ports while using `immich_internal`?
+**A:** No. On a custom Docker network, containers communicate directly by container name and internal port. Only the Immich server needs a port mapping (2283) so you can access the web UI from your browser. The database (5432), Valkey (6379), and machine learning (3003) containers do not need exposed ports - they are only accessed by the Immich server internally. Not exposing these ports is actually more secure since it prevents external access to your database and cache.
+
 ---
 
 ## TODO
