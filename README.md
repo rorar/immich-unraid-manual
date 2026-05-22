@@ -278,25 +278,6 @@ wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercon
 wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-valkey.xml
 ```
 
-### Server template (choose one based on your GPU):
-*These templates are for video transcoding. If you don't have a GPU or don't want to use it for transcoding, choose the CPU-only template.*
-
-#### **CPU only** — no GPU transcoding:
-```bash
-wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-server.xml
-```
-
-#### **Intel QSV / AMD VAAPI** — uses `/dev/dri`:
-*You can also use your Intel iGPU ("inbuilt graphics card" in your CPU) for transcoding with Quick Sync Video (QSV) or your AMD GPU with VAAPI. Both use the same template since they both leverage `/dev/dri` for hardware acceleration.*
-```bash
-wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-server-qsv-vaapi.xml
-```
-
-#### **NVIDIA NVENC** — uses `--runtime=nvidia`:
-```bash
-wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-server-nvenc.xml
-```
-
 ### Machine Learning template (choose one based on your GPU):
 
 #### **CPU only** — no GPU acceleration:
@@ -318,6 +299,25 @@ wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercon
 #### **AMD ROCm:**
 ```bash
 wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-machine-learning-rocm.xml
+```
+
+### Server template (choose one based on your GPU):
+*These templates are for video transcoding. If you don't have a GPU or don't want to use it for transcoding, choose the CPU-only template.*
+
+#### **CPU only** — no GPU transcoding:
+```bash
+wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-server.xml
+```
+
+#### **Intel QSV / AMD VAAPI** — uses `/dev/dri`:
+*You can also use your Intel iGPU ("inbuilt graphics card" in your CPU) for transcoding with Quick Sync Video (QSV) or your AMD GPU with VAAPI. Both use the same template since they both leverage `/dev/dri` for hardware acceleration.*
+```bash
+wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-server-qsv-vaapi.xml
+```
+
+#### **NVIDIA NVENC** — uses `--runtime=nvidia`:
+```bash
+wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-server-nvenc.xml
 ```
 
 ### **PhotoMigrator** (for Google Takeout migration):
