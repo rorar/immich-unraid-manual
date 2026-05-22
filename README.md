@@ -579,11 +579,17 @@ Once your Google Takeout downloads are complete (see [Phase 2](#pre-work-google-
 
 Open the Unraid terminal and run the following command. It starts a `tmux` session so the extraction continues even if you close the web terminal.
 
+First, download the extraction script:
 ```bash
-tmux new-session -s takeout 'cd /mnt/user/immich/Takeout && FAIL=0 && for f in takeout-*.tgz; do echo "Extracting $f ..."; EXPECTED=$(tar -tzf "$f" 2>/dev/null | wc -l); tar -xzf "$f" -C /mnt/user/immich/Takeout; ACTUAL=$(tar -tzf "$f" 2>/dev/null | while read p; do [ -e "/mnt/user/immich/Takeout/$p" ] && echo ok; done | wc -l); if [ "$EXPECTED" != "$ACTUAL" ]; then echo "WARNING: $f - expected $EXPECTED files, found $ACTUAL on disk!"; FAIL=1; else echo "OK: $f - all $EXPECTED files verified."; fi; done; if [ "$FAIL" = "0" ]; then echo "All archives extracted and verified successfully."; else echo "WARNING: Some archives had mismatches. Check the output above."; fi; echo "Press Enter to close."; read'
+wget -O /mnt/user/immich/Takeout/extract-takeout.sh https://raw.githubusercontent.com/rorar/immich-unraid-manual/main/scripts/extract-takeout.sh
 ```
 
-This will extract each archive (e.g. `takeout-20260518T081014Z-3-001.tgz`, `takeout-20260518T081014Z-3-002.tgz`, etc.) sequentially into `/mnt/user/immich/Takeout` and verify that the number of extracted files matches the archive contents. You will see either `OK` or `WARNING` per archive.
+Then run it inside a tmux session:
+```bash
+tmux new-session -s takeout 'bash /mnt/user/immich/Takeout/extract-takeout.sh /mnt/user/immich/Takeout'
+```
+
+The script extracts each archive sequentially, then verifies every file. You will see `OK` or `WARNING` per archive, and any missing files are listed individually.
 
 **tmux tips:**
 - If you close the terminal, the extraction keeps running in the background
