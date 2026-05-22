@@ -217,6 +217,8 @@ docker network create immich_internal
 ## Step 3: Choose Your Platform
 Before downloading templates, determine which GPU acceleration you want to use. This affects which **server** template (for video transcoding) and which **machine learning** template (for face recognition and image search) you need.
 
+*Tip: Click the expand icon (↔) on the diagram to view it in full size.*
+
 ```mermaid
 graph TD
     A[What GPU do you have?] --> B{NVIDIA?}
