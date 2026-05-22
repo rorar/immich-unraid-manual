@@ -177,11 +177,11 @@ Once you receive the email from Google Takeout with the download link, you can u
 3. Choose the Firefox container by LinuxServer.io and click "Install".
 4. If you already have a Firefox container setup, choose to name the new container something like "firefox-takeout-export" to differentiate it from any other Firefox containers you may have.
 5. During the installation process, scroll down and click on `Add another Path, Port, Variable, Label or Device`
-6. To map the Download Path to the `immich` share, set the "Config Type" to "Path" (It's automatically pre-set)
-   1. Name: takeout-export
-   2. Container Path: /config/Downloads
-   3. Host Path: /mnt/user/immich/Takeout
-   4. Access Mode: Read/Write
+6. To map the Download Path to the `immich` share, set the "Config Type" to `Path` (It's automatically pre-set)
+   1. Name: `takeout-export`
+   2. Container Path: `/config/Downloads`
+   3. Host Path: `/mnt/user/immich/Takeout`
+   4. Access Mode: `Read/Write`
    5. --> Hit "Save" to add the path mapping
 7. Hit "Apply" to start the installation of the Firefox container with the new path mapping.
 8.  Open the Firefox container's web UI
