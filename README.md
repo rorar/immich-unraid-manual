@@ -7,177 +7,28 @@
 
 
 # Table of Contents
-- [Table of Contents](#table-of-contents)
-  - [Unraid Immich Performance Setup + Google Takeout Guide](#unraid-immich-performance-setup--google-takeout-guide)
-    - [TL;DR:](#tldr)
-      - [Immich Setup](#immich-setup)
-      - [Google Takeout Guide](#google-takeout-guide)
-  - [Note](#note)
-  - [Intended Use](#intended-use)
-    - [In Scope:](#in-scope)
-    - [Out of Scope:](#out-of-scope)
-  - [What's inside this repository?](#whats-inside-this-repository)
-    - [Pre-requisites](#pre-requisites)
+- [Unraid Immich Performance Setup + Google Takeout Guide](#unraid-immich-performance-setup--google-takeout-guide)
+- [Note](#note)
+- [Intended Use](#intended-use)
 - [Installation and Configuration](#installation-and-configuration)
-  - [Pre-Work: Google Takeout Phase 1 - Request Exporting Your Photos from Google Photos](#pre-work-google-takeout-phase-1---request-exporting-your-photos-from-google-photos)
-  - [Step 1: Create Shares `immich` and `immich-gen` for Immich on Unraid](#step-1-create-shares-immich-and-immich-gen-for-immich-on-unraid)
-    - [`immich` Share](#immich-share)
-    - [`immich-gen` Share](#immich-gen-share)
-  - [Pre-Work: Google Takeout Phase 2 - Downloading and Extracting Your Photos from Google Takeout utilizing a Firefox Docker Container on Unraid](#pre-work-google-takeout-phase-2---downloading-and-extracting-your-photos-from-google-takeout-utilizing-a-firefox-docker-container-on-unraid)
-  - [Step 2: Create the `immich_internal` Docker Network](#step-2-create-the-immich_internal-docker-network)
+  - [Pre-Work: Google Takeout Phase 1 - Request Export](#pre-work-google-takeout-phase-1---request-exporting-your-photos-from-google-photos)
+  - [Step 1: Create Shares](#step-1-create-shares-immich-and-immich-gen-for-immich-on-unraid)
+  - [Pre-Work: Google Takeout Phase 2 - Download via Firefox](#pre-work-google-takeout-phase-2---downloading-and-extracting-your-photos-from-google-takeout-utilizing-a-firefox-docker-container-on-unraid)
+  - [Step 2: Create Docker Network](#step-2-create-the-immich_internal-docker-network)
   - [Step 3: Choose Your Platform](#step-3-choose-your-platform)
   - [Step 4: Download Templates](#step-4-download-templates)
-    - [PostgreSQL](#postgresql)
-      - [**PostgreSQL database by Immich** — RECOMMENDED (stable, tested by Immich team):](#postgresql-database-by-immich--recommended-stable-tested-by-immich-team)
-      - [**PostgreSQL database by VectorChord** — OPTIONAL/EXPERIMENTAL (latest VectorChord 1.1.1, less tested with Immich):](#postgresql-database-by-vectorchord--optionalexperimental-latest-vectorchord-111-less-tested-with-immich)
-    - [**Valkey** (cache/message broker):](#valkey-cachemessage-broker)
-    - [Server template (choose one based on your GPU):](#server-template-choose-one-based-on-your-gpu)
-      - [**CPU only** — no GPU transcoding:](#cpu-only--no-gpu-transcoding)
-      - [**Intel QSV / AMD VAAPI** — uses `/dev/dri`:](#intel-qsv--amd-vaapi--uses-devdri)
-      - [**NVIDIA NVENC** — uses `--runtime=nvidia`:](#nvidia-nvenc--uses---runtimenvidia)
-    - [Machine Learning template (choose one based on your GPU):](#machine-learning-template-choose-one-based-on-your-gpu)
-      - [**CPU only** — no GPU acceleration:](#cpu-only--no-gpu-acceleration)
-      - [**NVIDIA CUDA:**](#nvidia-cuda)
-      - [**Intel OpenVINO:**](#intel-openvino)
-      - [**AMD ROCm:**](#amd-rocm)
-    - [**PhotoMigrator** (for Google Takeout migration):](#photomigrator-for-google-takeout-migration)
   - [Step 5: PostgreSQL](#step-5-postgresql)
-    - [PostgreSQL Setup (both options):](#postgresql-setup-both-options)
   - [Step 6: Valkey Setup](#step-6-valkey-setup)
   - [Step 7: Machine Learning Setup](#step-7-machine-learning-setup)
   - [Step 8: Immich Server Setup](#step-8-immich-server-setup)
-  - [Step 9: Container Start Order with FolderView3](#step-9-container-start-order-with-folderview3)
+  - [Step 9: Container Start Order](#step-9-container-start-order-with-folderview3)
   - [Step 10: Run and Verify](#step-10-run-and-verify)
-  - [Pre-Work: Google Takeout Phase 2.5 - Extract tar Archives](#pre-work-google-takeout-phase-25---extract-tar-archives)
-- [Table of Contents](#table-of-contents-1)
-  - [Unraid Immich Performance Setup + Google Takeout Guide](#unraid-immich-performance-setup--google-takeout-guide-1)
-    - [TL;DR:](#tldr-1)
-      - [Immich Setup](#immich-setup-1)
-      - [Google Takeout Guide](#google-takeout-guide-1)
-  - [Note](#note-1)
-  - [Intended Use](#intended-use-1)
-    - [In Scope:](#in-scope-1)
-    - [Out of Scope:](#out-of-scope-1)
-  - [What's inside this repository?](#whats-inside-this-repository-1)
-    - [Pre-requisites](#pre-requisites-1)
-- [Installation and Configuration](#installation-and-configuration-1)
-  - [Pre-Work: Google Takeout Phase 1 - Request Exporting Your Photos from Google Photos](#pre-work-google-takeout-phase-1---request-exporting-your-photos-from-google-photos-1)
-  - [Step 1: Create Shares `immich` and `immich-gen` for Immich on Unraid](#step-1-create-shares-immich-and-immich-gen-for-immich-on-unraid-1)
-    - [`immich` Share](#immich-share-1)
-    - [`immich-gen` Share](#immich-gen-share-1)
-  - [Pre-Work: Google Takeout Phase 2 - Downloading and Extracting Your Photos from Google Takeout utilizing a Firefox Docker Container on Unraid](#pre-work-google-takeout-phase-2---downloading-and-extracting-your-photos-from-google-takeout-utilizing-a-firefox-docker-container-on-unraid-1)
-  - [Step 2: Create the `immich_internal` Docker Network](#step-2-create-the-immich_internal-docker-network-1)
-  - [Step 3: Choose Your Platform](#step-3-choose-your-platform-1)
-  - [Step 4: Download Templates](#step-4-download-templates-1)
-    - [PostgreSQL](#postgresql-1)
-      - [**PostgreSQL database by Immich** — RECOMMENDED (stable, tested by Immich team):](#postgresql-database-by-immich--recommended-stable-tested-by-immich-team-1)
-      - [**PostgreSQL database by VectorChord** — OPTIONAL/EXPERIMENTAL (latest VectorChord 1.1.1, less tested with Immich):](#postgresql-database-by-vectorchord--optionalexperimental-latest-vectorchord-111-less-tested-with-immich-1)
-    - [**Valkey** (cache/message broker):](#valkey-cachemessage-broker-1)
-    - [Server template (choose one based on your GPU):](#server-template-choose-one-based-on-your-gpu-1)
-      - [**CPU only** — no GPU transcoding:](#cpu-only--no-gpu-transcoding-1)
-      - [**Intel QSV / AMD VAAPI** — uses `/dev/dri`:](#intel-qsv--amd-vaapi--uses-devdri-1)
-      - [**NVIDIA NVENC** — uses `--runtime=nvidia`:](#nvidia-nvenc--uses---runtimenvidia-1)
-    - [Machine Learning template (choose one based on your GPU):](#machine-learning-template-choose-one-based-on-your-gpu-1)
-      - [**CPU only** — no GPU acceleration:](#cpu-only--no-gpu-acceleration-1)
-      - [**NVIDIA CUDA:**](#nvidia-cuda-1)
-      - [**Intel OpenVINO:**](#intel-openvino-1)
-      - [**AMD ROCm:**](#amd-rocm-1)
-    - [**PhotoMigrator** (for Google Takeout migration):](#photomigrator-for-google-takeout-migration-1)
-  - [Step 5: PostgreSQL](#step-5-postgresql-1)
-    - [PostgreSQL Setup (both options):](#postgresql-setup-both-options-1)
-  - [Step 6: Valkey Setup](#step-6-valkey-setup-1)
-  - [Step 7: Machine Learning Setup](#step-7-machine-learning-setup-1)
-  - [Step 8: Immich Server Setup](#step-8-immich-server-setup-1)
-  - [Step 9: Container Start Order with FolderView3](#step-9-container-start-order-with-folderview3-1)
-  - [Step 10: Run and Verify](#step-10-run-and-verify-1)
-    - [Run and Verify](#run-and-verify)
-    - [Create Immich API Key for PhotoMigrator](#create-immich-api-key-for-photomigrator)
-  - [Pre-Work: Google Takeout Phase 2.5 - Extract tar Archives](#pre-work-google-takeout-phase-25---extract-tar-archives-1)
+  - [Pre-Work: Google Takeout Phase 2.5 - Extract Archives](#pre-work-google-takeout-phase-25---extract-tar-archives)
   - [Google Takeout Phase 3: PhotoMigrator](#google-takeout-phase-3-photomigrator)
-    - [PhotoMigrator Setup](#photomigrator-setup)
-    - [Quick Start Guide: Import Google Takeout Photos to Immich](#quick-start-guide-import-google-takeout-photos-to-immich)
-  - [Cleanup](#cleanup)
-    - [Files](#files)
-    - [API Keys](#api-keys)
-    - [Google Photos](#google-photos)
-  - [TODO](#todo)
-  - [Kudos and Credits](#kudos-and-credits)
-    - [This a polished guide from Starbuckstech @starbuck93](#this-a-polished-guide-from-starbuckstech-starbuck93)
-    - [Immich Team](#immich-team)
-    - [PhotoMigrator Team](#photomigrator-team)
-  - [Google Takeout Phase 3: PhotoMigrator](#google-takeout-phase-3-photomigrator-1)
-    - [PhotoMigrator Setup](#photomigrator-setup-1)
-    - [Quick Start Guide: Import Google Takeout Photos to Immich](#quick-start-guide-import-google-takeout-photos-to-immich-1)
-- [Table of Contents](#table-of-contents-2)
-  - [Unraid Immich Performance Setup + Google Takeout Guide](#unraid-immich-performance-setup--google-takeout-guide-2)
-    - [TL;DR:](#tldr-2)
-      - [Immich Setup](#immich-setup-2)
-      - [Google Takeout Guide](#google-takeout-guide-2)
-  - [Note](#note-2)
-  - [Intended Use](#intended-use-2)
-    - [In Scope:](#in-scope-2)
-    - [Out of Scope:](#out-of-scope-2)
-  - [What's inside this repository?](#whats-inside-this-repository-2)
-    - [Pre-requisites](#pre-requisites-2)
-- [Installation and Configuration](#installation-and-configuration-2)
-  - [Pre-Work: Google Takeout Phase 1 - Request Exporting Your Photos from Google Photos](#pre-work-google-takeout-phase-1---request-exporting-your-photos-from-google-photos-2)
-  - [Step 1: Create Shares `immich` and `immich-gen` for Immich on Unraid](#step-1-create-shares-immich-and-immich-gen-for-immich-on-unraid-2)
-    - [`immich` Share](#immich-share-2)
-    - [`immich-gen` Share](#immich-gen-share-2)
-  - [Pre-Work: Google Takeout Phase 2 - Downloading and Extracting Your Photos from Google Takeout utilizing a Firefox Docker Container on Unraid](#pre-work-google-takeout-phase-2---downloading-and-extracting-your-photos-from-google-takeout-utilizing-a-firefox-docker-container-on-unraid-2)
-  - [Step 2: Create the `immich_internal` Docker Network](#step-2-create-the-immich_internal-docker-network-2)
-  - [Step 3: Choose Your Platform](#step-3-choose-your-platform-2)
-  - [Step 4: Download Templates](#step-4-download-templates-2)
-    - [PostgreSQL](#postgresql-2)
-      - [**PostgreSQL database by Immich** — RECOMMENDED (stable, tested by Immich team):](#postgresql-database-by-immich--recommended-stable-tested-by-immich-team-2)
-      - [**PostgreSQL database by VectorChord** — OPTIONAL/EXPERIMENTAL (latest VectorChord 1.1.1, less tested with Immich):](#postgresql-database-by-vectorchord--optionalexperimental-latest-vectorchord-111-less-tested-with-immich-2)
-    - [**Valkey** (cache/message broker):](#valkey-cachemessage-broker-2)
-    - [Server template (choose one based on your GPU):](#server-template-choose-one-based-on-your-gpu-2)
-      - [**CPU only** — no GPU transcoding:](#cpu-only--no-gpu-transcoding-2)
-      - [**Intel QSV / AMD VAAPI** — uses `/dev/dri`:](#intel-qsv--amd-vaapi--uses-devdri-2)
-      - [**NVIDIA NVENC** — uses `--runtime=nvidia`:](#nvidia-nvenc--uses---runtimenvidia-2)
-    - [Machine Learning template (choose one based on your GPU):](#machine-learning-template-choose-one-based-on-your-gpu-2)
-      - [**CPU only** — no GPU acceleration:](#cpu-only--no-gpu-acceleration-2)
-      - [**NVIDIA CUDA:**](#nvidia-cuda-2)
-      - [**Intel OpenVINO:**](#intel-openvino-2)
-      - [**AMD ROCm:**](#amd-rocm-2)
-    - [**PhotoMigrator** (for Google Takeout migration):](#photomigrator-for-google-takeout-migration-2)
-  - [Step 5: PostgreSQL](#step-5-postgresql-2)
-    - [PostgreSQL Setup (both options):](#postgresql-setup-both-options-2)
-  - [Step 6: Valkey Setup](#step-6-valkey-setup-2)
-  - [Step 7: Machine Learning Setup](#step-7-machine-learning-setup-2)
-  - [Step 8: Immich Server Setup](#step-8-immich-server-setup-2)
-  - [Step 9: Container Start Order with FolderView3](#step-9-container-start-order-with-folderview3-2)
-  - [Step 10: Run and Verify](#step-10-run-and-verify-2)
-  - [Pre-Work: Google Takeout Phase 2.5 - Extract `tar` Archives](#pre-work-google-takeout-phase-25---extract-tar-archives-2)
-  - [Google Takeout Phase 3: PhotoMigrator](#google-takeout-phase-3-photomigrator-2)
-    - [PhotoMigrator Setup](#photomigrator-setup-2)
-    - [Quick Start Guide: Import Google Takeout Photos to Immich](#quick-start-guide-import-google-takeout-photos-to-immich-2)
-  - [Cleanup](#cleanup-1)
-    - [Files](#files-1)
-    - [API Keys](#api-keys-1)
-    - [Google Photos](#google-photos-1)
-  - [TODO](#todo-1)
-  - [Kudos and Credits](#kudos-and-credits-1)
-    - [This a polished guide from Starbuckstech @starbuck93](#this-a-polished-guide-from-starbuckstech-starbuck93-1)
-    - [Immich Team](#immich-team-1)
-    - [PhotoMigrator Team](#photomigrator-team-1)
-  - [Cleanup](#cleanup-2)
-    - [Files](#files-2)
-    - [API Keys](#api-keys-2)
-    - [Google Photos](#google-photos-2)
-  - [FAQ](#faq)
-    - [Q: Why not use the imagegenius docker image?](#q-why-not-use-the-imagegenius-docker-image)
-    - [Q: Can I use this guide to upgrade an existing Immich setup on Unraid?](#q-can-i-use-this-guide-to-upgrade-an-existing-immich-setup-on-unraid)
-    - [Q: What if I have a different GPU or want to use a different transcoding method?](#q-what-if-i-have-a-different-gpu-or-want-to-use-a-different-transcoding-method)
-    - [Q: Why have you choosen PATH living on the array insude `immich` share instead of cache for Firefox Downloads and processing?](#q-why-have-you-choosen-path-living-on-the-array-insude-immich-share-instead-of-cache-for-firefox-downloads-and-processing)
-    - [Q: Can I use Docker Compose instead of individual containers?](#q-can-i-use-docker-compose-instead-of-individual-containers)
-    - [Q: Do I need to use the custom Docker network `immich_internal`?](#q-do-i-need-to-use-the-custom-docker-network-immich_internal)
-  - [TODO](#todo-2)
-  - [Kudos and Credits](#kudos-and-credits-2)
-    - [This a polished guide from Starbuckstech @starbuck93](#this-a-polished-guide-from-starbuckstech-starbuck93-2)
-    - [Immich Team](#immich-team-2)
-    - [PhotoMigrator Team](#photomigrator-team-2)
+- [Cleanup](#cleanup)
+- [FAQ](#faq)
+- [TODO](#todo)
+- [Kudos and Credits](#kudos-and-credits)
 
 
 ## Unraid Immich Performance Setup + Google Takeout Guide
@@ -241,15 +92,15 @@ If you have a large library, the Google Takeout exporting process can take a whi
 For exporting from Google Takeout, you can choose between a `zip` and `tar`  file that you can extract and then using tools to upload to Immich.
 
 Depending on:
-- Your internet conection speed
+- Your internet connection speed
 - possibly metered internet connection (some ISPs throttle download speeds after a certain amount of data downloaded)
 ... choose between `zip` and `tar` for your export.
 
-**The convinient choice: `zip` (recommended)**
+**The convenient choice: `zip` (recommended)**
 `zip` has a larger file size but is supported by PhotoMigrator out of the box, *taking care of the extraction process*. See chapter [Google Takeout Phase 3: PhotoMigrator](#google-takeout-phase-3-photomigrator) for more details.
 
 **The smaller and faster choice: `tar`**
-But if you have a large library and/or slower internet speed, I would recommend choosing `tar` for better compression and faster extraction times. You can easily extract `tar` files on Unraid using the terminal or a Docker container. We got that step covereed in chapter [Pre-Work: Google Takeout Phase 2.5 - Extract tar Archives](#pre-work-google-takeout-phase-25---extract-tar-archives).
+But if you have a large library and/or slower internet speed, I would recommend choosing `tar` for better compression and faster extraction times. You can easily extract `tar` files on Unraid using the terminal or a Docker container. We got that step covered in chapter [Pre-Work: Google Takeout Phase 2.5 - Extract tar Archives](#pre-work-google-takeout-phase-25---extract-tar-archives).
 
 1. Go to [Google Takeout](https://takeout.google.com/)
 2. Sign in to your Google account
@@ -555,7 +406,7 @@ To manage this on Unraid, install **FolderView3** from Community Applications:
 
 ## Step 10: Run and Verify
 1. Click on the `Immich` folder in Docker and hit "Start" (this will start all containers in the correct order)
-2. Wait a few minutes for the server and all dependendent services to initialize
+2. Wait a few minutes for the server and all dependent services to initialize
 3. Access Immich at `http://<your-unraid-ip>:2283` and log in with the admin account you created
 4. Verify that everything is working by uploading a test photo and checking that thumbnails are generated and that the photo appears in the library.
 5. Check the logs of each container if you encounter any issues to troubleshoot.
@@ -614,14 +465,13 @@ PhotoMigrator is a tool to help with the migration of photos from Google Takeout
 | Container Path | Host Path | Purpose |
 |----------------|-----------|---------|
 | `/app/config` | `/mnt/user/appdata/photomigrator/config` | Config files (Config.ini, docker.conf) |
-| `/app/data` | `/mnt/user/appdata/photomigrator/data` | Working directory for import/export |
-| `/app/volumes/admin` | **`/mnt/user/immich/Takeout`** | Your extracted Google Takeout files |
+| `/app/data/admin` | **`/mnt/user/immich/Takeout`** | Your extracted Google Takeout files |
 
 4. Set **Network** to `immich_internal` (so PhotoMigrator can reach Immich by container name)
 5. Hit **Apply** to start the container.
 6. Access the PhotoMigrator web UI at `http://<your-unraid-ip>:6078`
 
-**NOTE:** The mount target is `/app/volumes/admin` (not `/app/volumes`) because PhotoMigrator's file browser uses per-user subdirectories. The default `admin` user browses under `/app/volumes/admin/`. With this mapping, your Takeout files are directly accessible via the `···` browse button → "Home (volumes)" in the web UI.
+**NOTE:** The mount target is `/app/data/admin` because PhotoMigrator's file browser uses per-user subdirectories. The default `admin` user browses under `/app/data/admin/`. With this mapping, your Takeout files are directly accessible via the `···` browse button → "Home (data)" in the web UI.
 
 ### Quick Start Guide: Import Google Takeout Photos to Immich
 1. Open the PhotoMigrator web UI at `http://<your-unraid-ip>:6078`
@@ -630,11 +480,18 @@ PhotoMigrator is a tool to help with the migration of photos from Google Takeout
 4. Fill out:
    - **IMMICH_URL:** `http://immich-server:2283` (uses container name since both are on `immich_internal`)
    - **IMMICH_API_KEY_ADMIN:** Create an API key in Immich first: Account Icon → Account Settings → API Keys → New API Key → Grant ALL access → Copy the key
-5. <!-- TODO: Complete migration steps -->
+5. Click **Save config** to save your Immich connection settings.
+6. Go to **Features Selector** → select the **GOOGLE TAKEOUT** tab
+7. In the **Takeout Input & Output** section, click the `···` button next to `google-takeout`
+8. In the folder dialog, click **"Home (data)"**
+9. Navigate into the **`Takeout`** folder (this contains your extracted `Takeout/Google Fotos/...` files)
+10. Click **"Use Current"** to set the path
+11. Click **Run module** to start the migration
 
 For detailed instructions on all features and migration options, see the [PhotoMigrator documentation](https://github.com/jaimetur/PhotoMigrator).
 
 ---
+
 ## Cleanup
 ### Files
 After you have successfully downloaded and extracted your photos from Google Takeout, you can clean up the Firefox container by deleting it and any temporary files in `/mnt/user/immich/Takeout/` that were created during the download process.
@@ -653,7 +510,7 @@ Also: This guide provides a more tailored approach to setting up Immich on Unrai
 **A:** This guide is intended for new setups of Immich on Unraid. Upgrading an existing setup requires significant changes and data migration. If you have an existing Immich setup, I recommend backing up your data, setting up a new instance of Immich following this guide, and then migrating your data from the old instance to the new one. Consult the Immich documentation and community for best practices on how to do this migration to ensure that you don't lose any data in the process.
 ### Q: What if I have a different GPU or want to use a different transcoding method?
 **A:** The templates provided in this guide cover the most common GPU options (NVIDIA NVENC, Intel QSV, AMD VAAPI) as well as a CPU-only option. If you have a different GPU or want to use a different transcoding method, you can still use the CPU-only template for the server, but keep in mind that transcoding performance will be slower. Alternatively, you can try modifying one of the existing templates to work with your specific GPU or transcoding method, but this may require advanced knowledge of Docker and the specific requirements of your GPU.
-### Q: Why have you choosen PATH living on the array insude `immich` share instead of cache for Firefox Downloads and processing?
+### Q: Why have you chosen PATH living on the array inside `immich` share instead of cache for Firefox Downloads and processing?
 **A:** *TL;DR:* This approach ensures that you have enough space for the entire Google Takeout export without running into issues with limited cache space.
 
 The `immich` share on the array is used for storing the downloaded Google Takeout files because these files can be quite large and may exceed the capacity of the cache drive, especially if you have a large photo library. The array normally provides more storage space for these temporary files during the download and extraction process. Once the photos are imported into Immich, they will be processed and stored in the appropriate locations (e.g., thumbnails and generated files in `immich-gen` on cache, original photos in `immich` on array). 
