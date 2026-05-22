@@ -202,12 +202,13 @@ Once you receive the email from Google Takeout with the download link, you can u
 ## Step 2: Create the `immich_internal` Docker Network
 All Immich containers need to communicate with each other by container name. We create a dedicated Docker network for this.
 
-1. Open the Unraid terminal (click `>_` in the top right corner)
-2. Run:
+1. Open the Unraid web interface
+2. Open the Unraid terminal (click the `>_` icon in the top right corner of the navigation bar)
+3. Run the following command to create the network:
 ```bash
 docker network create immich_internal
 ```
-3. When setting up each container below, select `immich_internal` as the network in the template settings.
+4. When setting up each container below, select `immich_internal` as the network in the template settings.
 
 **Why a custom network?** Containers on the default `bridge` network communicate via host port mappings (NAT overhead). On a custom network, containers resolve each other by name directly — faster and more secure since database/cache ports don't need to be exposed to the host.
 
@@ -246,7 +247,7 @@ graph TD
 ---
 
 ## Step 4: Download Templates
-Open the Unraid terminal (`>_` icon in the top right corner) and download the templates you need.
+Open the Unraid web interface and open the terminal (click the `>_` icon in the top right corner of the navigation bar). Then download the templates you need.
 
 **NOTE:** `wget` downloads files from the web. The `-P` flag sets the download directory. Templates are saved to Unraid's Docker Manager template directory.
 
@@ -431,7 +432,7 @@ To manage this on Unraid, install **FolderView3** from Community Applications:
 
 Once your Google Takeout downloads are complete (see [Phase 2](#pre-work-google-takeout-phase-2---downloading-and-extracting-your-photos-from-google-takeout-utilizing-a-firefox-docker-container-on-unraid)), you need to extract them.
 
-Open the Unraid terminal and run the following command. It starts a `tmux` session so the extraction continues even if you close the web terminal.
+Open the Unraid web interface and open the terminal (click the `>_` icon in the top right corner of the navigation bar). The following commands use a `tmux` session so the extraction continues even if you close the web terminal.
 
 First, download the extraction script:
 ```bash
