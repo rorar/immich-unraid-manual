@@ -187,8 +187,8 @@ Once you receive the email from Google Takeout with the download link, you can u
 8.  Open the Firefox container's web UI
 9.  You may be prompted with an SSL warning since the container is using a self-signed certificate. You can safely bypass this warning by clicking on "Advanced" and then "Accept the Risk and Continue" to proceed to the Firefox web UI.
 10. Go to [https://mail.google.com/](https://mail.google.com/)
-11. When prompted for giving Google/Alphabet your data, click "Deny All" (or similar)
-12. Sign in to the Google account associated with your Google Takeout export.
+11. Sign in to the Google account associated with your Google Takeout export.
+12. When prompted for giving Google/Alphabet your data, click "Deny All" (or similar)
 13. Open the email from Google Takeout
 14. Click on the download link(s) for your export.
 15. Your export files will start downloading directly to the `immich` share on your Unraid server in the `Takeout` folder that we mapped to the Firefox container.
