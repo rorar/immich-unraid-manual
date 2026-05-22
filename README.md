@@ -72,7 +72,7 @@ This repository contains a step-by-step guide for an optimal setup of Unraid for
 - Basic understanding of Unraid and Docker
 - Knowledge how to add a Docker Container to a (custom) docker network
 - Unraid Community Applications plugin installed
-- A SSD/NVMe drive for Cache
+- A SSD/NVMe drive for Cache (can be your Unraid Cache drive)
 - Very basic Terminal/Command Line knowledge for Unraid
 - Google Account with photos stored in Google Photos (if you want to migrate from Google Photos to Immich)
 - Triple the space of your Google Photos library available on your Unraid server for the migration process.
