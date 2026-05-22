@@ -146,7 +146,7 @@
   - [Step 8: Immich Server Setup](#step-8-immich-server-setup-2)
   - [Step 9: Container Start Order with FolderView3](#step-9-container-start-order-with-folderview3-2)
   - [Step 10: Run and Verify](#step-10-run-and-verify-2)
-  - [Pre-Work: Google Takeout Phase 2.5 - Extract tar Archives](#pre-work-google-takeout-phase-25---extract-tar-archives-2)
+  - [Pre-Work: Google Takeout Phase 2.5 - Extract `tar` Archives](#pre-work-google-takeout-phase-25---extract-tar-archives-2)
   - [Google Takeout Phase 3: PhotoMigrator](#google-takeout-phase-3-photomigrator-2)
     - [PhotoMigrator Setup](#photomigrator-setup-2)
     - [Quick Start Guide: Import Google Takeout Photos to Immich](#quick-start-guide-import-google-takeout-photos-to-immich-2)
@@ -711,7 +711,7 @@ Open the Unraid terminal and run the following to extract all `.tgz` archives in
   - [Step 8: Immich Server Setup](#step-8-immich-server-setup-2)
   - [Step 9: Container Start Order with FolderView3](#step-9-container-start-order-with-folderview3-2)
   - [Step 10: Run and Verify](#step-10-run-and-verify-2)
-  - [Pre-Work: Google Takeout Phase 2.5 - Extract tar Archives](#pre-work-google-takeout-phase-25---extract-tar-archives-2)
+  - [Pre-Work: Google Takeout Phase 2.5 - Extract `tar` Archives](#pre-work-google-takeout-phase-25---extract-tar-archives-2)
   - [Google Takeout Phase 3: PhotoMigrator](#google-takeout-phase-3-photomigrator-2)
     - [PhotoMigrator Setup](#photomigrator-setup-2)
     - [Quick Start Guide: Import Google Takeout Photos to Immich](#quick-start-guide-import-google-takeout-photos-to-immich-2)
@@ -1403,7 +1403,7 @@ PhotoMigrator is a tool to help with the migration of photos from Google Takeout
   - [Step 8: Immich Server Setup](#step-8-immich-server-setup-2)
   - [Step 9: Container Start Order with FolderView3](#step-9-container-start-order-with-folderview3-2)
   - [Step 10: Run and Verify](#step-10-run-and-verify-2)
-  - [Pre-Work: Google Takeout Phase 2.5 - Extract tar Archives](#pre-work-google-takeout-phase-25---extract-tar-archives-2)
+  - [Pre-Work: Google Takeout Phase 2.5 - Extract `tar` Archives](#pre-work-google-takeout-phase-25---extract-tar-archives-2)
   - [Google Takeout Phase 3: PhotoMigrator](#google-takeout-phase-3-photomigrator-2)
     - [PhotoMigrator Setup](#photomigrator-setup-2)
     - [Quick Start Guide: Import Google Takeout Photos to Immich](#quick-start-guide-import-google-takeout-photos-to-immich-2)
@@ -1728,7 +1728,7 @@ Choose between stability and latest features:
    - **POSTGRES_DB:** `immich`
 4. Hit **Apply** to start the container.
 
-**IMPORTANT:** Remember your `POSTGRES_PASSWORD` — you'll need the exact same value in the `immich-server` configuration.
+**IMPORTANT:** Remember/copy your `POSTGRES_PASSWORD` — you'll need the exact same value in the `immich-server` configuration.
 
 **NOTE:** If upgrading from VectorChord 0.4.3 to 1.0.0+: See [this comment](https://github.com/immich-app/immich/pull/23845#issuecomment-3566969928).
 
@@ -1817,7 +1817,9 @@ To manage this on Unraid, install **FolderView3** from Community Applications:
 
 ---
 
-## Pre-Work: Google Takeout Phase 2.5 - Extract tar Archives
+## Pre-Work: Google Takeout Phase 2.5 - Extract `tar` Archives
+*THIS STEP IS ONLY NECESSARY IF YOU CHOSE `tar` AS THE FILE TYPE FOR YOUR GOOGLE TAKEOUT EXPORT. IF YOU'VE CHOSEN `zip`, YOU CAN SKIP THIS STEP AND MOVE FORWARD TO [GOOGLE TAKEOUT PHASE 3: PHOTOMIGRATOR](#google-takeout-phase-3-photomigrator) AS PHOTO MIGRATOR CAN HANDLE ZIP FILES OUT OF THE BOX.*
+
 Once your Google Takeout downloads are complete (see [Phase 2](#pre-work-google-takeout-phase-2---downloading-and-extracting-your-photos-from-google-takeout-utilizing-a-firefox-docker-container-on-unraid)), you need to extract them.
 
 Open the Unraid terminal and run the following to extract all `.tgz` archives into the Takeout folder:
@@ -1859,7 +1861,7 @@ PhotoMigrator is a tool to help with the migration of photos from Google Takeout
 5. Hit **Apply** to start the container.
 6. Access the PhotoMigrator web UI at `http://<your-unraid-ip>:6078`
 
-**NOTE:** The mount target is `/app/volumes/admin` (not `/app/volumes`) because PhotoMigrator's file browser uses per-user subdirectories. The default admin user browses under `/app/volumes/admin/`. With this mapping, your Takeout files are directly accessible via the `···` browse button → "Home (volumes)" in the web UI.
+**NOTE:** The mount target is `/app/volumes/admin` (not `/app/volumes`) because PhotoMigrator's file browser uses per-user subdirectories. The default `admin` user browses under `/app/volumes/admin/`. With this mapping, your Takeout files are directly accessible via the `···` browse button → "Home (volumes)" in the web UI.
 
 ### Quick Start Guide: Import Google Takeout Photos to Immich
 1. Open the PhotoMigrator web UI at `http://<your-unraid-ip>:6078`
