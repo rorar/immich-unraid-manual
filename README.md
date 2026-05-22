@@ -10,26 +10,36 @@
   - [Unraid Immich Performance Setup + Google Takeout Guide](#unraid-immich-performance-setup--google-takeout-guide)
     - [TL;DR:](#tldr)
       - [Immich Setup](#immich-setup)
-        - [Google Takeout Guide](#google-takeout-guide)
+      - [Google Takeout Guide](#google-takeout-guide)
   - [Note](#note)
   - [Intended Use](#intended-use)
     - [In Scope:](#in-scope)
     - [Out of Scope:](#out-of-scope)
-    - [What's inside this repository?](#whats-inside-this-repository)
+  - [What's inside this repository?](#whats-inside-this-repository)
     - [Pre-requisites](#pre-requisites)
 - [Installation and Configuration](#installation-and-configuration)
   - [Pre-Work: Google Takeout Phase 1 - Request Exporting Your Photos from Google Photos](#pre-work-google-takeout-phase-1---request-exporting-your-photos-from-google-photos)
   - [Step 1: Create Shares `immich` and `immich-gen` for Immich on Unraid](#step-1-create-shares-immich-and-immich-gen-for-immich-on-unraid)
-        - [`immich` Share](#immich-share)
-        - [`immich-gen` Share](#immich-gen-share)
+    - [`immich` Share](#immich-share)
+    - [`immich-gen` Share](#immich-gen-share)
   - [Pre-Work: Google Takeout Phase 2 - Downloading and Extracting Your Photos from Google Takeout utilizing a Firefox Docker Container on Unraid](#pre-work-google-takeout-phase-2---downloading-and-extracting-your-photos-from-google-takeout-utilizing-a-firefox-docker-container-on-unraid)
   - [Step 2: Create the `immich_internal` Docker Network](#step-2-create-the-immich_internal-docker-network)
   - [Step 3: Choose Your Platform](#step-3-choose-your-platform)
   - [Step 4: Download Templates](#step-4-download-templates)
-    - [Required templates (everyone needs these):](#required-templates-everyone-needs-these)
-      - [PostgreSQL](#postgresql)
-      - [Server template (choose one based on your GPU):](#server-template-choose-one-based-on-your-gpu)
-      - [Machine Learning template (choose one based on your GPU):](#machine-learning-template-choose-one-based-on-your-gpu)
+    - [PostgreSQL](#postgresql)
+      - [**PostgreSQL database by Immich** — RECOMMENDED (stable, tested by Immich team):](#postgresql-database-by-immich--recommended-stable-tested-by-immich-team)
+      - [**PostgreSQL database by VectorChord** — OPTIONAL/EXPERIMENTAL (latest VectorChord 1.1.1, less tested with Immich):](#postgresql-database-by-vectorchord--optionalexperimental-latest-vectorchord-111-less-tested-with-immich)
+    - [**Valkey** (cache/message broker):](#valkey-cachemessage-broker)
+    - [Server template (choose one based on your GPU):](#server-template-choose-one-based-on-your-gpu)
+      - [**CPU only** — no GPU transcoding:](#cpu-only--no-gpu-transcoding)
+      - [**Intel QSV / AMD VAAPI** — uses `/dev/dri`:](#intel-qsv--amd-vaapi--uses-devdri)
+      - [**NVIDIA NVENC** — uses `--runtime=nvidia`:](#nvidia-nvenc--uses---runtimenvidia)
+    - [Machine Learning template (choose one based on your GPU):](#machine-learning-template-choose-one-based-on-your-gpu)
+      - [**CPU only** — no GPU acceleration:](#cpu-only--no-gpu-acceleration)
+      - [**NVIDIA CUDA:**](#nvidia-cuda)
+      - [**Intel OpenVINO:**](#intel-openvino)
+      - [**AMD ROCm:**](#amd-rocm)
+    - [**PhotoMigrator** (for Google Takeout migration):](#photomigrator-for-google-takeout-migration)
   - [Step 5: PostgreSQL](#step-5-postgresql)
     - [PostgreSQL Setup (both options):](#postgresql-setup-both-options)
   - [Step 6: Valkey Setup](#step-6-valkey-setup)
@@ -44,6 +54,7 @@
   - [Cleanup](#cleanup)
     - [Files](#files)
     - [API Keys](#api-keys)
+    - [Google Photos](#google-photos)
   - [TODO](#todo)
   - [Kudos and Credits](#kudos-and-credits)
     - [This a polished guide from Starbuckstech @starbuck93](#this-a-polished-guide-from-starbuckstech-starbuck93)
@@ -79,10 +90,12 @@ If you have an existing Immich setup on Unraid and want to optimize it for bette
 
 *If you REALLY want to upgrade: Consult the Immich documentation and community for best practices on how to do this migration to ensure that you don't lose any data in the process. Happy learning!*
 
-### What's inside this repository?
+## What's inside this repository?
 This repository contains a step-by-step guide for an optimal setup of Unraid for Immich, a self-hosted photo and video management application. The guide covers Unraid configuration WITHOUT using Docker Compose for a more Unraid-native approach and also performance optimization tips to ensure a smooth and efficient experience with Immich on Unraid.
 
 **AGAIN:** This guide is intended for users who want to run a *NEW instance of Immich* on Unraid and are looking for best practices to achieve optimal performance and to ensure that your setup is running efficiently and effectively.
+
+---
 
 ### Pre-requisites
 - 2 hours of time to set up and configure everything (depending on your familiarity with Unraid and Docker, it may take more or less time)
@@ -109,7 +122,16 @@ If you have a large library, the Google Takeout exporting process can take a whi
 **Purpose:** You can use Google Takeout to export your photos and videos from Google Photos including metadata.
 For exporting from Google Takeout, you can choose between a `zip` and `tar`  file that you can extract and then using tools to upload to Immich.
 
-We're covering `tar` here because of its better compression and faster extraction times, especially for large libraries.
+Depending on:
+- Your internet conection speed
+- possibly metered internet connection (some ISPs throttle download speeds after a certain amount of data downloaded)
+... choose between `zip` and `tar` for your export.
+
+**The convinient choice: `zip` (recommended)**
+`zip` has a larger file size but is supported by PhotoMigrator out of the box, *taking care of the extraction process*. See chapter [Google Takeout Phase 3: PhotoMigrator](#google-takeout-phase-3-photomigrator) for more details.
+
+**The smaller and faster choice: `tar`**
+But if you have a large library and/or slower internet speed, I would recommend choosing `tar` for better compression and faster extraction times. You can easily extract `tar` files on Unraid using the terminal or a Docker container. We got that step covereed in chapter [Pre-Work: Google Takeout Phase 2.5 - Extract tar Archives](#pre-work-google-takeout-phase-25---extract-tar-archives).
 
 1. Go to [Google Takeout](https://takeout.google.com/)
 2. Sign in to your Google account
@@ -120,7 +142,7 @@ We're covering `tar` here because of its better compression and faster extractio
 
 7. Choose your delivery method (e.g., "Send download link via email")
 8. Choose the export frequency: "Export once"
-9. Choose the file type: "tar"
+9. Choose the file type: `zip` or `tar`
 10. Choose the file size: "50GB" (Google will split the export into multiple files if your library exceeds this size.)
 11. Hit "Create export" and wait for the process to complete. You will receive an email with a download link once the export is ready.
 
@@ -131,36 +153,41 @@ Open up your Unraid web interface and using the top navigation menu, navigate to
 Here, we will create two shares: one for the main media library and another for generated files.
 Click on "Add Share" on the bottom left of your Share table and create the following shares:
 
-##### `immich` Share
+### `immich` Share
 **Data storage:** Array (HDD)
 
 **Purpose:** This share will be used to store your photo and video library, as well as backups and uploads. It will be the main storage location for your media files.
 
 - **Share name:** immich
 - **Comments:** Immich photo and video library, as well as backups and uploads.
-- **Minimum free space:** 10GB (you can adjust this based on your needs - Setting too low may lead to issues with uploads and backups if the share runs out of space)
+- **Minimum free space:** 10GB 
+  (you can adjust this based on your needs - Setting too low may lead to issues with uploads and backups if the share runs out of space)
 - **Primary storage (for new files and folders):** Array
 - **Allocation method:** High-Water
 - **Split level:** Automatically split any directory as required
-- **Included disk(s):** All (BUT you can exclude disks if you want to dedicate specific disks for other purposes or if you have a mix of HDDs and SSDs in your array and want to keep the immich share on the HDDs. Also usable if you've got untrusted disks in your array that you don't want to use for immich storage.)
+- **Included disk(s):** All 
+  (BUT you can exclude disks if you want to dedicate specific disks for other purposes or if you have a mix of HDDs and SSDs in your array and want to keep the immich share on the HDDs. Also usable if you've got untrusted disks in your array that you don't want to use for immich storage.)
 - **Excluded disk(s):** None
 
 -> Hit "Add Share" to create the share.
 
 
-##### `immich-gen` Share
+### `immich-gen` Share
 **Data storage:** Cache (SSD/NVMe)
 
 **Purpose:** This share will be used to store **gen**erated files like thumbnails and encoded videos. Also your profile lives here.
 
 - **Share name:** immich-gen
 - **Comments:** Immich generated files (thumbnails, encoded videos) and profile.
-- **Minimum free space:** 10GB (you can adjust this based on your needs - Setting too low may lead to issues with thumbnail generation and video encoding if the share runs out of space)
+- **Minimum free space:** 10GB 
+  (you can adjust this based on your needs - Setting too low may lead to issues with thumbnail generation and video encoding if the share runs out of space)
 - **Primary storage (for new files and folders):** Cache
-- **Secondary storage:** Array (HDD - this is a fallback in case the cache runs out of space, but ideally, you want to keep the immich-gen share on the cache for optimal performance)
+- **Secondary storage:** Array 
+  (HDD - this is a fallback in case the cache runs out of space, but ideally, you want to keep the immich-gen share on the cache for optimal performance)
 - **Allocation method:** High-Water
 - **Split level:** Automatically split any directory as required
-- **Included disk(s):** All (BUT you can exclude disks if you want to dedicate specific disks for other purposes or if you have a mix of HDDs and SSDs in your array and want to keep the immich share on the HDDs. Also usable if you've got untrusted disks in your array that you don't want to use for immich storage.)
+- **Included disk(s):** All 
+  (BUT you can exclude disks if you want to dedicate specific disks for other purposes or if you have a mix of HDDs and SSDs in your array and want to keep the immich share on the HDDs. Also usable if you've got untrusted disks in your array that you don't want to use for immich storage.)
 - **Excluded disk(s):** None
 - **Mover actions:** Cache -> Array
 
@@ -175,7 +202,7 @@ Once you receive the email from Google Takeout with the download link, you can u
 
 1. Go to the "Apps" tab in your Unraid web interface
 2. Search for "Firefox" in the Community Applications.
-3. Choose a Firefox container by LinuxServer.io and click "Install".
+3. Choose the Firefox container by LinuxServer.io and click "Install".
 4. If you already have a Firefox container setup, choose to name the new container something like "firefox-takeout-export" to differentiate it from any other Firefox containers you may have.
 5. During the installation process, scroll down and click on `Add another Path, Port, Variable, Label or Device`
 6. To map the Download Path to the `immich` share, set the "Config Type" to "Path" (It's automatically pre-set)
@@ -251,69 +278,67 @@ Open the Unraid terminal (`>_` icon in the top right corner) and download the te
 
 **NOTE:** `wget` downloads files from the web. The `-P` flag sets the download directory. Templates are saved to Unraid's Docker Manager template directory.
 
-### Required templates (everyone needs these):
-
-#### PostgreSQL
-**PostgreSQL database by Immich** — RECOMMENDED (stable, tested by Immich team):
+### PostgreSQL
+#### **PostgreSQL database by Immich** — RECOMMENDED (stable, tested by Immich team):
 ```bash
 wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-postgres-official.xml
 ```
 
-**PostgreSQL database by VectorChord** — OPTIONAL/EXPERIMENTAL (latest VectorChord 1.1.1, less tested with Immich):
+#### **PostgreSQL database by VectorChord** — OPTIONAL/EXPERIMENTAL (latest VectorChord 1.1.1, less tested with Immich):
 ```bash
 wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-vectorchord-db.xml
 ```
 
-**Valkey** (cache/message broker):
+### **Valkey** (cache/message broker):
 ```bash
 wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-valkey.xml
 ```
 
-**PhotoMigrator** (for Google Takeout migration):
-```bash
-wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/photomigrator.xml
-```
-
-#### Server template (choose one based on your GPU):
+### Server template (choose one based on your GPU):
 *These templates are for video transcoding. If you don't have a GPU or don't want to use it for transcoding, choose the CPU-only template.*
 
-**CPU only** — no GPU transcoding:
+#### **CPU only** — no GPU transcoding:
 ```bash
 wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-server.xml
 ```
 
-**Intel QSV / AMD VAAPI** — uses `/dev/dri`:
+#### **Intel QSV / AMD VAAPI** — uses `/dev/dri`:
 *You can also use your Intel iGPU ("inbuilt graphics card" in your CPU) for transcoding with Quick Sync Video (QSV) or your AMD GPU with VAAPI. Both use the same template since they both leverage `/dev/dri` for hardware acceleration.*
 ```bash
 wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-server-qsv-vaapi.xml
 ```
 
-**NVIDIA NVENC** — uses `--runtime=nvidia`:
+#### **NVIDIA NVENC** — uses `--runtime=nvidia`:
 ```bash
 wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-server-nvenc.xml
 ```
 
-#### Machine Learning template (choose one based on your GPU):
+### Machine Learning template (choose one based on your GPU):
 
-**CPU only** — no GPU acceleration:
+#### **CPU only** — no GPU acceleration:
 *CPU inference is possible but will be much slower for tasks like face recognition and CLIP-based search. Only recommended if you have a powerful CPU and a small library. Will work but expect slower performance and high load on the CPU.*
 ```bash
 wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-machine-learning.xml
 ```
 
-**NVIDIA CUDA:**
+#### **NVIDIA CUDA:**
 ```bash
 wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-machine-learning-cuda.xml
 ```
 
-**Intel OpenVINO:**
+#### **Intel OpenVINO:**
 ```bash
 wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-machine-learning-openvino.xml
 ```
 
-**AMD ROCm:**
+#### **AMD ROCm:**
 ```bash
 wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-machine-learning-rocm.xml
+```
+
+### **PhotoMigrator** (for Google Takeout migration):
+```bash
+wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/photomigrator.xml
 ```
 
 ---
@@ -332,10 +357,10 @@ Choose between stability and latest features:
 1. Go to the **Docker** tab → **Add Container**
 2. Select the template you downloaded (`immich-postgres-official` or `immich-vectorchord-db`)
 3. Configure:
+   - **Network:** `immich_internal`
    - **POSTGRES_PASSWORD:** Set a strong password! Generate one in the terminal: `openssl rand -base64 32 | tr -dc A-Za-z0-9 | head -c 32`
    - **POSTGRES_USER:** `postgres`
    - **POSTGRES_DB:** `immich`
-   - **Network:** `immich_internal`
 4. Hit **Apply** to start the container.
 
 **IMPORTANT:** Remember your `POSTGRES_PASSWORD` — you'll need the exact same value in the `immich-server` configuration.
@@ -393,7 +418,8 @@ Access Immich at `http://<your-unraid-ip>:2283` and create your admin account.
 Immich containers must start in the correct order. If the server starts before the database is ready, it will fail.
 
 **Correct start order:**
-1. `immich-vectorchord-db` (PostgreSQL)
+1. depending on your database choice: 
+   `immich-postgres-official` or `immich-vectorchord-db` (PostgreSQL)
 2. `immich-valkey` (Valkey)
 3. `immich-machine-learning` (ML)
 4. `immich-server` (Server — depends on all above)
@@ -401,9 +427,11 @@ Immich containers must start in the correct order. If the server starts before t
 To manage this on Unraid, install **FolderView3** from Community Applications:
 1. Go to **Apps** → search for **FolderView3** → Install
 2. Go to the **Docker** tab
-3. Create a new folder called `Immich`
-4. Drag all four Immich containers into this folder in the order listed above
-5. FolderView3 will start them in sequence when you start the folder
+3. Scroll down and click "Add Folder"
+4. create a new folder called `Immich` 
+5. optionally add an Immich icon using the URL https://raw.githubusercontent.com/immich-app/immich/refs/heads/main/mobile/packages/ui/showcase/web/icons/apple-icon-180.png )
+6. Drag all four Immich containers into this folder in the order listed above
+7. Back in **Docker** tab, click on the Immich folder and click "Start" (FolderView3 will start them in sequence when you start the folder)
 
 ---
 
@@ -421,6 +449,8 @@ To manage this on Unraid, install **FolderView3** from Community Applications:
 7. You can now move on to the next step of your Google Photos library using PhotoMigrator (see next section).
 
 **HINT:** Delete your API-Key after the migration process to ensure that there are no security risks from having an unused API key lying around. (see [Cleanup](#cleanup) section)
+
+---
 
 ## Pre-Work: Google Takeout Phase 2.5 - Extract tar Archives
 Once your Google Takeout downloads are complete (see [Phase 2](#pre-work-google-takeout-phase-2---downloading-and-extracting-your-photos-from-google-takeout-utilizing-a-firefox-docker-container-on-unraid)), you need to extract them.
@@ -484,6 +514,10 @@ For detailed instructions on all features and migration options, see the [PhotoM
 After you have successfully downloaded and extracted your photos from Google Takeout, you can clean up the Firefox container by deleting it and any temporary files in `/mnt/user/immich/Takeout/` that were created during the download process.
 ### API Keys
 Remove your Immich API Key in your Account Settings-->API_KEY Keys that you created for the PhotoMigrator in the Immich web UI to ensure that there are no security risks from having an unused API key lying around.
+### Google Photos
+If you have verified that all your photos have been successfully migrated to Immich and you no longer need your Google Photos library, you can choose to delete your Google Photos library to free up space and ensure that you are no longer relying on Google Photos for your photo storage. 
+
+*Make sure to double-check that everything is working correctly in Immich and that you have backups of your photos before deleting your Google Photos library.*
 
 ---
 
