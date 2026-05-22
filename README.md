@@ -577,19 +577,18 @@ To manage this on Unraid, install **FolderView3** from Community Applications:
 
 Once your Google Takeout downloads are complete (see [Phase 2](#pre-work-google-takeout-phase-2---downloading-and-extracting-your-photos-from-google-takeout-utilizing-a-firefox-docker-container-on-unraid)), you need to extract them.
 
-Open the Unraid terminal and run the following to extract all `.tgz` archives into the Takeout folder:
+Open the Unraid terminal and run the following command. It starts a `tmux` session so the extraction continues even if you close the web terminal.
 
 ```bash
-cd /mnt/user/immich/Takeout
-for f in takeout-*.tgz; do
-  echo "Extracting $f ..."
-  tar -xzf "$f" -C /mnt/user/immich/Takeout
-  echo "Done: $f"
-done
-echo "All archives extracted."
+tmux new-session -s takeout 'cd /mnt/user/immich/Takeout && for f in takeout-*.tgz; do echo "Extracting $f ..."; tar -xzf "$f" -C /mnt/user/immich/Takeout; echo "Done: $f"; done; echo "All archives extracted. Press Enter to close."; read'
 ```
 
 This will extract each archive (e.g. `takeout-20260518T081014Z-3-001.tgz`, `takeout-20260518T081014Z-3-002.tgz`, etc.) sequentially into `/mnt/user/immich/Takeout`.
+
+**tmux tips:**
+- If you close the terminal, the extraction keeps running in the background
+- To reattach: `tmux attach -t takeout`
+- To check if it's still running: `tmux ls`
 
 **NOTES:**
 - Extraction can take a while for large libraries. Be patient.
