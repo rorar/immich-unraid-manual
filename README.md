@@ -94,6 +94,7 @@ For exporting from Google Takeout, you can choose between a `zip` and `tar`  fil
 Depending on:
 - Your internet connection speed
 - possibly metered internet connection (some ISPs throttle download speeds after a certain amount of data downloaded)
+
 ... choose between `zip` and `tar` for your export.
 
 **The convenient choice: `zip` (recommended)**
