@@ -89,6 +89,8 @@
   - [Step 8: Immich Server Setup](#step-8-immich-server-setup-1)
   - [Step 9: Container Start Order with FolderView3](#step-9-container-start-order-with-folderview3-1)
   - [Step 10: Run and Verify](#step-10-run-and-verify-1)
+    - [Run and Verify](#run-and-verify)
+    - [Create Immich API Key for PhotoMigrator](#create-immich-api-key-for-photomigrator)
   - [Pre-Work: Google Takeout Phase 2.5 - Extract tar Archives](#pre-work-google-takeout-phase-25---extract-tar-archives-1)
   - [Google Takeout Phase 3: PhotoMigrator](#google-takeout-phase-3-photomigrator)
     - [PhotoMigrator Setup](#photomigrator-setup)
@@ -654,6 +656,8 @@ Open the Unraid terminal and run the following to extract all `.tgz` archives in
   - [Step 8: Immich Server Setup](#step-8-immich-server-setup-1)
   - [Step 9: Container Start Order with FolderView3](#step-9-container-start-order-with-folderview3-1)
   - [Step 10: Run and Verify](#step-10-run-and-verify-1)
+    - [Run and Verify](#run-and-verify)
+    - [Create Immich API Key for PhotoMigrator](#create-immich-api-key-for-photomigrator)
   - [Pre-Work: Google Takeout Phase 2.5 - Extract tar Archives](#pre-work-google-takeout-phase-25---extract-tar-archives-1)
   - [Google Takeout Phase 3: PhotoMigrator](#google-takeout-phase-3-photomigrator)
     - [PhotoMigrator Setup](#photomigrator-setup)
@@ -1109,13 +1113,15 @@ To manage this on Unraid, install **FolderView3** from Community Applications:
 ---
 
 ## Step 10: Run and Verify
+### Run and Verify
 1. Click on the `Immich` folder in Docker and hit "Start" (this will start all containers in the correct order)
 2. Wait a few minutes for the server and all dependendent services to initialize
 3. Access Immich at `http://<your-unraid-ip>:2283` and log in with the admin account you created
 4. Verify that everything is working by uploading a test photo and checking that thumbnails are generated and that the photo appears in the library.
 5. Check the logs of each container if you encounter any issues to troubleshoot.
 
-**Google Takeout Migration (if you don't want to migrate you're done here):**
+### Create Immich API Key for PhotoMigrator
+**This step is for Google Takeout Migration (if you don't want to migrate you're done here):**
 6. Once verified, create an API key for the admin user in Immich: 
   Account Icon (Top right)  → Account Settings → API Keys → New API Key → Grant ALL access by "Select All" + "Create" → Copy the API-key.
   You'll need the API key for PhotoMigrator to import your Google Takeout photos.
@@ -1175,7 +1181,8 @@ PhotoMigrator is a tool to help with the migration of photos from Google Takeout
 3. Go to **Configuration Panel** → **Feature Config** → **Immich Photos**
 4. Fill out:
    - **IMMICH_URL:** `http://immich-server:2283` (uses container name since both are on `immich_internal`)
-   - **IMMICH_API_KEY_ADMIN:** Create an API key in Immich first: Account Icon → Account Settings → API Keys → New API Key → Grant ALL access → Copy the key
+   - **IMMICH_API_KEY_ADMIN:** 
+    If you haven't created an API-Key: See [Create Immich API Key for PhotoMigrator](#create-immich-api-key-for-photomigrator)
 5. <!-- TODO: Complete migration steps -->
 
 For detailed instructions on all features and migration options, see the [PhotoMigrator documentation](https://github.com/jaimetur/PhotoMigrator).
@@ -1346,6 +1353,8 @@ PhotoMigrator is a tool to help with the migration of photos from Google Takeout
   - [Step 8: Immich Server Setup](#step-8-immich-server-setup-1)
   - [Step 9: Container Start Order with FolderView3](#step-9-container-start-order-with-folderview3-1)
   - [Step 10: Run and Verify](#step-10-run-and-verify-1)
+    - [Run and Verify](#run-and-verify)
+    - [Create Immich API Key for PhotoMigrator](#create-immich-api-key-for-photomigrator)
   - [Pre-Work: Google Takeout Phase 2.5 - Extract tar Archives](#pre-work-google-takeout-phase-25---extract-tar-archives-1)
   - [Google Takeout Phase 3: PhotoMigrator](#google-takeout-phase-3-photomigrator)
     - [PhotoMigrator Setup](#photomigrator-setup)
@@ -1808,8 +1817,10 @@ To manage this on Unraid, install **FolderView3** from Community Applications:
 5. Check the logs of each container if you encounter any issues to troubleshoot.
 
 **Google Takeout Migration (if you don't want to migrate you're done here):**
+*You'll need this step for [Quick Start Guide: Import Google Takeout Photos to Immich](#quick-start-guide-import-google-takeout-photos-to-immich) in the PhotoMigrator section.*
+
 6. Once verified, create an API key for the admin user in Immich: 
-  Account Icon (Top right)  → Account Settings → API Keys → New API Key → Grant ALL access by "Select All" + "Create" → Copy the API-key.
+  `Account Icon (Top right)  → Account Settings → API Keys → New API Key → Grant ALL access by "Select All" + "Create" → Copy the API-key.`
   You'll need the API key for PhotoMigrator to import your Google Takeout photos.
 7. You can now move on to the next step of your Google Photos library using PhotoMigrator (see next section).
 
@@ -1905,13 +1916,6 @@ Link: https://immich.app/
 ### PhotoMigrator Team
 PhotoMigrator is a fantastic tool that has been developed to help users migrate their photos from various services to Immich. The team behind PhotoMigrator has done an amazing job creating a user-friendly and efficient tool that simplifies the migration process for users. If you find PhotoMigrator useful, consider supporting the project by donating or contributing to the codebase.
 Link: https://github.com/jaimetur/PhotoMigrator/
-
-4. Fill out:
-   - **IMMICH_URL:** `http://immich-server:2283` (uses container name since both are on `immich_internal`)
-   - **IMMICH_API_KEY_ADMIN:** Create an API key in Immich first: Account Icon → Account Settings → API Keys → New API Key → Grant ALL access → Copy the key
-5. <!-- TODO: Complete migration steps -->
-
-For detailed instructions on all features and migration options, see the [PhotoMigrator documentation](https://github.com/jaimetur/PhotoMigrator).
 
 ---
 
