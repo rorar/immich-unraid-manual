@@ -74,7 +74,7 @@ This repository contains a step-by-step guide for an optimal setup of Unraid for
 - Unraid Community Applications plugin installed
 - A SSD/NVMe drive for Cache (can be your Unraid Cache drive)
 - Very basic Terminal/Command Line knowledge for Unraid
-- Google Account with photos stored in Google Photos (if you want to migrate from Google Photos to Immich)
+- If you want to migrate from Google Photos to Immich: Google Account with photos stored in Google Photos
 - Triple the space of your Google Photos library available on your Unraid server for the migration process.
   Example: 100GB of Google Takeout Photos * 3 = 300GB
   -> 100GB for the compressed files, 100GB for the extracted files, 100GB for the final library after migration.
