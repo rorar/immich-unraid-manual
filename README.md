@@ -421,8 +421,13 @@ To manage this on Unraid, install **FolderView3** from Community Applications:
    1. enable the toogle to enable it. 
    2. I'd recommend `{{y}}/{{MM}}/{{dd}}/{{filename}}` for better organization of your library, but you can manually build one by yourself OR choose a template from the preset dropdown. You can also change this later in the settings.
 8. Recommendation: Follow the 3-2-1 backup strategy. You can set this up later.
-9. Mobile Apps
-   1.  <!-- Fill in later with instructions for mobile app setup and connection to the server -->
+9. **Mobile Apps**
+   1. Download the Immich app: [iOS App Store](https://apps.apple.com/app/immich/id1613945652) | [Google Play](https://play.google.com/store/apps/details?id=app.alextran.immich) | [F-Droid](https://f-droid.org/packages/app.alextran.immich/)
+   2. Open the app and enter your server URL: `http://<your-unraid-ip>:2283`
+   3. Log in with your admin account (or a user account you created)
+   4. To enable auto-backup: tap the cloud icon (top right) → "Choose albums to backup" → select albums (e.g. Camera Roll) → configure foreground/background upload preferences
+   5. **iOS:** Enable Background App Refresh (Settings → General) and grant location permission for reliable background uploads
+   6. **Android:** Visit [dontkillmyapp.com](https://dontkillmyapp.com) for device-specific guidance on preventing battery optimization from interrupting uploads
 10. Verify that everything is working by uploading a test photo and checking that thumbnails are generated and that the photo appears in the library.
 11. Check the logs of each container if you encounter any issues to troubleshoot.
 12. **Verify GPU acceleration for Machine Learning (if applicable):**
