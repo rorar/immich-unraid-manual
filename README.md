@@ -413,10 +413,19 @@ To manage this on Unraid, install **FolderView3** from Community Applications:
 ## Step 10: Run and Verify
 1. Click on the `Immich` folder in Docker and hit "Start" (this will start all containers in the correct order)
 2. Wait a few minutes for the server and all dependent services to initialize
-3. Access Immich at `http://<your-unraid-ip>:2283` and log in with the admin account you created
-4. Verify that everything is working by uploading a test photo and checking that thumbnails are generated and that the photo appears in the library.
-5. Check the logs of each container if you encounter any issues to troubleshoot.
-6. **Verify GPU acceleration for Machine Learning (if applicable):**
+3. Access Immich at `http://<your-unraid-ip>:2283` 
+4. Create an admin account with your email and a strong password (you'll need this to log in to the web UI)
+5. Log in with the admin account you created
+6. Go through the initial setup steps in the web UI
+7. If asked for "[Storage Template](https://docs.immich.app/administration/storage-template/)", 
+   1. enable the toogle to enable it. 
+   2. I'd recommend `{{y}}/{{MM}}/{{dd}}/{{filename}}` for better organization of your library, but you can manually build one by yourself OR choose a template from the preset dropdown. You can also change this later in the settings.
+8. Recommendation: Follow the 3-2-1 backup strategy. You can set this up later.
+9. Mobile Apps
+   1.  <!-- Fill in later with instructions for mobile app setup and connection to the server -->
+10. Verify that everything is working by uploading a test photo and checking that thumbnails are generated and that the photo appears in the library.
+11. Check the logs of each container if you encounter any issues to troubleshoot.
+12. **Verify GPU acceleration for Machine Learning (if applicable):**
    If you chose a GPU-accelerated ML template (CUDA, OpenVINO, or ROCm), verify that the GPU is being used:
    - Upload a photo and wait for face detection / smart search to process (the provider log appears on first model load, not on container startup)
    - Then run this command in the Unraid terminal:
