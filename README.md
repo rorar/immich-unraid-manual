@@ -201,6 +201,7 @@ Once you receive the email from Google Takeout with the download link, you can u
    3. Host Path: `/mnt/user/immich/Takeout`
    4. Access Mode: `Read/Write`
    5. -> Hit "Save" to add the path mapping
+   5. -> Hit "Save" to add the path mapping
 7. Hit "Apply" to start the installation of the Firefox container with the new path mapping.
 8.  Open the Firefox container's web UI
 9.  You may be prompted with an SSL warning since the container is using a self-signed certificate. You can safely bypass this warning by clicking on "Advanced" and then "Accept the Risk and Continue" to proceed to the Firefox web UI.
@@ -451,6 +452,12 @@ Quicklink to the relevant settings page in Immich Admin UI:
 http://<your-unraid-ip>:2283/admin/system-settings?isOpen=external-library+notifications+library-watching+library-scanning+nightly-tasks+backup`
 ```
 
+#### Unraid Appdata Backup Plugin Conflict Warning
+Quicklink to the relevant settings page in Immich Admin UI:
+```
+http://<your-unraid-ip>:2283/admin/system-settings?isOpen=external-library+notifications+library-watching+library-scanning+nightly-tasks+backup`
+```
+
 **Important:**
 - If you've got the Unraid plugin `Appdata Backup` installed, avoid setting 
   - `Database Dump Settings` -> `Cron expression`
@@ -459,6 +466,7 @@ http://<your-unraid-ip>:2283/admin/system-settings?isOpen=external-library+notif
 *at the same time you would backup your appdata folder.*
 
 If set in parallel/in the same time window, your 
+If set in parallel/in the same time window, your 
 - database won't get backed up
 - Libraries won't get indexed
 - Nightly Task won't run as the `Appdata Backup` plugin stops the docker container. 
@@ -466,13 +474,14 @@ Worst case would be **corrupted data.**
 To avoid this, you can set the named schedules to a different time than your appdata backup schedule.
 
 Best would be: `Run Database Dump before External Library indexing, then let the Nightly Tasks run.`
+Best would be: `Run Database Dump before External Library indexing, then let the Nightly Tasks run.`
 This resluts in: Backup a clean database state before possibly unwated images may get indexed -> let the Library Periodic Scanning run -> then let the nightly tasks run to process new data. 
 If something goes wrong during the library indexing, you have a clean backup of the database before the indexing process started.  
 
 #### Hardware Acceleration
 Quicklink to the relevant settings page in Immich Admin UI:
 ```
-http://192.168.178.24:2283/admin/system-settings?isOpen=video-transcoding+transcoding-policy+machine-learning+encoding-options+hardware-acceleration
+http://<your-unraid-ip>:2283/admin/system-settings?isOpen=video-transcoding+transcoding-policy+machine-learning+encoding-options+hardware-acceleration
 ```
 1. <!-- Hardware Acceleration Settings to be filled; user should choose based on template/plattform -->
 
