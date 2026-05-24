@@ -67,15 +67,18 @@ This repository contains a step-by-step guide for an optimal setup of Unraid for
 ---
 
 ### Pre-requisites
+- If you want to migrate from Google Photos to Immich: 
+  - Google Account with photos stored in Google Photos
+  - Up to an day of patience for the Google Takeout export and download process (depending on the size of your library, it can take a while)
 - 2 hours of time to set up and configure everything (depending on your familiarity with Unraid and Docker, it may take more or less time)
 - Unraid Server with Docker support
-- Basic understanding of Unraid and Docker
-- Knowledge how to add a Docker Container to a (custom) docker network
 - Unraid Community Applications plugin installed
+- Basic understanding of Unraid and Docker
+  - Knowledge how to add a Docker Container to a (custom) docker network
+  - Very basic Terminal/Command Line knowledge for Unraid
 - A SSD/NVMe drive for Cache (can be your Unraid Cache drive)
   - 7-10GB for the Immich machine learning container to store ML models and cache
-- Very basic Terminal/Command Line knowledge for Unraid
-- If you want to migrate from Google Photos to Immich: Google Account with photos stored in Google Photos
+
 - Triple the space of your Google Photos library available on your Unraid server for the migration process.
   Example: 100GB of Google Takeout Photos * 3 = 300GB
   -> 100GB for the compressed files, 100GB for the extracted files, 100GB for the final library after migration.
@@ -340,8 +343,9 @@ wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercon
 
 **IMPORTANT:** Remember/copy your `POSTGRES_PASSWORD` — you'll need the exact same value in the `immich-server` configuration.
 
-**NOTE:** If upgrading from VectorChord 0.4.3 to 1.0.0+: See [this comment](https://github.com/immich-app/immich/pull/23845#issuecomment-3566969928).
-
+**NOTE:** 
+- If upgrading from VectorChord 0.4.3 to 1.0.0+: See [this comment](https://github.com/immich-app/immich/pull/23845#issuecomment-3566969928).
+- You don't need to set a port. See [FAQ](#q-do-i-need-to-set-ports-while-using-immich_internal).
 ---
 
 ## Step 6: Valkey Setup
@@ -356,6 +360,7 @@ Valkey is a Redis-compatible cache used by Immich as a message broker.
 
 That's it — Valkey needs no special configuration for Immich.
 
+**NOTE:** You don't need to set a port. See [FAQ](#q-do-i-need-to-set-ports-while-using-immich_internal).
 ---
 
 ## Step 7: Machine Learning Setup
@@ -368,8 +373,9 @@ The ML service handles face recognition, CLIP-based image search, and OCR. Model
    - **Path: Model Cache:** `/mnt/user/appdata/immich/model-cache/` (default is fine as long as it points to a path with an SSD/NVMe for better performance)
 4. Hit **Apply** to start the container.
 
-**NOTE:** The first startup will be slow as ML models are downloaded. This is normal.
-
+**NOTE:** 
+- The first startup will be slow as ML models are downloaded. This is normal.
+- You don't need to set a port. See [FAQ](#q-do-i-need-to-set-ports-while-using-immich_internal).
 ---
 
 ## Step 8: Immich Server Setup
@@ -426,11 +432,11 @@ To manage this on Unraid, install **FolderView3** from Community Applications:
    2. Open the app and enter your server URL: `http://<your-unraid-ip>:2283`
    3. Log in with your admin account (or a user account you created)
    4. To enable auto-backup: tap the cloud icon (top right) → "Choose albums to backup" → select albums (e.g. Camera Roll) → configure foreground/background upload preferences
-   5. **iOS:** Enable Background App Refresh (Settings → General) and grant location permission for reliable background uploads
-   6. **Android:** Visit [dontkillmyapp.com](https://dontkillmyapp.com) for device-specific guidance on preventing battery optimization from interrupting uploads
-10. Verify that everything is working by uploading a test photo and checking that thumbnails are generated and that the photo appears in the library.
-11. Check the logs of each container if you encounter any issues to troubleshoot.
-12. **Verify GPU acceleration for Machine Learning (if applicable):**
+   5. **iOS Background Backup:** Settings → General - Background App Refresh Ensure → Immich is toggled ON and grant location permission for reliable background uploads.
+   6. **Android Battery Optimization** Settings → Apps → Immich → Battery. Visit [dontkillmyapp.com](https://dontkillmyapp.com) for device-specific guidance on preventing battery optimization from interrupting uploads.
+1.  Verify that everything is working by uploading a test photo and checking that thumbnails are generated and that the photo appears in the library.
+2.  Check the logs of each container if you encounter any issues to troubleshoot.
+3.  **Verify GPU acceleration for Machine Learning (if applicable):**
    If you chose a GPU-accelerated ML template (CUDA, OpenVINO, or ROCm), verify that the GPU is being used:
    - Upload a photo and wait for face detection / smart search to process (the provider log appears on first model load, not on container startup)
    - Then run this command in the Unraid terminal:
@@ -507,21 +513,40 @@ PhotoMigrator is a tool to help with the migration of photos from Google Takeout
 **NOTE:** The mount target is `/app/data/admin` because PhotoMigrator's file browser uses per-user subdirectories. The default `admin` user browses under `/app/data/admin/`. With this mapping, your Takeout files are directly accessible via the `···` browse button → "Home (data)" in the web UI.
 
 ### Quick Start Guide: Import Google Takeout Photos to Immich
+#### Set Immich settings
 1. Open the PhotoMigrator web UI at `http://<your-unraid-ip>:6078`
 2. Login with default credentials — User: `admin` / Password: `admin123`
 3. Go to **Configuration Panel** → **Feature Config** → **Immich Photos**
 4. Fill out:
    - **IMMICH_URL:** `http://immich-server:2283` (uses container name since both are on `immich_internal`)
    - **IMMICH_API_KEY_ADMIN:** Create an API key in Immich first: Account Icon → Account Settings → API Keys → New API Key → Grant ALL access → Copy the key
+   - **IMMICH_USERNAME_1:** <your Immich admin email address> (the one you use to log in to the Immich web UI)
+   - **IMMICH_PASSWORD_1:** <your Immich admin password> (the one you use to log in to the Immich web UI)
+   - **IMMICH_API_KEY_USER_1** Can be the same as IMMICH_API_KEY_ADMIN or you can create a separate API key for the user account in Immich and use that here for better security practices (recommended)
 5. Click **Save config** to save your Immich connection settings.
-6. Go to **Features Selector** → select the **GOOGLE TAKEOUT** tab
-7. In the **Takeout Input & Output** section, click the `···` button next to `google-takeout`
-8. In the folder dialog, click **"Home (data)"**
-9. Navigate into the **`Takeout`** folder (this contains your extracted `Takeout/Google Fotos/...` files)
-10. Click **"Use Current"** to set the path
-11. Click **Run module** to start the migration
+#### Prepare your photo library
+1. Go to **Features Selector** → select the **GOOGLE TAKEOUT** tab
+2. In the **Takeout Input & Output** section, click the `···` button next to `google-takeout`
+3. In the folder dialog, click **"Home (data)"**
+4.  Navigate into the **`Takeout`** folder (this contains either your `zip` files OR from the `tar` archive your extracted `Takeout/Google Fotos/...` files)
+5.  Optionally change settings BUT Defaults should be find
+6.  Click **"Use Current"** to set the path
+7.  Click **Run module** to start your library preperation
+8.  Grab a cup of coffee - the procedure can take a while depending on your photo library size
+#### Import your Google Takeout photo library to Immich
+1. Go to **Features Selector** → select the **IMMICH PHOTOS** tab
+2. At `select module`, open the dropdown menu and select `Upload All`
+3. Click the `···` button next to `input folder`. 
+4. Select your input folder. At the moment of writing there's a bug that duplicates the path, so you have to dig through the folder structure (e.g. `/app/data/admin/Takeout/Takeout_/app/data/admin/processed_20260523-132324/Google Fotos`)
+5. **Create Albums:** Click the `···` button next to `Albums Folder`
+6. Select your folders that belongs into an Album (e.g. `Holidays 2023`, `Family`, etc.).
+7.  Click **Run module** to start your library import. 
+8.  The module will upload your photos to Immich and assign them to albums based on the folder structure you selected in the previous step.
 
-For detailed instructions on all features and migration options, see the [PhotoMigrator documentation](https://github.com/jaimetur/PhotoMigrator).
+**NOTE**
+- The import process can take a while depending on the size of your library and your network speed. Be patient and monitor the logs for progress and any potential issues.
+- *Your system will be under heavy load during the import*, especially if you have a large library. This is normal as Immich processes each photo (generating thumbnails, extracting metadata, etc.) after upload.
+- For detailed instructions on all features and migration options, see the [PhotoMigrator repository](https://github.com/jaimetur/PhotoMigrator) and [PhotoMigrator repository](https://github.com/jaimetur/PhotoMigrator/blob/main/help/6-immich-photos.md).
 
 ---
 
