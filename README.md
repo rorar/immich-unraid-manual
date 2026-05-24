@@ -66,10 +66,21 @@ This repository contains a step-by-step guide for an optimal setup of Unraid for
 
 ---
 
+## Hardware Requirements and Pre-requisites
+### Hardware Requirements
+
+| Component     | Minimum      | Recommended                                               | Large Libraries (500K+ assets) |
+|---------------|--------------|-----------------------------------------------------------|--------------------------------|
+| RAM           | 4 GB         | 8 GB                                                      | 32-64 GB                       |
+| CPU           | 2 cores      | 4 cores                                                   | 8+ cores (modern AMD/Intel)    |
+| OS Storage    | 50 GB SSD    | 100 GB NVMe                                               | 250 GB+ NVMe                   |
+| Media Storage | Variable     | NVMe/SSD for DB, `encoded-video`, `profile` and `thumbs`  | SSD for DB + HDD for media     |
+| GPU/iGPU      | Not required | Intel N100+, NVIDIA Gen. Pascal+, AMD Gen. Polaris+       | RTX 3060/4060 12GB             |
+
 ### Pre-requisites
 - If you want to migrate from Google Photos to Immich: 
   - Google Account with photos stored in Google Photos
-  - Up to an day of patience for the Google Takeout export and download process (depending on the size of your library, it can take a while)
+  - Up to an day of patience for the Google Takeout *export and download process* (depending on the size of your library, it can take a while)
 - 2 hours of time to set up and configure everything (depending on your familiarity with Unraid and Docker, it may take more or less time)
 - Unraid Server with Docker support
 - Unraid Community Applications plugin installed
@@ -83,7 +94,10 @@ This repository contains a step-by-step guide for an optimal setup of Unraid for
   Example: 100GB of Google Takeout Photos * 3 = 300GB
   -> 100GB for the compressed files, 100GB for the extracted files, 100GB for the final library after migration.
 
-**HINT:** Not required but a sanity check - If you want to opt-out of Google Photos (=destroy your Google Photos library) and start with Immich, make sure to have healthy disks. It *might* be a good idea to run a SMART test on your disks and check the health status before you start uploading your photos to Immich to avoid any potential data loss due to disk failure during the upload process. 
+**HINT:** Not required but a sanity check - If you want to opt-out of Google Photos (=destroy your Google Photos library) and start with Immich, make sure to have healthy disks. It *might* be a good idea 
+1. to have an offsite backup and 
+2. run a SMART test on your disks and check the health status 
+before you start uploading your photos to Immich to avoid any potential data loss due to disk failure during the upload process. 
 
 ---
 
