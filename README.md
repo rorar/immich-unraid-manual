@@ -84,6 +84,7 @@ This repository contains a step-by-step guide for an optimal setup of Unraid for
 - 2 hours of time to set up and configure everything (depending on your familiarity with Unraid and Docker, it may take more or less time)
 - Unraid Server with Docker support
 - Unraid Community Applications plugin installed
+- FolderView 3 plugin installed (for managing container start order)
 - Basic understanding of Unraid and Docker
   - Knowledge how to add a Docker Container to a (custom) docker network
   - Very basic Terminal/Command Line knowledge for Unraid
@@ -413,21 +414,28 @@ Access Immich at `http://<your-unraid-ip>:2283` and create your admin account.
 ## Step 9: Container Start Order with FolderView3
 Immich containers must start in the correct order. If the server starts before the database is ready, it will fail.
 
-**Correct start order:**
-1. depending on your database choice: 
-   `immich-vectorchord-db` (PostgreSQL)
-2. `immich-valkey` (Valkey)
-3. `immich-machine-learning` (ML)
-4. `immich-server` (Server — depends on all above)
-
 To manage this on Unraid, install **FolderView3** from Community Applications:
 1. Go to **Apps** → search for **FolderView3** → Install
 2. Go to the **Docker** tab
 3. Scroll down and click "Add Folder"
-4. create a new folder called `Immich` 
-5. optionally add an Immich icon using the URL https://raw.githubusercontent.com/immich-app/immich/refs/heads/main/mobile/packages/ui/showcase/web/icons/apple-icon-180.png )
-6. Drag all four Immich containers into this folder in the order listed above
-7. Back in **Docker** tab, click on the Immich folder and click "Start" (FolderView3 will start them in sequence when you start the folder)
+4. **Name:** `Immich` 
+5. **Icon (use the following URL):** 
+```
+https://raw.githubusercontent.com/immich-app/immich/refs/heads/main/mobile/packages/ui/showcase/web/icons/apple-icon-180.png )
+```
+6. **Folder WebUI:** On
+7. **WebUI URL:** `http://<your-unraid-ip>:2283` (this will be the URL of the Immich server container)
+8. Edit `Preview` section to your liking (optional)
+9. Drag all four Immich containers into in the **Correct start order and set the toogles next to them to "ON"**
+  1. `immich-vectorchord-db` (PostgreSQL)
+  2. `immich-valkey` (Valkey)
+  3. `immich-machine-learning` (ML)
+  4. `immich-server` (Server — depends on all above)
+10. Click "Submit" to save the folder configuration
+11. Back in **Docker** tab, click on the Immich folder and if the Containers weren't running before, click "Start" 
+12. Optionally set Autostart to "ON" for the folder.
+
+FolderView3 will now start Immich and its dependent containers in sequence when you click on the folder and hit "Start".
 
 ---
 
