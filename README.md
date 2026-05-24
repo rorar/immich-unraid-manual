@@ -430,7 +430,8 @@ To manage this on Unraid, install **FolderView3** from Community Applications:
 
 ---
 
-## Step 10: Run and Verify
+## Step 10: Setup Immich and Verify
+### Setup Immich
 1. Click on the `Immich` folder in Docker and hit "Start" (this will start all containers in the correct order)
 2. Wait a few minutes for the server and all dependent services to initialize
 3. Access Immich at `http://<your-unraid-ip>:2283` 
@@ -441,16 +442,37 @@ To manage this on Unraid, install **FolderView3** from Community Applications:
    1. enable the toogle to enable it. 
    2. I'd recommend `{{y}}/{{MM}}/{{dd}}/{{filename}}` for better organization of your library, but you can manually build one by yourself OR choose a template from the preset dropdown. You can also change this later in the settings.
 8. Recommendation: Follow the 3-2-1 backup strategy. You can set this up later.
-9. **Mobile Apps**
-   1. Download the Immich app: [iOS App Store](https://apps.apple.com/app/immich/id1613945652) | [Google Play](https://play.google.com/store/apps/details?id=app.alextran.immich) | [F-Droid](https://f-droid.org/packages/app.alextran.immich/)
-   2. Open the app and enter your server URL: `http://<your-unraid-ip>:2283`
-   3. Log in with your admin account (or a user account you created)
-   4. To enable auto-backup: tap the cloud icon (top right) → "Choose albums to backup" → select albums (e.g. Camera Roll) → configure foreground/background upload preferences
-   5. **iOS Background Backup:** Settings → General - Background App Refresh Ensure → Immich is toggled ON and grant location permission for reliable background uploads.
-   6. **Android Battery Optimization** Settings → Apps → Immich → Battery. Visit [dontkillmyapp.com](https://dontkillmyapp.com) for device-specific guidance on preventing battery optimization from interrupting uploads.
-1.  Verify that everything is working by uploading a test photo and checking that thumbnails are generated and that the photo appears in the library.
-2.  Check the logs of each container if you encounter any issues to troubleshoot.
-3.  **Verify GPU acceleration for Machine Learning (if applicable):**
+9. Go to `Account Icon (Top right)  → Account Settings → Administration` and set up Immich to your liking.
+
+### Administration Settings
+**Important:**
+- If you've got the Unraid plugin `Appdata Backup` installed, avoid setting 
+  - `Database Dump Settings` -> `Cron expression`
+  - `External Library` (if used) -> `Periodic scanning`
+  - `Nightly Tasks Settings` -> `Start time`
+*at the same time you would backup your appdata folder.*
+
+If set in parallel/in the same time, your 
+- database won't get backed up
+- Libraries won't get indexed
+- Nightly Task won't run as the `Appdata Backup` plugin stops the docker container. 
+Worst case would be **corrupted data.**
+To avoid this, you can set the named schedules to a different time than your appdata backup schedule.
+
+Best would be: Database Dump before External Library indexing, then let the Nightly Tasks run.
+This resluts in: Backup a clean database state before possibly unwated images may get indexed -> let the Library Periodic Scanning run -> then let the nightly tasks run to process new data. 
+If something goes wrong during the library indexing, you have a clean backup of the database before the indexing process started.  
+
+### Setup Mobile Apps
+1. Download the Immich app: [iOS App Store](https://apps.apple.com/app/immich/id1613945652) | [Google Play](https://play.google.com/store/apps/details?id=app.alextran.immich) | [F-Droid](https://f-droid.org/packages/app.alextran.immich/)
+2. Open the app and enter your server URL: `http://<your-unraid-ip>:2283`
+3. Log in with your admin account (or a user account you created)
+4. To enable auto-backup: tap the cloud icon (top right) → "Choose albums to backup" → select albums (e.g. Camera Roll) → configure foreground/background upload preferences
+5. **iOS Background Backup:** Settings → General - Background App Refresh Ensure → Immich is toggled ON and grant location permission for reliable background uploads.
+6. **Android Battery Optimization** Settings → Apps → Immich → Battery. Visit [dontkillmyapp.com](https://dontkillmyapp.com) for device-specific guidance on preventing battery optimization from interrupting uploads.
+7.  Verify that everything is working by uploading a test photo and checking that thumbnails are generated and that the photo appears in the library.
+8.  Check the logs of each container if you encounter any issues to troubleshoot.
+9.  **Verify GPU acceleration for Machine Learning (if applicable):**
    If you chose a GPU-accelerated ML template (CUDA, OpenVINO, or ROCm), verify that the GPU is being used:
    - Upload a photo and wait for face detection / smart search to process (the provider log appears on first model load, not on container startup)
    - Then run this command in the Unraid terminal:
