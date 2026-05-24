@@ -503,21 +503,21 @@ Under **Video Transcoding → Hardware Acceleration**, set the **Acceleration AP
 - **Temporal AQ:** Leave disabled unless you have a modern NVIDIA GPU (NVENC only)
 - **Preferred hardware device:** Leave empty unless you have multiple GPUs
 
-##### 2. Transcode Policy (recommended)
+##### 2. Transcode Policy
 Under **Video Transcoding → Transcode Policy**:
-- **Transcode policy:** `Videos higher than target resolution or not in an accepted format` (recommended)
-- **Accepted video codecs:** Check `H.264`, `HEVC`, `VP9` (prevents unnecessary re-encoding)
-- **Accepted audio codecs:** Check `AAC`, `MP3`, `Opus`
-- **Accepted containers:** Check `MOV`, `Ogg`, `WebM`
+- **Transcode policy:** `Only videos not in an accepted format` (default - only transcodes incompatible videos)
+- **Accepted video codecs:** `H.264` is checked by default. Consider also checking `HEVC` and `VP9` to prevent unnecessary re-encoding of these common formats.
+- **Accepted audio codecs:** `AAC`, `MP3`, `Opus` (all checked by default)
+- **Accepted containers:** `MOV`, `Ogg`, `WebM` (all checked by default)
 
-##### 3. Encoding Options (recommended)
+##### 3. Encoding Options
 Under **Video Transcoding → Encoding Options**:
-- **Video codec:** `H.264` (best compatibility) or `HEVC` (better compression, slightly less compatible)
-- **Audio codec:** `AAC` (best compatibility)
-- **Target resolution:** `1080p` (good balance of quality and file size)
-- **Constant rate factor (-crf):** `23` for H.264, `28` for HEVC (lower = better quality, larger files)
-- **Preset:** `medium` (good balance; use `fast` or `faster` for GPU-accelerated encoding)
-- **Threads:** `0` (auto, uses all available CPU cores)
+- **Video codec:** `H.264` (default - best compatibility)
+- **Audio codec:** `AAC` (default - best compatibility)
+- **Target resolution:** `720p` (default). Increase to `1080p` if you have a powerful GPU and want higher quality playback.
+- **Constant rate factor (-crf):** `23` (default). Lower = better quality but larger files. Typical values: 23 for H.264, 28 for HEVC, 31 for VP9, 35 for AV1.
+- **Preset:** `ultrafast` (default). The official docs recommend choosing a **slower** preset when using hardware acceleration to improve quality, e.g. `fast` or `medium`.
+- **Threads:** `0` (default - auto, uses all available CPU cores)
 
 Click **Save** after making changes.
 
