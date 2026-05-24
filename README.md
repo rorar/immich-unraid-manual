@@ -31,7 +31,7 @@
 - [Kudos and Credits](#kudos-and-credits)
 
 
-## Unraid Immich Performance Setup + Google Takeout Guide
+## Unraid Immich "Performance" Setup + Google Takeout Guide
 ### TL;DR:
 #### Immich Setup
 We use a share living on the Cache (SSD/NVMe) for `encoded-video`, `profile` and `thumbs` - and a HDD share living on the Array for `backups`, `library` and `upload`. This setup allows us to leverage the speed of the Cache for frequently accessed data while utilizing the Array for long-term storage of original media files.
@@ -42,7 +42,7 @@ Also for the migration from Google Photos to Immich, we use Google Takeout to ex
 We'll be using PhotoMigrator to automate the process of importing photos from our Google Takeout export into Immich. PhotoMigrator takes care of handling metadata and organizing the photos in the correct structure for Immich.
 
 ## Note
-If you're unsure about using Immich, you can try it out on [PixelUnion](https://pixelunion.eu) (non-sponsored).
+If you're unsure about using Immich, you can try it out for free on [PixelUnion](https://pixelunion.eu) (non-sponsored).
 
 Just a friendly recommendation to test Immich without setting it up yourself first. You can create a free account with 16GB included storage and upload a few photos to see how the interface works and if it meets your needs before going through the setup process on Unraid.
 
@@ -54,7 +54,7 @@ Just a friendly recommendation to test Immich without setting it up yourself fir
 This guide is intended for NEW setups of Immich on Unraid.
 
 ### Out of Scope:
-Upgrading existing Immich setups as it requires significant changes to the existing setup and *data migration*.
+Upgrading existing Immich setups as it *requires significant changes* to the existing setup and *data migration*.
 If you have an existing Immich setup on Unraid and want to optimize it for better performance, I would recommend **backing up your data**, setting up a new instance of Immich following this guide and then migrating your data from the old instance to the new one.
 
 *If you REALLY want to upgrade: Consult the Immich documentation and community for best practices on how to do this migration to ensure that you don't lose any data in the process. Happy learning!*
