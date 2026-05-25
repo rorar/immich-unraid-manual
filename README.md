@@ -488,8 +488,6 @@ http://<your-unraid-ip>:2283/admin/system-settings?isOpen=image+thumbnail-settin
 
 **Or navigate manually:** Administration → System Settings → Image
 
-*The Image settings below are recommendations for a good balance of quality and performance. You can adjust them based on your needs and preferences. For best compatibility, consider using Immich's default settings.*
-
 ##### Thumbnail Settings
 Under **Image → Thumbnail Settings** (small thumbnails used in the main timeline and grid views):
 - **Format:** `JPEG` (default: WebP. JPEG is faster to encode and has broader compatibility. WebP produces smaller files but is slower.)
