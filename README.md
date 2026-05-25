@@ -66,16 +66,16 @@ This repository contains a step-by-step guide for an optimal setup of Unraid for
 
 ---
 
-## Hardware Requirements and Pre-requisites
-### Hardware Requirements
+## Hardware Recommendations and Pre-requisites
+### Hardware Recommendations
 
-| Component     | Minimum      | Recommended                                               | Large Libraries (500K+ assets) |
-|---------------|--------------|-----------------------------------------------------------|--------------------------------|
-| RAM           | 4 GB         | 8 GB                                                      | 32-64 GB                       |
-| CPU           | 2 cores      | 4 cores                                                   | 8+ cores (modern AMD/Intel)    |
-| OS Storage    | 50 GB SSD    | 100 GB NVMe                                               | 250 GB+ NVMe                   |
-| Media Storage | Variable     | NVMe/SSD for DB, `encoded-video`, `profile` and `thumbs`  | SSD for DB + HDD for media     |
-| GPU/iGPU      | Not required | Intel N100+, NVIDIA Gen. Pascal+, AMD Gen. Polaris+       | RTX 3060/4060 12GB             |
+| Component     | Minimum      | Recommended                                                                  | Large Libraries (500K+ assets) |
+|---------------|--------------|------------------------------------------------------------------------------|--------------------------------|
+| RAM           | 4 GB         | 8 GB                                                                         | 32-64 GB                       |
+| CPU           | 2 cores      | 4 cores                                                                      | 8+ cores (modern AMD/Intel)    |
+| OS Storage    | 50 GB SSD    | 100 GB NVMe                                                                  | 250 GB+ NVMe                   |
+| Media Storage | Variable     | NVMe/SSD for DB, `encoded-video`, `profile` and `thumbs`                     | SSD for DB + HDD for media     |
+| GPU/iGPU      | Not required | Intel 7th Gen. with Quick Sync, NVIDIA Gen. Pascal+, AMD Gen. Polaris+       | RTX 3060/4060 12GB             |
 
 ### Pre-requisites
 - If you want to migrate from Google Photos to Immich: 
@@ -202,7 +202,6 @@ Once you receive the email from Google Takeout with the download link, you can u
    3. Host Path: `/mnt/user/immich/Takeout`
    4. Access Mode: `Read/Write`
    5. -> Hit "Save" to add the path mapping
-   5. -> Hit "Save" to add the path mapping
 7. Hit "Apply" to start the installation of the Firefox container with the new path mapping.
 8.  Open the Firefox container's web UI
 9.  You may be prompted with an SSL warning since the container is using a self-signed certificate. You can safely bypass this warning by clicking on "Advanced" and then "Accept the Risk and Continue" to proceed to the Firefox web UI.
@@ -222,7 +221,7 @@ Once you receive the email from Google Takeout with the download link, you can u
 ## Step 2: Create the `immich_internal` Docker Network
 All Immich containers need to communicate with each other by container name. We create a dedicated Docker network for this.
 
-1. Open the Unraid web interface
+1. Open the Unraid web interface `http://<your-unraid-ip>`
 2. Open the Unraid terminal (click the `>_` icon in the top right corner of the navigation bar)
 3. Run the following command to create the network:
 ```bash
@@ -401,7 +400,7 @@ The main application — web UI, API, and background workers.
 2. Select the `immich-server` template matching your GPU (see [Step 3](#step-3-choose-your-platform))
 3. Configure:
    - **Network:** `immich_internal`
-   - **DB_HOSTNAME:** `immich-vectorchord-db` (depending on your database choice | must match the database container name)
+   - **DB_HOSTNAME:** `immich-vectorchord-db` (must match the database container name)
    - **DB_PASSWORD:** The exact same password you set in [Step 5](#step-5-postgresql)
    - **REDIS_HOSTNAME:** `immich-valkey` (must match the Valkey container name)
    - All HDD/SSD storage paths should already point to the correct shares (`/mnt/user/immich/` and `/mnt/user/immich-gen/`)
@@ -449,18 +448,14 @@ FolderView3 will now start Immich and its dependent containers in sequence when 
 6. Go through the initial setup steps in the web UI
 7. If asked for "[Storage Template](https://docs.immich.app/administration/storage-template/)", 
    1. enable the toogle to enable it. 
-   2. I'd recommend `{{y}}/{{MM}}/{{dd}}/{{filename}}` for better organization of your library, but you can manually build one by yourself OR choose a template from the preset dropdown. You can also change this later in the settings.
+   2. I'd recommend `{{y}}/{{MM}}/{{dd}}/{{filename}}` (which results in the folder/file structure `/YYYY/MM/DD/filename`) for better organization of your library.
+   But you can manually build one by yourself OR choose a template from the preset dropdown. 
+   You can also change this later in the settings.
 8. Recommendation: Follow the 3-2-1 backup strategy. You can set this up later.
 9. Go to `Account Icon (Top right)  → Account Settings → Administration` and set up Immich to your liking.
 
 ### Administration Settings
-#### Unraid Appdata Backup Plugin Conflict Warning
-Quicklink to the relevant settings page in Immich Admin UI:
-```
-http://<your-unraid-ip>:2283/admin/system-settings?isOpen=external-library+notifications+library-watching+library-scanning+nightly-tasks+backup`
-```
-
-#### Unraid Appdata Backup Plugin Conflict Warning
+#### Set periodic server jobs & Unraid Appdata Backup Plugin Conflict Warning
 Quicklink to the relevant settings page in Immich Admin UI:
 ```
 http://<your-unraid-ip>:2283/admin/system-settings?isOpen=external-library+notifications+library-watching+library-scanning+nightly-tasks+backup`
@@ -474,14 +469,12 @@ http://<your-unraid-ip>:2283/admin/system-settings?isOpen=external-library+notif
 *at the same time you would backup your appdata folder.*
 
 If set in parallel/in the same time window, your 
-If set in parallel/in the same time window, your 
 - database won't get backed up
 - Libraries won't get indexed
 - Nightly Task won't run as the `Appdata Backup` plugin stops the docker container. 
 Worst case would be **corrupted data.**
 To avoid this, you can set the named schedules to a different time than your appdata backup schedule.
 
-Best would be: `Run Database Dump before External Library indexing, then let the Nightly Tasks run.`
 Best would be: `Run Database Dump before External Library indexing, then let the Nightly Tasks run.`
 This resluts in: Backup a clean database state before possibly unwated images may get indexed -> let the Library Periodic Scanning run -> then let the nightly tasks run to process new data. 
 If something goes wrong during the library indexing, you have a clean backup of the database before the indexing process started.  
@@ -512,19 +505,23 @@ Under **Video Transcoding → Hardware Acceleration**, set the **Acceleration AP
 - **Preferred hardware device:** Leave empty unless you have multiple GPUs
 
 ##### 2. Transcode Policy
+*The Transcoding settings below are recommendations for a good balance of disk usage and quality. You can adjust them based on your needs and preferences. For best compatibility, consider using Immich's default settings.*
+
 Under **Video Transcoding → Transcode Policy**:
 - **Transcode policy:** `Only videos not in an accepted format` (default - only transcodes incompatible videos)
-- **Accepted video codecs:** `H.264` is checked by default. Consider also checking `HEVC` and `VP9` to prevent unnecessary re-encoding of these common formats.
-- **Accepted audio codecs:** `AAC`, `MP3`, `Opus` (all checked by default)
-- **Accepted containers:** `MOV`, `Ogg`, `WebM` (all checked by default)
+- **Accepted video codecs:** `VP9` (For Apple iOS devices below iOS 14, choose `H.264` instead for better compatibility)
+- **Accepted audio codecs:** `opus` (For Apple iOS devices below iOS 17 and Android devices below Android 10, choose `AAC` instead for better compatibility) 
+- **Accepted containers:** Deselect all (everything will be transcoded to MP4)
 
 ##### 3. Encoding Options
+*The Encoding settings below are recommendations for a good balance of disk usage and quality. You can adjust them based on your needs and preferences. For best compatibility, consider using Immich's default settings.*
+
 Under **Video Transcoding → Encoding Options**:
-- **Video codec:** `H.264` (default - best compatibility)
-- **Audio codec:** `AAC` (default - best compatibility)
-- **Target resolution:** `720p` (default). Increase to `1080p` if you have a powerful GPU and want higher quality playback.
-- **Constant rate factor (-crf):** `23` (default). Lower = better quality but larger files. Typical values: 23 for H.264, 28 for HEVC, 31 for VP9, 35 for AV1.
-- **Preset:** `ultrafast` (default). The official docs recommend choosing a **slower** preset when using hardware acceleration to improve quality, e.g. `fast` or `medium`.
+- **Video codec:** `VP9` (For Apple iOS devices below iOS 14, choose `H.264` instead for better compatibility)
+- **Audio codec:** `opus` (For Apple iOS devices below iOS 17 and Android devices below Android 10, choose `AAC` instead for better compatibility) 
+- **Target resolution:** `Original` (avoid unnecessary re-encoding if the original resolution is already suitable)
+- **Constant rate factor (-crf):** `31` for VP9 / `23` for H.264. Lower = better quality but larger files. Typical values: 23 for H.264, 28 for HEVC, 31 for VP9, 35 for AV1.
+- **Preset:** `veryslow` (best quality and compression, but slowest encoding speed. You can choose `slow` or `medium` for faster encoding at the cost of larger file sizes.)
 - **Threads:** `0` (default - auto, uses all available CPU cores)
 
 Click **Save** after making changes.
