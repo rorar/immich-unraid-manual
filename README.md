@@ -560,15 +560,19 @@ Under **Video Transcoding → Encoding Options**:
 Click **Save** after making changes.
 
 ### Setup Mobile Apps
+*For Google Takeout: I would recommend not to sync images from your mobile phone yet as it may lead to duplicates.* 
+
 1. Download the Immich app: [iOS App Store](https://apps.apple.com/app/immich/id1613945652) | [Google Play](https://play.google.com/store/apps/details?id=app.alextran.immich) | [F-Droid](https://f-droid.org/packages/app.alextran.immich/)
 2. Open the app and enter your server URL: `http://<your-unraid-ip>:2283`
 3. Log in with your admin account (or a user account you created)
 4. To enable auto-backup: tap the cloud icon (top right) → "Choose albums to backup" → select albums (e.g. Camera Roll) → configure foreground/background upload preferences
 5. **iOS Background Backup:** Settings → General - Background App Refresh Ensure → Immich is toggled ON and grant location permission for reliable background uploads.
 6. **Android Battery Optimization** Settings → Apps → Immich → Battery. Visit [dontkillmyapp.com](https://dontkillmyapp.com) for device-specific guidance on preventing battery optimization from interrupting uploads.
-7.  Verify that everything is working by uploading a test photo and checking that thumbnails are generated and that the photo appears in the library.
-8.  Check the logs of each container if you encounter any issues to troubleshoot.
-9.  **Verify GPU acceleration for Machine Learning (if applicable):**
+
+### Verify
+1.  Verify that everything is working by uploading a test photo and checking that thumbnails are generated and that the photo appears in the library.
+2.  Check the logs of each container if you encounter any issues to troubleshoot.
+3.  **Verify GPU acceleration for Machine Learning (if applicable):**
    If you chose a GPU-accelerated ML template (CUDA, OpenVINO, or ROCm), verify that the GPU is being used:
    - Upload a photo and wait for face detection / smart search to process (the provider log appears on first model load, not on container startup)
    - Then run this command in the Unraid terminal:
@@ -585,10 +589,11 @@ Click **Save** after making changes.
 **Google Takeout Migration (if you don't want to migrate you're done here):**
 *You'll need this step for [Quick Start Guide: Import Google Takeout Photos to Immich](#quick-start-guide-import-google-takeout-photos-to-immich) in the PhotoMigrator section.*
 
-7. Once verified, create an API key for the admin user in Immich: 
+## Create an API-Key
+1. Once verified, create an API key for the admin user in Immich: 
   `Account Icon (Top right)  → Account Settings → API Keys → New API Key → Grant ALL access by "Select All" + "Create" → Copy the API-key.`
   You'll need the API key for PhotoMigrator to import your Google Takeout photos.
-8. You can now move on to the next step of your Google Photos library using PhotoMigrator (see next section).
+2. You can now move on to the next step of your Google Photos library using PhotoMigrator (see next section).
 
 **HINT:** Delete your API-Key after the migration process to ensure that there are no security risks from having an unused API key lying around. (see [Cleanup](#cleanup) section)
 
@@ -651,7 +656,7 @@ PhotoMigrator is a tool to help with the migration of photos from Google Takeout
 3. Go to **Configuration Panel** → **Feature Config** → **Immich Photos**
 4. Fill out:
    - **IMMICH_URL:** `http://immich-server:2283` (uses container name since both are on `immich_internal`)
-   - **IMMICH_API_KEY_ADMIN:** Create an API key in Immich first: Account Icon → Account Settings → API Keys → New API Key → Grant ALL access → Copy the key
+   - **IMMICH_API_KEY_ADMIN:** Paste in your Immich API-Key from Sektion [Create an API-Key](#create-an-api-key)
    - **IMMICH_USERNAME_1:** <your Immich admin email address> (the one you use to log in to the Immich web UI)
    - **IMMICH_PASSWORD_1:** <your Immich admin password> (the one you use to log in to the Immich web UI)
    - **IMMICH_API_KEY_USER_1** Can be the same as IMMICH_API_KEY_ADMIN or you can create a separate API key for the user account in Immich and use that here for better security practices (recommended)
@@ -683,11 +688,11 @@ PhotoMigrator is a tool to help with the migration of photos from Google Takeout
 ---
 
 ## Cleanup
-### Files
+### Cleanup Files
 After you have successfully downloaded and extracted your photos from Google Takeout, you can clean up the Firefox container by deleting it and any temporary files in `/mnt/user/immich/Takeout/` that were created during the download process.
-### API Keys
+### Cleanup API Keys
 Remove your Immich API Key in your Account Settings-->API_KEY Keys that you created for the PhotoMigrator in the Immich web UI to ensure that there are no security risks from having an unused API key lying around.
-### Google Photos
+### Cleanup Google Photos
 If you have verified that all your photos have been successfully migrated to Immich and you no longer need your Google Photos library, you can choose to delete your Google Photos library to free up space and ensure that you are no longer relying on Google Photos for your photo storage. 
 
 *Make sure to double-check that everything is working correctly in Immich and that you have backups of your photos before deleting your Google Photos library.*
