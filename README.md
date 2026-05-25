@@ -633,6 +633,8 @@ The script extracts each archive sequentially, then verifies every file. You wil
 ## Google Takeout Phase 3: PhotoMigrator
 PhotoMigrator is a tool to help with the migration of photos from Google Takeout and other services to Immich. It automates importing photos including metadata handling and organizing files in the correct structure for Immich.
 
+---
+
 ### PhotoMigrator Setup
 1. Go to the **Docker** tab → **Add Container**
 2. Select the `photomigrator` template
@@ -648,6 +650,8 @@ PhotoMigrator is a tool to help with the migration of photos from Google Takeout
 6. Access the PhotoMigrator web UI at `http://<your-unraid-ip>:6078`
 
 **NOTE:** The mount target is `/app/data/admin` because PhotoMigrator's file browser uses per-user subdirectories. The default `admin` user browses under `/app/data/admin/`. With this mapping, your Takeout files are directly accessible via the `···` browse button → "Home (data)" in the web UI.
+
+---
 
 ### Quick Start Guide: Import Google Takeout Photos to Immich
 #### Set Immich settings
@@ -687,6 +691,16 @@ PhotoMigrator is a tool to help with the migration of photos from Google Takeout
 
 ---
 
+## More possibilities
+### Immich Power Tools
+Setup [Immich Power Tools](https://github.com/immich-power-tools/immich-power-tools) for extended functionality.
+1. Go to the "Apps" tab in your Unraid web interface
+2. Search for "Immich Power Tools" in the Community Applications.
+3. Choose the "Immich Power Tools" click "Install"
+4. <!-- to be filled --->
+
+---
+
 ## Cleanup
 ### Cleanup Files
 After you have successfully downloaded and extracted your photos from Google Takeout, you can clean up the Firefox container by deleting it and any temporary files in `/mnt/user/immich/Takeout/` that were created during the download process.
@@ -696,6 +710,8 @@ Remove your Immich API Key in your Account Settings-->API_KEY Keys that you crea
 If you have verified that all your photos have been successfully migrated to Immich and you no longer need your Google Photos library, you can choose to delete your Google Photos library to free up space and ensure that you are no longer relying on Google Photos for your photo storage. 
 
 *Make sure to double-check that everything is working correctly in Immich and that you have backups of your photos before deleting your Google Photos library.*
+
+---
 
 ## FAQ
 ### Q: Why not use the imagegenius docker image?
