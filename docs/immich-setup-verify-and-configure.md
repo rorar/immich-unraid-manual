@@ -189,15 +189,27 @@ Click ![Save](assets/images/Immich%20-%20Administration%20-%20Button%20Save.png)
         - AMD: `['MIGraphXExecutionProvider', 'CPUExecutionProvider']`
         - CPU only: `['CPUExecutionProvider']`
 
-**Google Takeout Migration (if you don't want to migrate you're done here):**
-*You'll need this step for [Quick Start Guide: Import Google Takeout Photos to Immich](google-takeout-import-with-photomigrator.md#quick-start-guide-import-google-takeout-photos-to-immich) in the PhotoMigrator section.*
+> [!NOTE]
+> **Not migrating from Google Photos?** You're done! Immich is ready to use.
+> If you want to migrate, continue with [Create an API-Key](#create-an-api-key) below, then proceed to [Google Takeout Phase 3: PhotoMigrator](google-takeout-import-with-photomigrator.md).
+
+---
 
 ## Create an API-Key
 
-1. Once verified, create an API key for the admin user in Immich:
-    `Account Icon (Top right) → Account Settings → API Keys → New API Key → Grant ALL access by "Select All" + "Create" → Copy the API-key.`
-    You'll need the API key for PhotoMigrator to import your Google Takeout photos.
-2. You can now move on to the next step of your Google Photos library using PhotoMigrator (see next section).
+You'll need an API key for tools that connect to the Immich API, such as [PhotoMigrator](google-takeout-import-with-photomigrator.md) (Google Takeout import) and [Immich Power Tools](immich-power-tools.md) (advanced library management).
+
+Quicklink to the API key settings page:
+
+```
+http://<your-unraid-ip>:2283/user-settings?isOpen=api-keys
+```
+
+1. Go to `Account Icon (Top right) → Account Settings → API Keys`
+2. Click **New API Key**
+3. Grant **ALL** access by clicking "Select All"
+4. Click **Create**
+5. Copy the API key and store it securely — you won't be able to see it again.
 
 > [!TIP]
-> Delete your API-Key after the migration process to ensure that there are no security risks from having an unused API key lying around. (see [Cleanup](cleanup-after-migration.md) section)
+> Delete your API key after migration is complete to avoid leaving unused credentials. (see [Cleanup](cleanup-after-migration.md))
