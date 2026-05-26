@@ -5,6 +5,12 @@
 
 Once your Google Takeout downloads are complete (see [Phase 2](google-takeout-download-with-firefox.md)), you need to extract them.
 
+Quicklink to the Unraid terminal:
+
+```
+http://<your-unraid-ip>/webterminal/ttyd/
+```
+
 Open the Unraid web interface and open the terminal (click the ![Terminal](assets/images/Unraid%20-%20Top%20Menu%20-%20Button%20Start%20Webterminal.png){: .inline-button } icon in the top right corner of the navigation bar). The following commands use a `tmux` session so the extraction continues even if you close the web terminal.
 
 First, download the extraction script:

@@ -1,5 +1,11 @@
 # Step 4: Download Docker Templates
 
+Quicklink to the Unraid terminal:
+
+```
+http://<your-unraid-ip>/webterminal/ttyd/
+```
+
 Open the Unraid web interface and open the terminal (click the ![Terminal](assets/images/Unraid%20-%20Top%20Menu%20-%20Button%20Start%20Webterminal.png){: .inline-button } icon in the top right corner of the navigation bar). Then download the templates you need.
 
 > [!NOTE]
