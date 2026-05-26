@@ -4,7 +4,7 @@ Once you receive the email from Google Takeout with the download link, you can u
 
 **Purpose:** This method is especially useful if you have a large library, slower download speed and to avoid downloading the files to your local machine first and moving it to Unraid.
 
-Quicklink to search for Firefox in Community Applications:
+Quicklink to search for Firefox in Community Applications (paste into your browser while logged into Unraid):
 
 ```
 http://<your-unraid-ip>/Apps?search=firefox+linuxserver

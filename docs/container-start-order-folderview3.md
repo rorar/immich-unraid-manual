@@ -4,7 +4,7 @@ Immich containers must start in the correct order. If the server starts before t
 
 To manage this on Unraid, install **FolderView3** from Community Applications:
 
-Quicklink to search for FolderView3:
+Quicklink to search for FolderView3 (paste into your browser while logged into Unraid):
 
 ```
 http://<your-unraid-ip>/Apps?search=folderview3

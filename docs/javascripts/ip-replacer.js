@@ -76,15 +76,24 @@
       var original = el.dataset.ipOriginal;
       if (!original) continue;
 
-      // Step 1: Replace full URL patterns → clickable links
+      // Step 1: Replace full URL patterns
+      // URLs with a port (e.g. :2283) → clickable links (Immich/app URLs)
+      // URLs without a port (e.g. /Terminal, /Docker) → plain text (Unraid UI, requires active session)
       URL_PATTERN_RE.lastIndex = 0;
       var result = original.replace(URL_PATTERN_RE, function (match, port, path) {
         var p = port || "";
         var pa = path || "";
-        var href = safeProto + "://" + safeIp + p + pa;
         var display = safeProto + "://" + safeIp + p + pa;
-        return '<a href="' + href + '" class="ip-link" target="_blank" rel="noopener">' +
-          display + '<span class="ip-link-icon" aria-hidden="true">\u00a0\u2197</span></a>';
+
+        if (p) {
+          // Has port → app URL → clickable link
+          var href = safeProto + "://" + safeIp + p + pa;
+          return '<a href="' + href + '" class="ip-link" target="_blank" rel="noopener">' +
+            display + '<span class="ip-link-icon" aria-hidden="true">\u00a0\u2197</span></a>';
+        } else {
+          // No port → Unraid UI path → plain text (user must copy-paste)
+          return '<span class="ip-replaced">' + display + "</span>";
+        }
       });
 
       // Step 2: Replace remaining standalone placeholders → plain text

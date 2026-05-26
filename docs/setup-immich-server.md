@@ -2,7 +2,7 @@
 
 The main application — web UI, API, and background workers.
 
-Quicklink to add a new Docker container:
+Quicklink to add a new Docker container (paste into your browser while logged into Unraid):
 
 ```
 http://<your-unraid-ip>/Docker/AddContainer

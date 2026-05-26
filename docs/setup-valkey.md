@@ -2,7 +2,7 @@
 
 Valkey is a Redis-compatible cache used by Immich as a message broker.
 
-Quicklink to add a new Docker container:
+Quicklink to add a new Docker container (paste into your browser while logged into Unraid):
 
 ```
 http://<your-unraid-ip>/Docker/AddContainer

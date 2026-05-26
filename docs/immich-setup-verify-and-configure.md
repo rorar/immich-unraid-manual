@@ -50,9 +50,13 @@ http://<your-unraid-ip>:2283/admin/system-settings?isOpen=external-library+notif
 > Worst case would be **corrupted data.**
 > To avoid this, you can set the named schedules to a different time than your appdata backup schedule.
 >
-> Best would be: `Run Database Dump before External Library indexing, then let the Nightly Tasks run.`
-> This results in: Backup a clean database state before possibly unwanted images may get indexed -> let the Library Periodic Scanning run -> then let the nightly tasks run to process new data.
-> If something goes wrong during the library indexing, you have a clean backup of the database before the indexing process started.
+> **Recommended schedule order:**
+>
+> 1. **Database Dump** — backup a clean database state first
+> 2. **External Library Periodic Scanning** — index new/changed files
+> 3. **Nightly Tasks** — process the newly indexed data
+>
+> This way, if something goes wrong during library indexing, you already have a clean database backup from before it started.
 
 ### Image Settings
 

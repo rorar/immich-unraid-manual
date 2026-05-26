@@ -1,6 +1,6 @@
 # Step 1: Create Shares
 
-Quicklink to the Shares overview:
+Quicklink to the Shares overview (paste into your browser while logged into Unraid):
 
 ```
 http://<your-unraid-ip>/Shares/Share?name=

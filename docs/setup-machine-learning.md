@@ -2,7 +2,7 @@
 
 The ML service handles face recognition, CLIP-based image search, and OCR. Models are downloaded on first use and cached (several GB).
 
-Quicklink to add a new Docker container:
+Quicklink to add a new Docker container (paste into your browser while logged into Unraid):
 
 ```
 http://<your-unraid-ip>/Docker/AddContainer

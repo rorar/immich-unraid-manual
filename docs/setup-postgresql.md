@@ -1,6 +1,6 @@
 # Step 5: PostgreSQL Setup
 
-Quicklink to add a new Docker container:
+Quicklink to add a new Docker container (paste into your browser while logged into Unraid):
 
 ```
 http://<your-unraid-ip>/Docker/AddContainer
