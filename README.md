@@ -762,6 +762,7 @@ The `immich` share on the array is used for storing the downloaded Google Takeou
 ### Q: Do I need to set ports while using `immich_internal`?
 **A:** No. On a custom Docker network, containers communicate directly by container name and internal port. The database (5432), Valkey (6379), and machine learning (3003) containers do not need exposed ports - they are only accessed by the Immich server internally. Not exposing these ports is actually more secure since it prevents external access to your database and cache.
 Only the Immich server needs a port mapping (2283) so you can access the web UI from your browser. 
+
 ---
 
 ## TODO
