@@ -1,5 +1,11 @@
 # Step 1: Create Shares
 
+Quicklink to the Shares overview:
+
+```
+http://<your-unraid-ip>/Shares/Share?name=
+```
+
 Open up your Unraid web interface and using the top navigation menu, navigate to the ![Shares](assets/images/Unraid%20-%20Tab%20Shares.png){: .inline-button } tab.
 Here, we will create two shares: one for the main media library and another for generated files.
 Click on ![Add Share](assets/images/Unraid%20-%20Tab%20Shares%20-%20Button%20Add%20Share.png){: .inline-button } on the bottom left of your Share table and create the following shares:
