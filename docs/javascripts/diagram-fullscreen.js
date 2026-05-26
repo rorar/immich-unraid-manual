@@ -44,11 +44,27 @@ function openMermaidFullscreen(btnEl) {
   }
 
   if (!svg) {
-    // Debug: show what the previous sibling actually is
+    // Debug logging
     var prev = btnEl.previousElementSibling;
-    var info = prev ? (prev.tagName + "." + prev.className) : "none";
-    var svgCount = document.querySelectorAll("svg").length;
-    btnEl.textContent = "\u26A0 SVG not found (prev: " + info + ", svgs: " + svgCount + ")";
+    console.group("[diagram-fullscreen] SVG not found — debug info");
+    console.log("Button:", btnEl);
+    console.log("Previous sibling:", prev);
+    if (prev) {
+      console.log("  tag:", prev.tagName, "class:", prev.className);
+      console.log("  innerHTML length:", prev.innerHTML.length);
+      console.log("  children:", Array.from(prev.children).map(function(c) { return c.tagName + "." + c.className; }));
+      console.log("  has shadow:", !!prev.shadowRoot);
+    }
+    var allSvgs = document.querySelectorAll("svg");
+    console.log("All SVGs on page:", allSvgs.length);
+    Array.from(allSvgs).forEach(function(s, i) {
+      var parent = s.parentElement;
+      console.log("  SVG[" + i + "] parent:", parent ? parent.tagName + "." + parent.className : "none",
+        "id:", s.id || "none", "size:", s.getBoundingClientRect().width + "x" + s.getBoundingClientRect().height);
+    });
+    console.groupEnd();
+
+    btnEl.textContent = "\u26A0 SVG not found \u2014 check console (F12)";
     setTimeout(function () { btnEl.textContent = "\u2922  Fullscreen"; }, 4000);
     return;
   }
