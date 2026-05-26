@@ -37,8 +37,51 @@ If you have an existing Immich setup on Unraid and want to optimize it for bette
 
 *If you REALLY want to upgrade: Consult the Immich documentation and community for best practices on how to do this migration to ensure that you don't lose any data in the process. Happy learning!*
 
-## What's inside this repository?
-This repository contains a step-by-step guide for an optimal setup of Unraid for Immich, a self-hosted photo and video management application. The guide covers Unraid configuration WITHOUT using Docker Compose for a more Unraid-native approach and also performance optimization tips to ensure a smooth and efficient experience with Immich on Unraid.
+## What's inside this guide?
+
+This guide covers an optimal Unraid-native setup of Immich (no Docker Compose) with performance optimization and optional Google Takeout migration.
 
 > [!IMPORTANT]
-> This guide is intended for users who want to run a *NEW instance of Immich* on Unraid and are looking for best practices to achieve optimal performance and to ensure that your setup is running efficiently and effectively.
+> This guide is intended for users who want to run a *NEW instance of Immich* on Unraid and are looking for best practices to achieve optimal performance.
+
+---
+
+## Guide Overview
+
+### Getting Started
+
+| | Topic | Description |
+|---|---|---|
+| | [Hardware & Prerequisites](hardware-and-prerequisites.md) | Minimum specs, pre-requisites checklist, storage planning |
+| | [Phase 1: Request Google Takeout Export](google-takeout-request-export.md) | Start your Google Photos export early (takes hours) |
+
+### Installation
+
+| | Step | Description |
+|---|---|---|
+| 1 | [Create Unraid Shares](unraid-create-immich-shares.md) | `immich` (HDD array) + `immich-gen` (SSD cache) shares |
+| | [Phase 2: Download Takeout via Firefox](google-takeout-download-with-firefox.md) | Download exports directly to Unraid via Firefox container |
+| 2 | [Create Docker Network](create-docker-network.md) | `immich_internal` network for container communication |
+| 3 | [Choose GPU Platform](choose-gpu-platform.md) | Select templates for your GPU (NVIDIA/Intel/AMD/CPU) |
+| 4 | [Download Docker Templates](download-docker-templates.md) | Download all Unraid container templates |
+| 5 | [PostgreSQL Setup](setup-postgresql.md) | Database with VectorChord for vector search |
+| 6 | [Valkey Setup](setup-valkey.md) | Redis-compatible cache/message broker |
+| 7 | [Machine Learning Setup](setup-machine-learning.md) | Face recognition, CLIP search, OCR |
+| 8 | [Immich Server Setup](setup-immich-server.md) | Main application — web UI, API, workers |
+| 9 | [Container Start Order](container-start-order-folderview3.md) | FolderView3 for correct startup sequence |
+| 10 | [Setup, Verify & Configure](immich-setup-verify-and-configure.md) | Admin settings, image/video config, mobile apps, GPU verification |
+
+### Google Takeout Migration
+
+| | Topic | Description |
+|---|---|---|
+| | [Phase 2.5: Extract tar Archives](google-takeout-extract-tar-archives.md) | Only if you chose `tar` format |
+| | [Phase 3: Import with PhotoMigrator](google-takeout-import-with-photomigrator.md) | Automated import with metadata handling |
+
+### After Setup
+
+| | Topic | Description |
+|---|---|---|
+| | [Immich Power Tools](immich-power-tools.md) | Advanced library management (bulk ops, analytics) |
+| | [Cleanup After Migration](cleanup-after-migration.md) | Remove temporary files, API keys, Firefox container |
+| | [FAQ](faq.md) | Common questions answered |
