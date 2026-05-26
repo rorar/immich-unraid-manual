@@ -114,18 +114,18 @@
   gap: 0.3rem;
   margin: 0.5rem auto 0;
   padding: 0.3rem 0.8rem;
-  border: 1px solid var(--md-accent-fg-color);
+  border: 1px solid transparent;
   border-radius: 4px;
-  background: var(--md-accent-fg-color--transparent);
-  color: var(--md-accent-fg-color);
+  background: transparent;
+  color: var(--md-default-fg-color--light);
   font-size: 0.78rem;
   cursor: pointer;
-  transition: background 0.15s, color 0.15s;
+  transition: color 0.2s ease, border-color 0.2s ease;
 }
 
 .mermaid-expand-btn:hover {
-  background: var(--md-accent-fg-color);
-  color: var(--md-accent-fg-color--transparent, #fff);
+  color: var(--md-accent-fg-color);
+  border-color: var(--md-accent-fg-color--transparent);
 }
 
 /* Fullscreen wrapper — contains .mermaid element + close button */
