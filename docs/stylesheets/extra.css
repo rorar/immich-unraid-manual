@@ -6,13 +6,16 @@
   margin: 0 2px;
 }
 
-/* IP Replacer — announcement bar below header */
+/* IP Replacer — announcement bar below header
+   The announce block inherits white text from MkDocs Material footer styling,
+   so we must explicitly set color to override it. */
 .ip-replacer {
   display: flex;
   align-items: center;
   gap: 0.6rem;
   padding: 0.35rem 1rem;
   background: var(--md-code-bg-color);
+  color: var(--md-default-fg-color);
   border-bottom: 1px solid var(--md-default-fg-color--lightest);
   font-size: 0.8rem;
   flex-wrap: wrap;
