@@ -21,15 +21,20 @@
       if (diagrams[i].dataset.fullscreenReady) continue;
       if (!diagrams[i].querySelector("svg")) continue;
       diagrams[i].dataset.fullscreenReady = "true";
-      diagrams[i].style.position = "relative";
+
+      // Wrap diagram + button in a container so the button is a sibling, not inside the SVG
+      var wrapper = document.createElement("div");
+      wrapper.className = "mermaid-wrapper";
+      diagrams[i].parentNode.insertBefore(wrapper, diagrams[i]);
+      wrapper.appendChild(diagrams[i]);
 
       var btn = document.createElement("button");
       btn.className = "mermaid-expand-btn";
-      btn.title = "View fullscreen";
+      btn.title = "Click to view fullscreen";
       btn.setAttribute("aria-label", "View diagram fullscreen");
-      btn.textContent = "\u26F6";
+      btn.textContent = "\u2922  Fullscreen";
       btn.addEventListener("click", openFullscreen.bind(null, diagrams[i]));
-      diagrams[i].appendChild(btn);
+      wrapper.appendChild(btn);
     }
   }
 

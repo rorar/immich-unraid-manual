@@ -107,30 +107,29 @@
   opacity: 0.7;
 }
 
-/* Mermaid fullscreen expand button */
+/* Mermaid diagram wrapper + fullscreen button */
+.mermaid-wrapper {
+  text-align: center;
+}
+
 .mermaid-expand-btn {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  z-index: 10;
-  width: 2rem;
-  height: 2rem;
-  border: 1px solid var(--md-default-fg-color--lighter);
-  border-radius: 4px;
-  background: var(--md-default-bg-color);
-  color: var(--md-default-fg-color);
-  font-size: 1rem;
-  cursor: pointer;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  opacity: 0.7;
-  transition: opacity 0.15s;
+  gap: 0.3rem;
+  margin-top: 0.5rem;
+  padding: 0.3rem 0.8rem;
+  border: 1px solid var(--md-accent-fg-color);
+  border-radius: 4px;
+  background: var(--md-accent-fg-color--transparent);
+  color: var(--md-accent-fg-color);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
 }
 
 .mermaid-expand-btn:hover {
-  opacity: 1;
-  background: var(--md-accent-fg-color--transparent);
+  background: var(--md-accent-fg-color);
+  color: #fff;
 }
 
 /* Fullscreen overlay */
