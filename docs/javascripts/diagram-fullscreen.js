@@ -204,12 +204,31 @@
     }, 3000);
   }
 
-  // Mermaid renders async — wait for SVGs to appear
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", function () {
-      setTimeout(addExpandButtons, 500);
+  // Mermaid renders async — use MutationObserver to detect when SVGs appear
+  function watchForMermaid() {
+    addExpandButtons();
+
+    var observer = new MutationObserver(function () {
+      addExpandButtons();
     });
+
+    var content = document.querySelector(".md-content");
+    if (content) {
+      observer.observe(content, { childList: true, subtree: true });
+    }
+
+    // Also retry a few times as fallback
+    var retries = 0;
+    var interval = setInterval(function () {
+      addExpandButtons();
+      retries++;
+      if (retries >= 10) clearInterval(interval);
+    }, 500);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", watchForMermaid);
   } else {
-    setTimeout(addExpandButtons, 500);
+    watchForMermaid();
   }
 })();
