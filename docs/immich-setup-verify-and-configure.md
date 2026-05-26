@@ -1,34 +1,39 @@
 # Step 10: Setup, Verify & Configure Immich
 
 ## Setup Immich
+
 1. Click on the `Immich` folder in Docker and hit ![Start](assets/images/Unraid%20-%20Docker%20Tab%20-%20Dropdown-Menu%20Dropdown-Context%20-%20Button%20Start.png){: .inline-button } (this will start all containers in the correct order)
 2. Wait a few minutes for the server and all dependent services to initialize
 3. Access Immich at `http://<your-unraid-ip>:2283`
 4. Create an admin account with your email and a strong password (you'll need this to log in to the web UI)
 5. Log in with the admin account you created
 6. Go through the initial setup steps in the web UI
-7. If asked for "[Storage Template](https://docs.immich.app/administration/storage-template/)",
-   1. enable the toogle to enable it.
-   2. I'd recommend the following template (which results in the folder/file structure `/YYYY/MM/DD/filename`) for better organization of your library:
+7. If asked for "[Storage Template](https://docs.immich.app/administration/storage-template/)":
+    1. Enable the toggle to enable it.
+    2. I'd recommend the following template (which results in the folder/file structure `/YYYY/MM/DD/filename`) for better organization of your library:
 
         ```
         {{y}}/{{MM}}/{{dd}}/{{filename}}
         ```
 
-       But you can manually build one by yourself OR choose a template from the preset dropdown.
-       You can also change this later in the settings.
+        But you can manually build one by yourself OR choose a template from the preset dropdown. You can also change this later in the settings.
+
 8. Recommendation: Follow the 3-2-1 backup strategy. You can set this up later.
-9. Go to `Account Icon (Top right)  → Account Settings → Administration` and set up Immich to your liking.
+9. Go to `Account Icon (Top right) → Account Settings → Administration` and set up Immich to your liking.
 
 ## Administration Settings
+
 ### Set periodic server jobs & Unraid Appdata Backup Plugin Conflict Warning
+
 Quicklink to the relevant settings page in Immich Admin UI:
+
 ```
-http://<your-unraid-ip>:2283/admin/system-settings?isOpen=external-library+notifications+library-watching+library-scanning+nightly-tasks+backup`
+http://<your-unraid-ip>:2283/admin/system-settings?isOpen=external-library+notifications+library-watching+library-scanning+nightly-tasks+backup
 ```
 
 > [!WARNING]
 > If you've got the Unraid plugin `Appdata Backup` installed, avoid setting
+>
 > - `Database Dump Settings` -> `Cron expression`
 > - `External Library` (if used) -> `Periodic scanning`
 > - `Nightly Tasks Settings` -> `Start time`
@@ -36,6 +41,7 @@ http://<your-unraid-ip>:2283/admin/system-settings?isOpen=external-library+notif
 > *at the same time you would backup your appdata folder.*
 >
 > If set in parallel/in the same time window, your
+>
 > - database won't get backed up
 > - Libraries won't get indexed
 > - Nightly Task won't run
@@ -45,12 +51,13 @@ http://<your-unraid-ip>:2283/admin/system-settings?isOpen=external-library+notif
 > To avoid this, you can set the named schedules to a different time than your appdata backup schedule.
 >
 > Best would be: `Run Database Dump before External Library indexing, then let the Nightly Tasks run.`
-> This resluts in: Backup a clean database state before possibly unwated images may get indexed -> let the Library Periodic Scanning run -> then let the nightly tasks run to process new data.
+> This results in: Backup a clean database state before possibly unwanted images may get indexed -> let the Library Periodic Scanning run -> then let the nightly tasks run to process new data.
 > If something goes wrong during the library indexing, you have a clean backup of the database before the indexing process started.
 
 ### Image Settings
 
 Quicklink to the relevant settings page:
+
 ```
 http://<your-unraid-ip>:2283/admin/system-settings?isOpen=image+thumbnail-settings+preview-settings+fullsize-settings
 ```
@@ -58,33 +65,42 @@ http://<your-unraid-ip>:2283/admin/system-settings?isOpen=image+thumbnail-settin
 **Or navigate manually:** Administration → System Settings → Image
 
 #### Thumbnail Settings
+
 Under **Image → Thumbnail Settings** (small thumbnails used in the main timeline and grid views):
+
 - **Format:** `JPEG` (default: WebP. JPEG is faster to encode and has broader compatibility. WebP produces smaller files but is slower.)
 - **Resolution:** `480p` (default: 250p. Higher resolution thumbnails look sharper in the timeline grid, especially on high-DPI displays.)
 - **Quality:** `80` (default. 1-100, higher is better but produces larger files.)
 - **Progressive:** Off (default. Encode JPEG progressively for gradual loading. No effect on WebP.)
 
 #### Preview Settings
+
 Under **Image → Preview Settings** (medium-size images used when viewing a single asset and for machine learning):
+
 - **Format:** `JPEG` (default. WebP produces smaller files but is slower to encode.)
 - **Resolution:** `1440p` (default. Setting a low value may affect machine learning quality.)
 - **Quality:** `80` (default. Low values may affect ML quality.)
 - **Progressive:** Off (default.)
 
 #### Full-size Image Settings
+
 Under **Image → Full-size Image Settings** (full-size images used when zoomed in):
+
 - **Enable:** Off (default. Generate full-size images for non-web-friendly formats like RAW. Does not affect JPEG.)
 
 #### General Image Options
+
 - **Prefer wide gamut:** On (default. Uses Display P3 colorspace for thumbnails. Better preserves vibrance of wide-gamut images.)
 - **Prefer embedded preview:** Off (default. Use embedded previews in RAW photos. Can produce more accurate colors but quality is camera-dependent.)
 
 Click ![Save](assets/images/Immich%20-%20Administration%20-%20Button%20Save.png){: .inline-button } after making changes.
 
 ### Hardware Acceleration
+
 If you chose a GPU-accelerated server template (QSV/VAAPI or NVENC), you need to enable hardware acceleration in the Immich Admin UI.
 
 Quicklink to the relevant settings page:
+
 ```
 http://<your-unraid-ip>:2283/admin/system-settings?isOpen=video-transcoding+transcoding-policy+machine-learning+encoding-options+hardware-acceleration
 ```
@@ -92,6 +108,7 @@ http://<your-unraid-ip>:2283/admin/system-settings?isOpen=video-transcoding+tran
 **Or navigate manually:** Administration → System Settings → Video Transcoding
 
 #### 1. Hardware Acceleration Settings
+
 Under **Video Transcoding → Hardware Acceleration**, set the **Acceleration API** based on your template:
 
 | Template | Acceleration API |
@@ -112,6 +129,7 @@ Under **Video Transcoding → Hardware Acceleration**, set the **Acceleration AP
 > The Transcoding settings below are recommendations for a good balance of disk usage and quality. You can adjust them based on your needs and preferences. For best compatibility, consider using Immich's default settings.
 
 Under **Video Transcoding → Transcode Policy**:
+
 - **Transcode policy:** `Only videos not in an accepted format` (default - only transcodes incompatible videos)
 - **Accepted video codecs:** `VP9` (For Apple iOS devices below iOS 14, choose `H.264` instead for better compatibility)
 - **Accepted audio codecs:** `opus` (For Apple iOS devices below iOS 17 and Android devices below Android 10, choose `AAC` instead for better compatibility)
@@ -123,6 +141,7 @@ Under **Video Transcoding → Transcode Policy**:
 > The Encoding settings below are recommendations for a good balance of disk usage and quality. You can adjust them based on your needs and preferences. For best compatibility, consider using Immich's default settings.
 
 Under **Video Transcoding → Encoding Options**:
+
 - **Video codec:** `VP9` (For Apple iOS devices below iOS 14, choose `H.264` instead for better compatibility)
 - **Audio codec:** `opus` (For Apple iOS devices below iOS 17 and Android devices below Android 10, choose `AAC` instead for better compatibility)
 - **Target resolution:** `Original` (avoid unnecessary re-encoding if the original resolution is already suitable)
@@ -145,10 +164,12 @@ Click ![Save](assets/images/Immich%20-%20Administration%20-%20Button%20Save.png)
 6. **Android Battery Optimization** Settings → Apps → Immich → Battery. Visit [dontkillmyapp.com](https://dontkillmyapp.com) for device-specific guidance on preventing battery optimization from interrupting uploads.
 
 ## Verify
-1.  Verify that everything is working by uploading a test photo and checking that thumbnails are generated and that the photo appears in the library.
-2.  Check the logs of each container if you encounter any issues to troubleshoot.
-3.  **Verify GPU acceleration for Machine Learning (if applicable):**
+
+1. Verify that everything is working by uploading a test photo and checking that thumbnails are generated and that the photo appears in the library.
+2. Check the logs of each container if you encounter any issues to troubleshoot.
+3. **Verify GPU acceleration for Machine Learning (if applicable):**
     If you chose a GPU-accelerated ML template (CUDA, OpenVINO, or ROCm), verify that the GPU is being used:
+
     - Upload a photo and wait for face detection / smart search to process (the provider log appears on first model load, not on container startup)
     - Then run this command in the Unraid terminal:
 
@@ -167,9 +188,10 @@ Click ![Save](assets/images/Immich%20-%20Administration%20-%20Button%20Save.png)
 *You'll need this step for [Quick Start Guide: Import Google Takeout Photos to Immich](google-takeout-import-with-photomigrator.md#quick-start-guide-import-google-takeout-photos-to-immich) in the PhotoMigrator section.*
 
 ## Create an API-Key
+
 1. Once verified, create an API key for the admin user in Immich:
-  `Account Icon (Top right)  → Account Settings → API Keys → New API Key → Grant ALL access by "Select All" + "Create" → Copy the API-key.`
-  You'll need the API key for PhotoMigrator to import your Google Takeout photos.
+    `Account Icon (Top right) → Account Settings → API Keys → New API Key → Grant ALL access by "Select All" + "Create" → Copy the API-key.`
+    You'll need the API key for PhotoMigrator to import your Google Takeout photos.
 2. You can now move on to the next step of your Google Photos library using PhotoMigrator (see next section).
 
 > [!TIP]
