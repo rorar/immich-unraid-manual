@@ -137,4 +137,24 @@
   justify-content: center;
   padding: 2rem;
   overflow: auto;
+  position: relative;
+}
+
+.mermaid-close-btn {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1;
+  padding: 0.4rem 1rem;
+  border: none;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.mermaid-close-btn:hover {
+  background: rgba(0, 0, 0, 0.85);
 }

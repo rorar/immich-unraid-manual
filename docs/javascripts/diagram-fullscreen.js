@@ -22,7 +22,18 @@ function openMermaidFullscreen(btnEl) {
     return;
   }
 
-  // Style for fullscreen display
+  // Add close button inside the element
+  var closeBtn = document.createElement("button");
+  closeBtn.className = "mermaid-close-btn";
+  closeBtn.setAttribute("aria-label", "Exit fullscreen");
+  closeBtn.textContent = "\u2715 Close";
+  closeBtn.addEventListener("click", function () {
+    if (document.exitFullscreen) document.exitFullscreen();
+    else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+  });
+  el.appendChild(closeBtn);
+
+  // Enter fullscreen
   el.classList.add("mermaid--fullscreen");
 
   var fsMethod = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
@@ -30,10 +41,12 @@ function openMermaidFullscreen(btnEl) {
     fsMethod.call(el).catch(function (err) {
       console.warn("[diagram-fullscreen] Fullscreen request failed:", err);
       el.classList.remove("mermaid--fullscreen");
+      el.removeChild(closeBtn);
     });
   } else {
     console.warn("[diagram-fullscreen] Fullscreen API not supported");
     el.classList.remove("mermaid--fullscreen");
+    el.removeChild(closeBtn);
   }
 
   // Clean up when exiting fullscreen
@@ -41,6 +54,7 @@ function openMermaidFullscreen(btnEl) {
     var fsEl = document.fullscreenElement || document.webkitFullscreenElement;
     if (!fsEl) {
       el.classList.remove("mermaid--fullscreen");
+      if (closeBtn.parentNode) closeBtn.parentNode.removeChild(closeBtn);
       document.removeEventListener("fullscreenchange", onFsChange);
       document.removeEventListener("webkitfullscreenchange", onFsChange);
     }
