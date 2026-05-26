@@ -1,0 +1,67 @@
+/* Inline button images — renders small UI button/icon PNGs inline with text */
+.inline-button {
+  height: 1.4em;
+  vertical-align: middle;
+  display: inline;
+  margin: 0 2px;
+}
+
+/* IP Replacer — sticky input bar below header */
+.ip-replacer {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.4rem 1rem;
+  background: var(--md-code-bg-color);
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+  font-size: 0.82rem;
+  flex-wrap: wrap;
+}
+
+.ip-replacer label {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.ip-replacer input {
+  font-family: var(--md-code-font-family);
+  font-size: 0.82rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--md-default-fg-color--lighter);
+  border-radius: 4px;
+  background: var(--md-default-bg-color);
+  color: var(--md-default-fg-color);
+  width: 10rem;
+}
+
+.ip-replacer input:focus {
+  outline: 2px solid var(--md-accent-fg-color);
+  outline-offset: 1px;
+}
+
+.ip-replacer button {
+  font-size: 0.78rem;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid var(--md-default-fg-color--lighter);
+  border-radius: 4px;
+  background: var(--md-default-bg-color);
+  color: var(--md-default-fg-color);
+  cursor: pointer;
+}
+
+.ip-replacer button:hover {
+  background: var(--md-accent-fg-color--transparent);
+}
+
+.ip-replacer .ip-replacer-disclaimer {
+  color: var(--md-default-fg-color--light);
+  font-size: 0.72rem;
+  font-style: italic;
+}
+
+/* Highlighted replaced IP values */
+.ip-replaced {
+  background: var(--md-accent-fg-color--transparent);
+  border-radius: 2px;
+  padding: 0 2px;
+}

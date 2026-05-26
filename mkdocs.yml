@@ -1,0 +1,85 @@
+site_name: Immich on Unraid — Performance Setup Guide
+site_url: https://rorar.github.io/immich-unraid-manual/
+site_description: Step-by-step guide for an optimal Immich setup on Unraid with Google Takeout migration
+repo_url: https://github.com/rorar/immich-unraid-manual
+repo_name: rorar/immich-unraid-manual
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: deep purple
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: deep purple
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - navigation.indexes
+    - content.code.copy
+    - search.suggest
+    - search.highlight
+    - toc.follow
+  icon:
+    repo: fontawesome/brands/github
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Hardware & Prerequisites: hardware-and-prerequisites.md
+    - "Phase 1: Request Google Takeout Export": google-takeout-request-export.md
+  - Installation:
+    - "Step 1: Create Unraid Shares": unraid-create-immich-shares.md
+    - "Phase 2: Download Takeout via Firefox": google-takeout-download-with-firefox.md
+    - "Step 2: Create Docker Network": create-docker-network.md
+    - "Step 3: Choose GPU Platform": choose-gpu-platform.md
+    - "Step 4: Download Docker Templates": download-docker-templates.md
+    - "Step 5: PostgreSQL Setup": setup-postgresql.md
+    - "Step 6: Valkey Setup": setup-valkey.md
+    - "Step 7: Machine Learning Setup": setup-machine-learning.md
+    - "Step 8: Immich Server Setup": setup-immich-server.md
+    - "Step 9: Container Start Order": container-start-order-folderview3.md
+    - "Step 10: Setup, Verify & Configure": immich-setup-verify-and-configure.md
+  - Google Takeout Migration:
+    - "Phase 2.5: Extract tar Archives": google-takeout-extract-tar-archives.md
+    - "Phase 3: Import with PhotoMigrator": google-takeout-import-with-photomigrator.md
+  - Extras:
+    - Immich Power Tools: immich-power-tools.md
+    - Cleanup After Migration: cleanup-after-migration.md
+  - FAQ: faq.md
+  - Credits: credits.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+
+plugins:
+  - search
+  - callouts
+
+extra_javascript:
+  - javascripts/ip-replacer.js
+
+extra_css:
+  - stylesheets/extra.css
