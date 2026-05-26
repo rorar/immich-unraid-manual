@@ -5,7 +5,7 @@ All Immich containers need to communicate with each other by container name. We 
 Quicklink to the Unraid terminal:
 
 ```
-http://<your-unraid-ip>/webterminal/ttyd/
+http://<your-unraid-ip>/Terminal
 ```
 
 1. Open the Unraid web interface `http://<your-unraid-ip>`
