@@ -38,8 +38,9 @@ http://<your-unraid-ip>:2283/admin/system-settings?isOpen=external-library+notif
 > If set in parallel/in the same time window, your
 > - database won't get backed up
 > - Libraries won't get indexed
-> - Nightly Task won't run as the `Appdata Backup` plugin stops the docker container.
+> - Nightly Task won't run
 >
+> as the `Appdata Backup` plugin stops the docker container.
 > Worst case would be **corrupted data.**
 > To avoid this, you can set the named schedules to a different time than your appdata backup schedule.
 >
