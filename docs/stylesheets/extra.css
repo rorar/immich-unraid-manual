@@ -195,17 +195,5 @@
 }
 
 .mermaid-overlay-content svg {
-  max-width: 90vw;
-  max-height: 85vh;
-  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.05));
-}
-
-/* Invert diagram colors for dark overlay background */
-.mermaid-overlay-content svg text {
-  fill: #e0e0e0 !important;
-}
-
-.mermaid-overlay-content svg .node rect,
-.mermaid-overlay-content svg .node polygon {
-  stroke: #888 !important;
+  display: block;
 }

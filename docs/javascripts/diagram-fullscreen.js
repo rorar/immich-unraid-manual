@@ -28,7 +28,10 @@ function openMermaidFullscreen(btnEl) {
   var clonedSvg = svg.cloneNode(true);
   clonedSvg.removeAttribute("width");
   clonedSvg.removeAttribute("height");
-  clonedSvg.style.width = "100%";
+  clonedSvg.removeAttribute("style");
+  clonedSvg.style.maxWidth = "90vw";
+  clonedSvg.style.maxHeight = "80vh";
+  clonedSvg.style.width = "auto";
   clonedSvg.style.height = "auto";
 
   var overlay = document.createElement("div");
