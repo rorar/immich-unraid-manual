@@ -1,0 +1,172 @@
+/* Inline button images — sized to match surrounding text height.
+   !important needed to override MkDocs Material's default img sizing. */
+.inline-button {
+  height: auto !important;
+  max-height: 1.25em !important;
+  width: auto !important;
+  vertical-align: middle;
+  display: inline;
+  margin: 0 1px;
+}
+
+/* IP Replacer — announcement bar below header
+   The announce block inherits white text from MkDocs Material footer styling,
+   so we must explicitly set color to override it. */
+.ip-replacer {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.35rem 1rem;
+  background: var(--md-code-bg-color);
+  color: var(--md-default-fg-color);
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+  font-size: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.ip-replacer label {
+  font-weight: 600;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.ip-replacer-icon {
+  font-size: 0.9rem;
+}
+
+.ip-replacer select,
+.ip-replacer input {
+  font-family: var(--md-code-font-family);
+  font-size: 0.8rem;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid var(--md-default-fg-color--lighter);
+  border-radius: 4px;
+  background: var(--md-default-bg-color);
+  color: var(--md-default-fg-color);
+}
+
+.ip-replacer input {
+  width: 9rem;
+}
+
+.ip-replacer input:focus {
+  outline: 2px solid var(--md-accent-fg-color);
+  outline-offset: 1px;
+}
+
+.ip-replacer button {
+  font-size: 0.75rem;
+  padding: 0.15rem 0.5rem;
+  border: 1px solid var(--md-default-fg-color--lighter);
+  border-radius: 4px;
+  background: var(--md-default-bg-color);
+  color: var(--md-default-fg-color);
+  cursor: pointer;
+}
+
+.ip-replacer button:hover {
+  background: var(--md-accent-fg-color--transparent);
+}
+
+.ip-replacer-hint {
+  color: var(--md-default-fg-color--light);
+  font-size: 0.7rem;
+}
+
+.ip-replacer-hint code {
+  font-size: 0.68rem;
+  padding: 0.1rem 0.25rem;
+  border-radius: 3px;
+  background: var(--md-default-fg-color--lightest);
+}
+
+/* Highlighted replaced IP values */
+.ip-replaced {
+  background: var(--md-accent-fg-color--transparent);
+  border-radius: 2px;
+  padding: 0 2px;
+}
+
+/* Clickable IP links (only when IP is filled in) */
+.ip-link {
+  color: var(--md-accent-fg-color);
+  text-decoration: none;
+  background: var(--md-accent-fg-color--transparent);
+  border-radius: 2px;
+  padding: 0 2px;
+}
+
+.ip-link:hover {
+  text-decoration: underline;
+}
+
+.ip-link-icon {
+  font-size: 0.75em;
+  opacity: 0.7;
+}
+
+/* Mermaid fullscreen button (inserted as sibling after .mermaid element) */
+.mermaid-expand-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin: 0.5rem auto 0;
+  padding: 0.3rem 0.8rem;
+  border: 1px solid var(--md-accent-fg-color);
+  border-radius: 4px;
+  background: var(--md-accent-fg-color--transparent);
+  color: var(--md-accent-fg-color);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: filter 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mermaid-expand-btn:hover {
+  filter: brightness(1.15);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+}
+
+/* Fullscreen wrapper — contains .mermaid element + close button */
+.mermaid-fs-wrapper {
+  background: var(--md-default-bg-color, #fff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  overflow: auto;
+  position: relative;
+}
+
+.mermaid-fs-wrapper .mermaid {
+  width: 95vw !important;
+  max-height: 90vh;
+}
+
+.mermaid-fs-wrapper .mermaid svg {
+  width: 100% !important;
+  height: auto !important;
+  max-height: 85vh;
+}
+
+/* Close button — top-right corner, adapts to light/dark mode */
+.mermaid-close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 10;
+  padding: 0.4rem 1rem;
+  border: 1px solid var(--md-default-fg-color--lighter);
+  border-radius: 6px;
+  background: var(--md-default-bg-color, #fff);
+  color: var(--md-default-fg-color, #333);
+  font-size: 0.85rem;
+  cursor: pointer;
+  opacity: 0.85;
+  transition: opacity 0.15s;
+}
+
+.mermaid-close-btn:hover {
+  opacity: 1;
+}
