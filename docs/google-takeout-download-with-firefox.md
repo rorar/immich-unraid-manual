@@ -4,6 +4,12 @@ Once you receive the email from Google Takeout with the download link, you can u
 
 **Purpose:** This method is especially useful if you have a large library, slower download speed and to avoid downloading the files to your local machine first and moving it to Unraid.
 
+Quicklink to search for Firefox in Community Applications:
+
+```
+http://<your-unraid-ip>/Apps?search=firefox+linuxserver
+```
+
 1. Go to the "Apps" tab in your Unraid web interface
 2. Search for "Firefox" in the Community Applications.
 3. Choose the Firefox container by LinuxServer.io and click "Install".
