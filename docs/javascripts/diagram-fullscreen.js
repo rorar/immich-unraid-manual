@@ -16,9 +16,10 @@
   var MAX_SCALE = 5;
 
   function addExpandButtons() {
-    var diagrams = document.querySelectorAll("pre.mermaid");
+    var diagrams = document.querySelectorAll(".mermaid");
     for (var i = 0; i < diagrams.length; i++) {
       if (diagrams[i].dataset.fullscreenReady) continue;
+      if (!diagrams[i].querySelector("svg")) continue;
       diagrams[i].dataset.fullscreenReady = "true";
       diagrams[i].style.position = "relative";
 
