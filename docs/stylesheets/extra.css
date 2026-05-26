@@ -139,6 +139,17 @@
   position: relative;
 }
 
+.mermaid-fs-wrapper .mermaid {
+  width: 95vw !important;
+  max-height: 90vh;
+}
+
+.mermaid-fs-wrapper .mermaid svg {
+  width: 100% !important;
+  height: auto !important;
+  max-height: 85vh;
+}
+
 /* Close button — top-right corner, adapts to light/dark mode */
 .mermaid-close-btn {
   position: absolute;
