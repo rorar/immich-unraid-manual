@@ -1,12 +1,11 @@
 /**
  * Mermaid Diagram Fullscreen Viewer
  *
- * Uses the native Fullscreen API on the .mermaid container.
- * Works regardless of how Mermaid renders (SVG, canvas, shadow DOM).
- * The browser fullscreens whatever is visually rendered in the element.
+ * Wraps the .mermaid element in a temporary fullscreen container
+ * with a close button. On exit, the element is moved back.
  *
- * Zoom: use browser native zoom (Ctrl+/Ctrl- or pinch on mobile).
- * Exit: Esc key or swipe down on mobile.
+ * Zoom: browser native (Ctrl+/- or pinch on mobile).
+ * Exit: Close button, Esc key, or browser fullscreen controls.
  */
 
 function openMermaidFullscreen(btnEl) {
@@ -16,13 +15,16 @@ function openMermaidFullscreen(btnEl) {
   while (el && !(el.classList && el.classList.contains("mermaid"))) {
     el = el.previousElementSibling;
   }
+  if (!el) return;
 
-  if (!el) {
-    console.warn("[diagram-fullscreen] No .mermaid element found");
-    return;
-  }
+  // Remember position for restoring later
+  var originalParent = el.parentNode;
+  var originalNext = el.nextSibling;
 
-  // Add close button inside the element
+  // Build fullscreen wrapper
+  var wrapper = document.createElement("div");
+  wrapper.className = "mermaid-fs-wrapper";
+
   var closeBtn = document.createElement("button");
   closeBtn.className = "mermaid-close-btn";
   closeBtn.setAttribute("aria-label", "Exit fullscreen");
@@ -31,30 +33,28 @@ function openMermaidFullscreen(btnEl) {
     if (document.exitFullscreen) document.exitFullscreen();
     else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
   });
-  el.appendChild(closeBtn);
 
-  // Enter fullscreen
-  el.classList.add("mermaid--fullscreen");
+  // Move .mermaid into wrapper, add close button
+  wrapper.appendChild(closeBtn);
+  originalParent.insertBefore(wrapper, originalNext);
+  wrapper.appendChild(el);
 
-  var fsMethod = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
+  // Enter fullscreen on the wrapper
+  var fsMethod = wrapper.requestFullscreen || wrapper.webkitRequestFullscreen;
   if (fsMethod) {
-    fsMethod.call(el).catch(function (err) {
-      console.warn("[diagram-fullscreen] Fullscreen request failed:", err);
-      el.classList.remove("mermaid--fullscreen");
-      el.removeChild(closeBtn);
+    fsMethod.call(wrapper).catch(function () {
+      // Fullscreen failed — restore DOM
+      originalParent.insertBefore(el, wrapper);
+      originalParent.removeChild(wrapper);
     });
-  } else {
-    console.warn("[diagram-fullscreen] Fullscreen API not supported");
-    el.classList.remove("mermaid--fullscreen");
-    el.removeChild(closeBtn);
   }
 
-  // Clean up when exiting fullscreen
+  // Restore DOM when exiting fullscreen
   function onFsChange() {
     var fsEl = document.fullscreenElement || document.webkitFullscreenElement;
     if (!fsEl) {
-      el.classList.remove("mermaid--fullscreen");
-      if (closeBtn.parentNode) closeBtn.parentNode.removeChild(closeBtn);
+      originalParent.insertBefore(el, wrapper);
+      if (wrapper.parentNode) wrapper.parentNode.removeChild(wrapper);
       document.removeEventListener("fullscreenchange", onFsChange);
       document.removeEventListener("webkitfullscreenchange", onFsChange);
     }

@@ -128,10 +128,10 @@
   color: var(--md-accent-fg-color--transparent, #fff);
 }
 
-/* Mermaid element in native fullscreen mode */
-.mermaid--fullscreen {
+/* Fullscreen wrapper — contains .mermaid element + close button */
+.mermaid-fs-wrapper {
   background: var(--md-default-bg-color, #fff);
-  display: flex !important;
+  display: flex;
   align-items: center;
   justify-content: center;
   padding: 2rem;
@@ -139,12 +139,12 @@
   position: relative;
 }
 
-/* Close button — adapts to light/dark mode */
+/* Close button — top-right corner, adapts to light/dark mode */
 .mermaid-close-btn {
-  position: fixed;
+  position: absolute;
   top: 1rem;
   right: 1rem;
-  z-index: 1;
+  z-index: 10;
   padding: 0.4rem 1rem;
   border: 1px solid var(--md-default-fg-color--lighter);
   border-radius: 6px;
