@@ -4,7 +4,10 @@
 2. Select the template you downloaded (`immich-postgres-official` or `immich-vectorchord-db`)
 3. Configure:
    - **Network:** `immich_internal`
-   - **POSTGRES_PASSWORD:** Set a strong password! Generate one in the terminal: `openssl rand -base64 32 | tr -dc A-Za-z0-9 | head -c 32`
+   - **POSTGRES_PASSWORD:** Set a strong password! Generate one in the terminal:
+     ```bash
+     openssl rand -base64 32 | tr -dc A-Za-z0-9 | head -c 32
+     ```
    - **POSTGRES_USER:** `postgres`
    - **POSTGRES_DB:** `immich`
 4. Hit ![Apply](assets/images/Unraid%20-%20Template%20general%20-%20Button%20Apply.png){: .inline-button } to start the container.
