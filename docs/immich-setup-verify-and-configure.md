@@ -9,9 +9,14 @@
 6. Go through the initial setup steps in the web UI
 7. If asked for "[Storage Template](https://docs.immich.app/administration/storage-template/)",
    1. enable the toogle to enable it.
-   2. I'd recommend `{{y}}/{{MM}}/{{dd}}/{{filename}}` (which results in the folder/file structure `/YYYY/MM/DD/filename`) for better organization of your library.
-   But you can manually build one by yourself OR choose a template from the preset dropdown.
-   You can also change this later in the settings.
+   2. I'd recommend the following template (which results in the folder/file structure `/YYYY/MM/DD/filename`) for better organization of your library:
+
+        ```
+        {{y}}/{{MM}}/{{dd}}/{{filename}}
+        ```
+
+       But you can manually build one by yourself OR choose a template from the preset dropdown.
+       You can also change this later in the settings.
 8. Recommendation: Follow the 3-2-1 backup strategy. You can set this up later.
 9. Go to `Account Icon (Top right)  → Account Settings → Administration` and set up Immich to your liking.
 
