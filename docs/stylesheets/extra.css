@@ -1,9 +1,9 @@
-/* Inline button images — renders small UI button/icon PNGs inline with text */
+/* Inline button images — sized to match surrounding text height */
 .inline-button {
-  height: 1em;
-  vertical-align: baseline;
+  height: .75em;
+  vertical-align: middle;
   display: inline;
-  margin: 0 2px;
+  margin: 0 1px;
 }
 
 /* IP Replacer — announcement bar below header
