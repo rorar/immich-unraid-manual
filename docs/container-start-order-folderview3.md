@@ -4,6 +4,12 @@ Immich containers must start in the correct order. If the server starts before t
 
 To manage this on Unraid, install **FolderView3** from Community Applications:
 
+Quicklink to search for FolderView3:
+
+```
+http://<your-unraid-ip>/Apps?search=folderview3
+```
+
 1. Go to **Apps** → search for **FolderView3** → Install
 2. Go to the **Docker** tab
 3. Scroll down and click ![Add Folder](assets/images/Unraid%20-%20Docker%20Tab%20-%20Button%20Add-Folder%20%28FolderView3%29.png){: .inline-button }
