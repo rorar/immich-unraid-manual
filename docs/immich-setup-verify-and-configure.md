@@ -142,18 +142,20 @@ Click ![Save](assets/images/Immich%20-%20Administration%20-%20Button%20Save.png)
 1.  Verify that everything is working by uploading a test photo and checking that thumbnails are generated and that the photo appears in the library.
 2.  Check the logs of each container if you encounter any issues to troubleshoot.
 3.  **Verify GPU acceleration for Machine Learning (if applicable):**
-   If you chose a GPU-accelerated ML template (CUDA, OpenVINO, or ROCm), verify that the GPU is being used:
-   - Upload a photo and wait for face detection / smart search to process (the provider log appears on first model load, not on container startup)
-   - Then run this command in the Unraid terminal:
-   ```bash
-   docker logs immich-machine-learning 2>&1 | grep -i "execution providers" | tail -1 | grep -qv "'CPUExecutionProvider'" && echo "GPU acceleration: ACTIVE" || echo "GPU acceleration: NOT ACTIVE (CPU only)"
-   ```
-   - If it says **NOT ACTIVE**, check your device mappings and driver setup
-   - For details, check the full log: `docker logs immich-machine-learning 2>&1 | grep -i "execution providers"`
-     - NVIDIA: `['CUDAExecutionProvider', 'CPUExecutionProvider']`
-     - Intel: `['OpenVINOExecutionProvider', 'CPUExecutionProvider']`
-     - AMD: `['MIGraphXExecutionProvider', 'CPUExecutionProvider']`
-     - CPU only: `['CPUExecutionProvider']`
+    If you chose a GPU-accelerated ML template (CUDA, OpenVINO, or ROCm), verify that the GPU is being used:
+    - Upload a photo and wait for face detection / smart search to process (the provider log appears on first model load, not on container startup)
+    - Then run this command in the Unraid terminal:
+
+        ```bash
+        docker logs immich-machine-learning 2>&1 | grep -i "execution providers" | tail -1 | grep -qv "'CPUExecutionProvider'" && echo "GPU acceleration: ACTIVE" || echo "GPU acceleration: NOT ACTIVE (CPU only)"
+        ```
+
+    - If it says **NOT ACTIVE**, check your device mappings and driver setup
+    - For details, check the full log: `docker logs immich-machine-learning 2>&1 | grep -i "execution providers"`
+        - NVIDIA: `['CUDAExecutionProvider', 'CPUExecutionProvider']`
+        - Intel: `['OpenVINOExecutionProvider', 'CPUExecutionProvider']`
+        - AMD: `['MIGraphXExecutionProvider', 'CPUExecutionProvider']`
+        - CPU only: `['CPUExecutionProvider']`
 
 **Google Takeout Migration (if you don't want to migrate you're done here):**
 *You'll need this step for [Quick Start Guide: Import Google Takeout Photos to Immich](google-takeout-import-with-photomigrator.md#quick-start-guide-import-google-takeout-photos-to-immich) in the PhotoMigrator section.*

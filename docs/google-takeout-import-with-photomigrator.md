@@ -28,21 +28,23 @@ PhotoMigrator is a tool to help with the migration of photos from Google Takeout
 2. Login with default credentials — User: `admin` / Password: `admin123`
 3. Go to **Configuration Panel** → **Feature Config** → **Immich Photos**
 4. Fill out:
-   - **IMMICH_URL:** `http://immich-server:2283` (uses container name since both are on `immich_internal`)
-   - **IMMICH_API_KEY_ADMIN:** Paste in your Immich API-Key from Sektion [Create an API-Key](immich-setup-verify-and-configure.md#create-an-api-key)
-   - **IMMICH_USERNAME_1:** <your Immich admin email address> (the one you use to log in to the Immich web UI)
-   - **IMMICH_PASSWORD_1:** <your Immich admin password> (the one you use to log in to the Immich web UI)
-   - **IMMICH_API_KEY_USER_1** Can be the same as IMMICH_API_KEY_ADMIN or you can create a separate API key for the user account in Immich and use that here for better security practices (recommended)
+    - **IMMICH_URL:** `http://immich-server:2283` (uses container name since both are on `immich_internal`)
+    - **IMMICH_API_KEY_ADMIN:** Paste in your Immich API-Key from Sektion [Create an API-Key](immich-setup-verify-and-configure.md#create-an-api-key)
+    - **IMMICH_USERNAME_1:** <your Immich admin email address> (the one you use to log in to the Immich web UI)
+    - **IMMICH_PASSWORD_1:** <your Immich admin password> (the one you use to log in to the Immich web UI)
+    - **IMMICH_API_KEY_USER_1** Can be the same as IMMICH_API_KEY_ADMIN or you can create a separate API key for the user account in Immich and use that here for better security practices (recommended)
 5. Click **Save config** to save your Immich connection settings.
+
 ### Prepare your photo library
 1. Go to **Features Selector** → select the **GOOGLE TAKEOUT** tab
 2. In the **Takeout Input & Output** section, click the `···` button next to `google-takeout`
 3. In the folder dialog, click **"Home (data)"**
-4.  Navigate into the **`Takeout`** folder (this contains either your `zip` files OR from the `tar` archive your extracted `Takeout/Google Fotos/...` files)
-5.  Optionally change settings BUT Defaults should be find
-6.  Click **"Use Current"** to set the path
-7.  Click **Run module** to start your library preperation
-8.  Grab a cup of coffee - the procedure can take a while depending on your photo library size
+4. Navigate into the **`Takeout`** folder (this contains either your `zip` files OR from the `tar` archive your extracted `Takeout/Google Fotos/...` files)
+5. Optionally change settings BUT Defaults should be find
+6. Click **"Use Current"** to set the path
+7. Click **Run module** to start your library preperation
+8. Grab a cup of coffee - the procedure can take a while depending on your photo library size
+
 ### Import your Google Takeout photo library to Immich
 1. Go to **Features Selector** → select the **IMMICH PHOTOS** tab
 2. At `select module`, open the dropdown menu and select `Upload All`
@@ -50,8 +52,8 @@ PhotoMigrator is a tool to help with the migration of photos from Google Takeout
 4. Select your input folder. At the moment of writing there's a bug that duplicates the path, so you have to dig through the folder structure (e.g. `/app/data/admin/Takeout/Takeout_/app/data/admin/processed_20260523-132324/Google Fotos`)
 5. **Create Albums:** Click the `···` button next to `Albums Folder`
 6. Select your folders that belongs into an Album (e.g. `Holidays 2023`, `Family`, etc.).
-7.  Click **Run module** to start your library import.
-8.  The module will upload your photos to Immich and assign them to albums based on the folder structure you selected in the previous step.
+7. Click **Run module** to start your library import.
+8. The module will upload your photos to Immich and assign them to albums based on the folder structure you selected in the previous step.
 
 > [!NOTE]
 > - The import process can take a while depending on the size of your library and your network speed. Be patient and monitor the logs for progress and any potential issues.

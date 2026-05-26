@@ -19,11 +19,11 @@ wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercon
 1. Go to the ![Docker](assets/images/Unraid%20-%20Tab%20Docker.png){: .inline-button } tab → ![Add Container](assets/images/Unraid%20-%20Docker%20Tab%20-%20Button%20Add%20Container.png){: .inline-button }
 2. Select the `immich-power-tools` template
 3. Configure:
-   - **Network:** `immich_internal` (pre-configured)
-   - **IMMICH_URL:** `http://immich-server:2283` (pre-configured)
-   - **IMMICH_API_KEY:** Paste your Immich API key (with ALL permissions)
-   - **DB_HOST:** `immich-vectorchord-db` (pre-configured, must match your DB container name)
-   - **DB_PASSWORD:** The same password you set for PostgreSQL in [Step 5](setup-postgresql.md)
+    - **Network:** `immich_internal` (pre-configured)
+    - **IMMICH_URL:** `http://immich-server:2283` (pre-configured)
+    - **IMMICH_API_KEY:** Paste your Immich API key (with ALL permissions)
+    - **DB_HOST:** `immich-vectorchord-db` (pre-configured, must match your DB container name)
+    - **DB_PASSWORD:** The same password you set for PostgreSQL in [Step 5](setup-postgresql.md)
 4. Hit ![Apply](assets/images/Unraid%20-%20Template%20general%20-%20Button%20Apply.png){: .inline-button } to start the container.
 5. Access Power Tools at `http://<your-unraid-ip>:3000`
 
