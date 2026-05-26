@@ -178,7 +178,12 @@ Click ![Save](assets/images/Immich%20-%20Administration%20-%20Button%20Save.png)
         ```
 
     - If it says **NOT ACTIVE**, check your device mappings and driver setup
-    - For details, check the full log: `docker logs immich-machine-learning 2>&1 | grep -i "execution providers"`
+    - For details, check the full log:
+
+        ```bash
+        docker logs immich-machine-learning 2>&1 | grep -i "execution providers"
+        ```
+
         - NVIDIA: `['CUDAExecutionProvider', 'CPUExecutionProvider']`
         - Intel: `['OpenVINOExecutionProvider', 'CPUExecutionProvider']`
         - AMD: `['MIGraphXExecutionProvider', 'CPUExecutionProvider']`
