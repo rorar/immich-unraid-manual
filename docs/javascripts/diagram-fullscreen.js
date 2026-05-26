@@ -13,24 +13,43 @@
 function openMermaidFullscreen(btnEl) {
   "use strict";
 
-  // Find SVG: try sibling .mermaid first, fall back to searching the whole page
+  // Find SVG: search backwards through siblings, then fall back to page-wide search
   var svg = null;
-  var mermaidEl = btnEl.previousElementSibling;
-  while (mermaidEl) {
-    if (mermaidEl.classList && mermaidEl.classList.contains("mermaid")) {
-      svg = mermaidEl.querySelector("svg");
+
+  // Strategy 1: previous sibling with class "mermaid"
+  var el = btnEl.previousElementSibling;
+  while (el) {
+    if (el.classList && el.classList.contains("mermaid")) {
+      svg = el.querySelector("svg");
       break;
     }
-    mermaidEl = mermaidEl.previousElementSibling;
+    el = el.previousElementSibling;
   }
-  // Fallback: find any .mermaid SVG on the page
+
+  // Strategy 2: previous sibling that IS an SVG or contains one
   if (!svg) {
-    var allMermaid = document.querySelectorAll(".mermaid svg");
-    if (allMermaid.length > 0) svg = allMermaid[0];
+    el = btnEl.previousElementSibling;
+    while (el) {
+      if (el.tagName === "SVG") { svg = el; break; }
+      var nested = el.querySelector("svg");
+      if (nested) { svg = nested; break; }
+      el = el.previousElementSibling;
+    }
   }
+
+  // Strategy 3: any SVG in .md-content
   if (!svg) {
-    btnEl.textContent = "\u26A0 Diagram not ready \u2014 try again";
-    setTimeout(function () { btnEl.textContent = "\u2922  Fullscreen"; }, 2000);
+    var content = document.querySelector(".md-content");
+    if (content) svg = content.querySelector("svg");
+  }
+
+  if (!svg) {
+    // Debug: show what the previous sibling actually is
+    var prev = btnEl.previousElementSibling;
+    var info = prev ? (prev.tagName + "." + prev.className) : "none";
+    var svgCount = document.querySelectorAll("svg").length;
+    btnEl.textContent = "\u26A0 SVG not found (prev: " + info + ", svgs: " + svgCount + ")";
+    setTimeout(function () { btnEl.textContent = "\u2922  Fullscreen"; }, 4000);
     return;
   }
 
