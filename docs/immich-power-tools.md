@@ -16,6 +16,12 @@ Download the template:
 wget -P /boot/config/plugins/dockerMan/templates-user/ https://raw.githubusercontent.com/rorar/unraid-templates/main/templates/immich-power-tools.xml
 ```
 
+Quicklink to add a new Docker container:
+
+```
+http://<your-unraid-ip>/Docker/AddContainer
+```
+
 1. Go to the ![Docker](assets/images/Unraid%20-%20Tab%20Docker.png){: .inline-button } tab → ![Add Container](assets/images/Unraid%20-%20Docker%20Tab%20-%20Button%20Add%20Container.png){: .inline-button }
 2. Select the `immich-power-tools` template
 3. Configure:

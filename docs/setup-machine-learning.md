@@ -2,6 +2,12 @@
 
 The ML service handles face recognition, CLIP-based image search, and OCR. Models are downloaded on first use and cached (several GB).
 
+Quicklink to add a new Docker container:
+
+```
+http://<your-unraid-ip>/Docker/AddContainer
+```
+
 1. Go to the ![Docker](assets/images/Unraid%20-%20Tab%20Docker.png){: .inline-button } tab → ![Add Container](assets/images/Unraid%20-%20Docker%20Tab%20-%20Button%20Add%20Container.png){: .inline-button }
 2. Select the `immich-machine-learning` template matching your GPU (see [Step 3](choose-gpu-platform.md))
 3. Configure:

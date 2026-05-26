@@ -1,5 +1,11 @@
 # Step 5: PostgreSQL Setup
 
+Quicklink to add a new Docker container:
+
+```
+http://<your-unraid-ip>/Docker/AddContainer
+```
+
 1. Go to the ![Docker](assets/images/Unraid%20-%20Tab%20Docker.png){: .inline-button } tab → ![Add Container](assets/images/Unraid%20-%20Docker%20Tab%20-%20Button%20Add%20Container.png){: .inline-button }
 2. Select the template you downloaded (`immich-postgres-official` or `immich-vectorchord-db`)
 3. Configure:

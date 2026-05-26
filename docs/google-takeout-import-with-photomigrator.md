@@ -4,6 +4,13 @@ PhotoMigrator is a tool to help with the migration of photos from Google Takeout
 ---
 
 ## PhotoMigrator Setup
+
+Quicklink to add a new Docker container:
+
+```
+http://<your-unraid-ip>/Docker/AddContainer
+```
+
 1. Go to the ![Docker](assets/images/Unraid%20-%20Tab%20Docker.png){: .inline-button } tab → ![Add Container](assets/images/Unraid%20-%20Docker%20Tab%20-%20Button%20Add%20Container.png){: .inline-button }
 2. Select the `photomigrator` template
 3. Configure the volume mappings:
