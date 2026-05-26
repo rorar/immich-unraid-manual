@@ -4,9 +4,10 @@ Before you can get your photos into Immich, you need to get them out of Google P
 If you have a large library, the Google Takeout exporting process can take a while (from my experience for 100GB half a day), so it's best to get it started as soon as possible.
 
 **Purpose:** You can use Google Takeout to export your photos and videos from Google Photos including metadata.
-For exporting from Google Takeout, you can choose between a `zip` and `tar`  file that you can extract and then using tools to upload to Immich.
+For exporting from Google Takeout, you can choose between a `zip` and `tar` file that you can extract and then using tools to upload to Immich.
 
 Depending on:
+
 - Your internet connection speed
 - possibly metered internet connection (some ISPs throttle download speeds after a certain amount of data downloaded)
 
@@ -26,7 +27,6 @@ But if you have a large library and/or slower internet speed, I would recommend 
 4. Then scroll down or search for "Google Photos"
 5. Select only Google Photos for export.
 6. Scroll to the bottom and click "Next step"
-
 7. Choose your delivery method (e.g., "Send download link via email")
 8. Choose the export frequency: "Export once"
 9. Choose the file type: `zip` or `tar`
