@@ -15,41 +15,37 @@
   var MIN_SCALE = 0.5;
   var MAX_SCALE = 5;
 
-  function addExpandButtons() {
-    var diagrams = document.querySelectorAll(".mermaid");
-    for (var i = 0; i < diagrams.length; i++) {
-      if (diagrams[i].dataset.fullscreenReady) continue;
-      if (!diagrams[i].querySelector("svg")) continue;
-      diagrams[i].dataset.fullscreenReady = "true";
+  function setupDiagram(el) {
+    if (el.dataset.fullscreenReady) return;
+    el.dataset.fullscreenReady = "true";
 
-      // Wrap diagram + button in a container so the button is a sibling, not inside the SVG
-      var wrapper = document.createElement("div");
-      wrapper.className = "mermaid-wrapper";
-      diagrams[i].parentNode.insertBefore(wrapper, diagrams[i]);
-      wrapper.appendChild(diagrams[i]);
+    var wrapper = document.createElement("div");
+    wrapper.className = "mermaid-wrapper";
+    el.parentNode.insertBefore(wrapper, el);
+    wrapper.appendChild(el);
 
-      var btn = document.createElement("button");
-      btn.className = "mermaid-expand-btn";
-      btn.title = "Click to view fullscreen";
-      btn.setAttribute("aria-label", "View diagram fullscreen");
-      btn.textContent = "\u2922  Fullscreen";
-      btn.addEventListener("click", openFullscreen.bind(null, diagrams[i]));
-      wrapper.appendChild(btn);
-    }
+    var btn = document.createElement("button");
+    btn.className = "mermaid-expand-btn";
+    btn.title = "Click to view fullscreen";
+    btn.setAttribute("aria-label", "View diagram fullscreen");
+    btn.textContent = "\u2922  Fullscreen";
+    btn.addEventListener("click", function () {
+      // Find SVG at click time — Mermaid may not have rendered yet at setup
+      var svg = el.querySelector("svg");
+      if (svg) {
+        openFullscreen(svg);
+      }
+    });
+    wrapper.appendChild(btn);
   }
 
-  function openFullscreen(mermaidEl) {
-    var svg = mermaidEl.querySelector("svg");
-    if (!svg) return;
-
-    // Clone the trusted Mermaid-rendered SVG node (not user content)
+  function openFullscreen(svg) {
     var clonedSvg = svg.cloneNode(true);
     clonedSvg.removeAttribute("width");
     clonedSvg.removeAttribute("height");
     clonedSvg.style.width = "100%";
     clonedSvg.style.height = "auto";
 
-    // --- Build overlay ---
     var overlay = document.createElement("div");
     overlay.className = "mermaid-overlay";
 
@@ -78,7 +74,6 @@
     document.body.appendChild(overlay);
     document.body.style.overflow = "hidden";
 
-    // --- Transform state ---
     var scale = 1;
     var translateX = 0;
     var translateY = 0;
@@ -93,7 +88,6 @@
         "translate(" + translateX + "px, " + translateY + "px) scale(" + scale + ")";
     }
 
-    // --- Scroll zoom (desktop) ---
     viewport.addEventListener("wheel", function (e) {
       e.preventDefault();
       var delta = e.deltaY > 0 ? -SCALE_STEP : SCALE_STEP;
@@ -101,7 +95,6 @@
       applyTransform();
     }, { passive: false });
 
-    // --- Mouse drag (desktop) ---
     viewport.addEventListener("mousedown", function (e) {
       if (e.button !== 0) return;
       isDragging = true;
@@ -128,7 +121,6 @@
     document.addEventListener("mousemove", onMouseMove);
     document.addEventListener("mouseup", onMouseUp);
 
-    // --- Touch: pinch-zoom + drag (mobile) ---
     var lastTouchDist = 0;
 
     viewport.addEventListener("touchstart", function (e) {
@@ -165,7 +157,6 @@
       lastTouchDist = 0;
     });
 
-    // --- Double-tap to reset (mobile) ---
     var lastTap = 0;
     viewport.addEventListener("touchend", function (e) {
       if (e.touches.length > 0) return;
@@ -185,7 +176,6 @@
       return Math.sqrt(dx * dx + dy * dy);
     }
 
-    // --- Close handlers ---
     function close() {
       document.removeEventListener("mousemove", onMouseMove);
       document.removeEventListener("mouseup", onMouseUp);
@@ -204,37 +194,39 @@
     }
     document.addEventListener("keydown", onKey);
 
-    // Fade out hint after 3s
     setTimeout(function () {
       hint.style.opacity = "0";
     }, 3000);
   }
 
-  // Mermaid renders async — use MutationObserver to detect when SVGs appear
-  function watchForMermaid() {
-    addExpandButtons();
+  // Setup: find .mermaid elements immediately (no SVG check needed —
+  // SVG is looked up at click time). Also observe for late-arriving elements.
+  function init() {
+    document.querySelectorAll(".mermaid").forEach(setupDiagram);
 
-    var observer = new MutationObserver(function () {
-      addExpandButtons();
+    var observer = new MutationObserver(function (mutations) {
+      for (var i = 0; i < mutations.length; i++) {
+        for (var j = 0; j < mutations[i].addedNodes.length; j++) {
+          var node = mutations[i].addedNodes[j];
+          if (node.nodeType === 1) {
+            if (node.classList && node.classList.contains("mermaid")) {
+              setupDiagram(node);
+            }
+            var nested = node.querySelectorAll ? node.querySelectorAll(".mermaid") : [];
+            for (var k = 0; k < nested.length; k++) {
+              setupDiagram(nested[k]);
+            }
+          }
+        }
+      }
     });
 
-    var content = document.querySelector(".md-content");
-    if (content) {
-      observer.observe(content, { childList: true, subtree: true });
-    }
-
-    // Also retry a few times as fallback
-    var retries = 0;
-    var interval = setInterval(function () {
-      addExpandButtons();
-      retries++;
-      if (retries >= 10) clearInterval(interval);
-    }, 500);
+    observer.observe(document.body, { childList: true, subtree: true });
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", watchForMermaid);
+    document.addEventListener("DOMContentLoaded", init);
   } else {
-    watchForMermaid();
+    init();
   }
 })();
