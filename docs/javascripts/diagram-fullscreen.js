@@ -13,15 +13,26 @@
 function openMermaidFullscreen(btnEl) {
   "use strict";
 
-  // Find the nearest .mermaid sibling before the button
+  // Find SVG: try sibling .mermaid first, fall back to searching the whole page
+  var svg = null;
   var mermaidEl = btnEl.previousElementSibling;
-  while (mermaidEl && !mermaidEl.classList.contains("mermaid")) {
+  while (mermaidEl) {
+    if (mermaidEl.classList && mermaidEl.classList.contains("mermaid")) {
+      svg = mermaidEl.querySelector("svg");
+      break;
+    }
     mermaidEl = mermaidEl.previousElementSibling;
   }
-  if (!mermaidEl) return;
-
-  var svg = mermaidEl.querySelector("svg");
-  if (!svg) return;
+  // Fallback: find any .mermaid SVG on the page
+  if (!svg) {
+    var allMermaid = document.querySelectorAll(".mermaid svg");
+    if (allMermaid.length > 0) svg = allMermaid[0];
+  }
+  if (!svg) {
+    btnEl.textContent = "\u26A0 Diagram not ready \u2014 try again";
+    setTimeout(function () { btnEl.textContent = "\u2922  Fullscreen"; }, 2000);
+    return;
+  }
 
   var SCALE_STEP = 0.15, MIN_SCALE = 0.5, MAX_SCALE = 5;
 
