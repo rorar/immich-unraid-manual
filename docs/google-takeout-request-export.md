@@ -1,9 +1,12 @@
 # Google Takeout Phase 1 — Request Export
 
-Before you can get your photos into Immich, you need to get them out of Google Photos.
-If you have a large library, the Google Takeout exporting process can take a while (from my experience for 100GB half a day), so it's best to get it started as soon as possible.
+> [!NOTE]
+> **This step is only required if you want to migrate from Google Photos to Immich.** If you're starting fresh without migrating existing photos, skip ahead to [Step 1: Create Unraid Shares](unraid-create-immich-shares.md).
 
-**Purpose:** You can use Google Takeout to export your photos and videos from Google Photos including metadata.
+> [!TIP]
+> The Google Takeout export can take a while (half a day for ~100GB in my experience), so it's best to start this early — you can continue with the Immich installation while waiting for the export.
+
+**Purpose:** Use Google Takeout to export your photos and videos from Google Photos including metadata.
 For exporting from Google Takeout, you can choose between a `zip` and `tar` file that you can extract and then using tools to upload to Immich.
 
 Depending on:
