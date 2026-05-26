@@ -87,10 +87,16 @@
     var state = applyFromStorage();
     input.value = state.saved;
 
-    // Tooltip toggle
+    // Tooltip toggle — positioned relative to ? button via fixed positioning
     if (infoBtn && tooltip) {
       infoBtn.addEventListener("click", function (e) {
         e.stopPropagation();
+        var isVisible = tooltip.classList.contains("ip-replacer-tooltip--visible");
+        if (!isVisible) {
+          var rect = infoBtn.getBoundingClientRect();
+          tooltip.style.top = (rect.bottom + 6) + "px";
+          tooltip.style.left = rect.left + "px";
+        }
         tooltip.classList.toggle("ip-replacer-tooltip--visible");
       });
       document.addEventListener("click", function () {

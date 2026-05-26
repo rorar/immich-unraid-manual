@@ -1,7 +1,7 @@
 /* Inline button images — renders small UI button/icon PNGs inline with text */
 .inline-button {
-  height: 1.4em;
-  vertical-align: middle;
+  height: 1em;
+  vertical-align: baseline;
   display: inline;
   margin: 0 2px;
 }
@@ -89,10 +89,8 @@
 /* Tooltip */
 .ip-replacer-tooltip {
   display: none;
-  position: absolute;
-  top: 2rem;
-  left: 0;
-  z-index: 100;
+  position: fixed;
+  z-index: 999;
   width: 20rem;
   padding: 0.6rem 0.8rem;
   border-radius: 6px;
@@ -100,9 +98,14 @@
   font-style: normal;
   font-weight: 400;
   line-height: 1.5;
-  background: var(--md-default-fg-color);
-  color: var(--md-default-bg-color);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  background: #1a1a2e;
+  color: #e8e8e8;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+[data-md-color-scheme="slate"] .ip-replacer-tooltip {
+  background: #f0f0f0;
+  color: #1a1a1a;
 }
 
 .ip-replacer-tooltip--visible {
