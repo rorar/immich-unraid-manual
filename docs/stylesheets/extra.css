@@ -88,3 +88,21 @@
   border-radius: 2px;
   padding: 0 2px;
 }
+
+/* Clickable IP links (only when IP is filled in) */
+.ip-link {
+  color: var(--md-accent-fg-color);
+  text-decoration: none;
+  background: var(--md-accent-fg-color--transparent);
+  border-radius: 2px;
+  padding: 0 2px;
+}
+
+.ip-link:hover {
+  text-decoration: underline;
+}
+
+.ip-link-icon {
+  font-size: 0.75em;
+  opacity: 0.7;
+}
