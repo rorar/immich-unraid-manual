@@ -2,10 +2,13 @@
 
 {% block announce %}
 <div class="ip-replacer">
-  <label for="ip-input">
+  <label for="ip-protocol">
     <span class="ip-replacer-icon" aria-hidden="true">&#x1F4E1;</span>
-    Your Unraid IP:
   </label>
+  <select id="ip-protocol">
+    <option value="http">http://</option>
+    <option value="https">https://</option>
+  </select>
   <input id="ip-input" type="text" placeholder="192.168.1.x" autocomplete="off" spellcheck="false" />
   <button id="ip-reset" type="button" title="Reset to placeholder">Reset</button>
   <span class="ip-replacer-hint">Replaces <code>&lt;your-unraid-ip&gt;</code> in all instructions &amp; code blocks. Saved in your browser only.</span>

@@ -33,6 +33,7 @@
   font-size: 0.9rem;
 }
 
+.ip-replacer select,
 .ip-replacer input {
   font-family: var(--md-code-font-family);
   font-size: 0.8rem;
@@ -41,6 +42,9 @@
   border-radius: 4px;
   background: var(--md-default-bg-color);
   color: var(--md-default-fg-color);
+}
+
+.ip-replacer input {
   width: 9rem;
 }
 
