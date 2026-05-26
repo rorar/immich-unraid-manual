@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block announce %}
+<div class="ip-replacer">
+  <span class="ip-replacer-info-wrapper">
+    <button type="button" class="ip-replacer-info-btn" id="ip-info-btn" title="What is this?">?</button>
+    <div class="ip-replacer-tooltip" id="ip-tooltip">
+      Enter your Unraid server IP address here. All placeholders like
+      &ldquo;&lt;your-unraid-ip&gt;&rdquo; throughout the guide will be replaced
+      with your IP &mdash; including in copy-able code blocks.
+      Your IP is saved in your browser only and never transmitted.
+    </div>
+  </span>
+  <label for="ip-input">Your Unraid IP:</label>
+  <input id="ip-input" type="text" placeholder="192.168.1.x" autocomplete="off" spellcheck="false" />
+  <button id="ip-reset" type="button" title="Reset to placeholder">Reset</button>
+  <span class="ip-replacer-disclaimer">Browser-only &mdash; no data is sent.</span>
+</div>
+{% endblock %}

@@ -59,6 +59,56 @@
   font-style: italic;
 }
 
+/* Info button (?) */
+.ip-replacer-info-wrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+.ip-replacer-info-btn {
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 0.75rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--md-default-fg-color--lighter);
+  background: var(--md-default-bg-color);
+  color: var(--md-default-fg-color);
+  cursor: pointer;
+}
+
+.ip-replacer-info-btn:hover {
+  background: var(--md-accent-fg-color--transparent);
+}
+
+/* Tooltip */
+.ip-replacer-tooltip {
+  display: none;
+  position: absolute;
+  top: 2rem;
+  left: 0;
+  z-index: 100;
+  width: 20rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5;
+  background: var(--md-default-fg-color);
+  color: var(--md-default-bg-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.ip-replacer-tooltip--visible {
+  display: block;
+}
+
 /* Highlighted replaced IP values */
 .ip-replaced {
   background: var(--md-accent-fg-color--transparent);

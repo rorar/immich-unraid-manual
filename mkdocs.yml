@@ -6,6 +6,7 @@ repo_name: rorar/immich-unraid-manual
 
 theme:
   name: material
+  custom_dir: overrides
   palette:
     - scheme: default
       primary: indigo
@@ -25,6 +26,7 @@ theme:
     - navigation.expand
     - navigation.top
     - navigation.indexes
+    - navigation.footer
     - content.code.copy
     - search.suggest
     - search.highlight
