@@ -1,6 +1,6 @@
 # Step 4: Download Docker Templates
 
-Quicklink to the Unraid terminal:
+Quicklink to the Unraid terminal (paste into your browser while logged into Unraid):
 
 ```
 http://<your-unraid-ip>/Terminal

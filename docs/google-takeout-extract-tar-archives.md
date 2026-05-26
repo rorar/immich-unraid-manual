@@ -5,7 +5,7 @@
 
 Once your Google Takeout downloads are complete (see [Phase 2](google-takeout-download-with-firefox.md)), you need to extract them.
 
-Quicklink to the Unraid terminal:
+Quicklink to the Unraid terminal (paste into your browser while logged into Unraid):
 
 ```
 http://<your-unraid-ip>/Terminal

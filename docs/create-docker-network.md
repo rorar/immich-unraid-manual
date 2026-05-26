@@ -2,7 +2,7 @@
 
 All Immich containers need to communicate with each other by container name. We create a dedicated Docker network for this.
 
-Quicklink to the Unraid terminal:
+Quicklink to the Unraid terminal (paste into your browser while logged into Unraid):
 
 ```
 http://<your-unraid-ip>/Terminal
