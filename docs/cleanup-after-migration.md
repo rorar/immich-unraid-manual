@@ -25,4 +25,4 @@ http://<your-unraid-ip>:2283/user-settings?isOpen=api-keys
 If you have verified that all your photos have been successfully migrated to Immich and you no longer need your Google Photos library, you can choose to delete your Google Photos library to free up space.
 
 > [!CAUTION]
-> Make sure to double-check that everything is working correctly in Immich and that you have backups of your photos before deleting your Google Photos library. This action is irreversible.
+> Make sure to double-check that everything is working correctly in Immich and that you have backups of your photos before deleting your Google Photos library. This action is irreversible and can't be undone.
