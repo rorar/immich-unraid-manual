@@ -22,6 +22,8 @@ graph TD
     E --> E2[ML: immich-machine-learning]
 ```
 
+<button class="mermaid-expand-btn" onclick="openMermaidFullscreen(this)">&#x2922; Fullscreen</button>
+
 | GPU | Server Template (Transcoding) | ML Template (Inference) |
 |-----|-------------------------------|------------------------|
 | **None / CPU only** | `immich-server` | `immich-machine-learning` |
