@@ -1,7 +1,9 @@
 /* Inline button images — sized to match surrounding text height.
    !important needed to override MkDocs Material's default img sizing. */
 .inline-button {
-  height: 1.25em !important;
+  height: auto !important;
+  max-height: 1.25em !important;
+  width: auto !important;
   vertical-align: middle;
   display: inline;
   margin: 0 1px;
