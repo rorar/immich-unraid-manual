@@ -80,13 +80,10 @@ markdown_extensions:
 plugins:
   - search
   - callouts
-  - panzoom:
-      include_selectors:
-        - ".mermaid svg"
-      always_show_hint: true
 
 extra_javascript:
   - javascripts/ip-replacer.js
+  - javascripts/diagram-fullscreen.js
 
 extra_css:
   - stylesheets/extra.css

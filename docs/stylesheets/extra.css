@@ -106,3 +106,110 @@
   font-size: 0.75em;
   opacity: 0.7;
 }
+
+/* Mermaid fullscreen expand button */
+.mermaid-expand-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 10;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--md-default-fg-color--lighter);
+  border-radius: 4px;
+  background: var(--md-default-bg-color);
+  color: var(--md-default-fg-color);
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+}
+
+.mermaid-expand-btn:hover {
+  opacity: 1;
+  background: var(--md-accent-fg-color--transparent);
+}
+
+/* Fullscreen overlay */
+.mermaid-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mermaid-overlay-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 10001;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mermaid-overlay-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.mermaid-overlay-hint {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10001;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 0.4rem 1rem;
+  border-radius: 2rem;
+  white-space: nowrap;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+.mermaid-overlay-viewport {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  overflow: hidden;
+  touch-action: none;
+}
+
+.mermaid-overlay-content {
+  transform-origin: center center;
+  will-change: transform;
+}
+
+.mermaid-overlay-content svg {
+  max-width: 90vw;
+  max-height: 85vh;
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.05));
+}
+
+/* Invert diagram colors for dark overlay background */
+.mermaid-overlay-content svg text {
+  fill: #e0e0e0 !important;
+}
+
+.mermaid-overlay-content svg .node rect,
+.mermaid-overlay-content svg .node polygon {
+  stroke: #888 !important;
+}
